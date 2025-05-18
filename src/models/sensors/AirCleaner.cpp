@@ -17,7 +17,7 @@
 using namespace std;
 
 //------------------------------------------------------ Include personnel
-#include "AirCleaner.h"
+#include "sensors/AirCleaner.h"
 //#include "SensorRepository.h"
 
 //------------------------------------------------------------- Constantes
