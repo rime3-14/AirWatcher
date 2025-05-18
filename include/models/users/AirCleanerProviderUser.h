@@ -1,10 +1,12 @@
-#ifndef AIRCLEANERSPROVIDERUSER_H
-#define AIRCLEANERSPROVIDERUSER_H
+//---------- Interface de la classe <AirCleanerProviderUser> (fichier AirCleanerProviderUser.h) ----------------
+#if ! defined ( AirCleanerProviderUser_H )
+#define AirCleanerProviderUser_H
 
+//--------------------------------------------------- Interfaces utilisées
 #include <vector>
 #include <string>
 #include "User.h"
-//#include "AirCleaner.h" 
+#include "AirCleaner.h" 
 
 using namespace std;
 
@@ -13,18 +15,18 @@ class AirCleanerProviderUser : public User
 public:
     // Constructeurs et destructeur
     AirCleanerProviderUser();
-    AirCleanerProviderUser(std::string id, std::string login, std::string mdp);
+    AirCleanerProviderUser(string id, string login, string mdp);
     virtual ~AirCleanerProviderUser();
 
     // Méthode d'authentification
-    User* authentificateUser(std::string login, std::string mdp) const override;
+    User* authentificateUser(string login, string mdp) const override;
 
     // Méthodes spécifiques
     void showAirCleaners() const;
     float calculateAirCleanerImpact() const;
 
-private:
-    //std::vector<AirCleaner> airCleaners;
+protected:
+    vector<AirCleaner> airCleaners;
 };
 
 #endif // AIRCLEANERSPROVIDERUSER_H
