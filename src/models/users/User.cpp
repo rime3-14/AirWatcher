@@ -2,7 +2,7 @@ using namespace std;
 #include <iostream>    
 #include <cstring>     
 
-#include "User.h"
+#include "users/User.h"
 
 //----------------------------------------------------------------- PUBLIC
 

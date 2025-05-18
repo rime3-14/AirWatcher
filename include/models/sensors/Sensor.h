@@ -12,7 +12,10 @@
 
 //--------------------------------------------------- Interfaces utilisées
 #include <string>
+#include <vector>
 #include "Measurement.h"
+
+using namespace std;
 
 //------------------------------------------------------------------------
 // Rôle de la classe <Sensor>
@@ -31,14 +34,14 @@ public:
     float GetLatitude() const;
     float GetLongitude() const;
     bool GetReliability() const;
-    Measurement* GetMeasurements() const;
+    vector<Measurement> GetMeasurements() const;
 
     // Setters
     void SetId(const std::string& newId);
     void SetLatitude(float newLatitude);
     void SetLongitude(float newLongitude);
     void SetReliability(bool newReliability);
-    void SetMeasurements(Measurement* newMeasurements);
+    void SetMeasurements(vector<Measurement> newMeasurements);
 
     //------------------------------------------------- Surcharge d'opérateurs
     Sensor& operator=(const Sensor& unSensor);
@@ -46,7 +49,7 @@ public:
     //-------------------------------------------- Constructeurs - destructeur
     Sensor(); // Constructeur par défaut
     Sensor(const Sensor& unSensor); // Constructeur de copie
-    Sensor(std::string unId, float unLatitude, float unLongitude, bool unReliability, Measurement* unMeasurements);
+    Sensor(std::string unId, float unLatitude, float unLongitude, bool unReliability, vector<Measurement> unMeasurements);
     virtual ~Sensor();
 
 //------------------------------------------------------------------ PRIVE
@@ -56,7 +59,7 @@ protected:
     float latitude;
     float longitude;
     bool reliability;
-    Measurement* measurements;
+    vector<Measurement> measurements;
 };
 
 #endif // SENSOR_H

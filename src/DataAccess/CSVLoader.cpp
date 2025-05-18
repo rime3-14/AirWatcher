@@ -3,17 +3,20 @@
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
-#include <iostream>
-using namespace std;
-
 //------------------------------------------------------ Include personnel
-#include "CSVLoader.h"
+#include "dataAccess/CSVLoader.h"
+using namespace std;
 
 //------------------------------------------------------------- Constantes
 CSVLoader CSVLoader::instance=CSVLoader();
 //----------------------------------------------------------------- PUBLIC
 
 //--------------------------------------------------Méthodes
+CSVLoader& CSVLoader::Instance() {
+    static CSVLoader instance;
+    return instance;
+}
+
 vector<vector<string>> CSVLoader::loadAttributesInfo(){
     vector<vector<string>> attributesInfo;
     
@@ -40,20 +43,20 @@ vector<vector<string>> CSVLoader::loadAttributesInfo(){
 
 
 
-vector<Measurement> CSVLoader::loadMeasurements(vector<Sensor>& sensors){
+map<string,vector<Measurement>> CSVLoader::loadMeasurements(vector<Sensor>& sensors){
     vector<vector<string>> attributesInfo = loadAttributesInfo();
-    vector<Measurement> measurements;
+    map<string,vector<Measurement>> measurementsBySensorId;
     
     ifstream ifsMeasurements;
     string fileName = "data/measurements.csv";
     ifsMeasurements.open(fileName);
-    if(!ifs.is_open()){
+    if(!ifsMeasurements.is_open()){
         cout << "Erreur d'ouverture du fichier" << endl;
-        return measurements;
+        return measurementsBySensorId;
     }
 
     string line;
-    while(getline(ifs, line)){
+    while(getline(ifsMeasurements, line)){
         stringstream ss(line);
         string timestamp, sensorId, attributeId, stringValue;
         float value;
@@ -74,21 +77,22 @@ vector<Measurement> CSVLoader::loadMeasurements(vector<Sensor>& sensors){
         string unit, description;
         for (std::vector<vector<string>>::iterator i = attributesInfo.begin() ; i != attributesInfo.end(); i++)
         {
-            if (*i[0] == attributeId)
+            if ((*i)[0] == attributeId)
             {
-                unit = *i[1];
-                description = *i[2];
+                unit = (*i)[1];
+                description = (*i)[2];
                 break;
             }
         }
-                
-        Measurement measurement = new Measurement(attributeId, unit, description, timestamp, value);
-        measurements.push_back(measurement);
+
+        Measurement measurement(attributeId, unit, description, value, timestamp);  
+        measurementsBySensorId[sensorId].push_back(measurement);
     }
-    return measurements;
+    return measurementsBySensorId;
 }
 
 vector<Sensor> CSVLoader::loadSensors(){
+    map<string,vector<Measurement>> allMeasurementsBySensorId = loadMeasurements(sensors);
     vector<Sensor> sensors;
 
     ifstream ifs;
@@ -100,12 +104,23 @@ vector<Sensor> CSVLoader::loadSensors(){
     string line;
     while(getline(ifs, line)){
         stringstream ss(line);
-        string id, latitude, longitude;
+        string id, latitudeString, longitudeString;
         getline(ss, id, ';');
-        getline(ss, latitude, ';');
-        getline(ss, longitude, ';');
+        getline(ss, latitudeString, ';');
+        getline(ss, longitudeString, ';');
+
+
+        vector<Measurement> measurements;
+        // Add measurements to the sensor
+        if (allMeasurementsBySensorId.find(id) != allMeasurementsBySensorId.end()) {
+            measurements = allMeasurementsBySensorId[id];
+        }
+
+        // Convert latitude and longitude strings to float
+        float latitude = stof(latitudeString);
+        float longitude = stof(longitudeString);
         
-        Sensor sensor(id, latitude, longitude);
+        Sensor sensor(id, latitude, longitude, true, measurements);
         sensors.push_back(sensor);
     }
 
@@ -124,14 +139,14 @@ const vector<Sensor>& CSVLoader::getSensors() const{
 const vector<PrivateUser>& CSVLoader::getUsers() const{
     return users;
 }
-const vector<AirCleanerProvider>& CSVLoader::getProviders() const{
+const vector<AirCleanerProviderUser>& CSVLoader::getProviders() const{
     return providers;
 }
 const vector<string>& CSVLoader::getFiles() const{
     return files;
 }
 
-void CSVLoader::setFiles(){
+void CSVLoader::setFiles(const vector<string>& files){
     // TODO : créer un vector contenant les noms des fichiers CSV
     this->files = files;
 }
@@ -142,7 +157,7 @@ void CSVLoader::setSensors(const vector<Sensor>& sensors){
 void CSVLoader::setUsers(const vector<PrivateUser>& users){
     this->users = users;
 }
-void CSVLoader::setProviders(const vector<AirCleanerProvider>& providers){
+void CSVLoader::setProviders(const vector<AirCleanerProviderUser>& providers){
     this->providers = providers;
 }
 

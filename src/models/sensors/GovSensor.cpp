@@ -15,7 +15,7 @@ using namespace std;
 #include <iostream>
 
 //------------------------------------------------------ Include personnel
-#include "GovSensor.h"
+#include "sensors/GovSensor.h"
 
 //------------------------------------------------------------- Constantes
 

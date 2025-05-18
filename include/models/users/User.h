@@ -4,6 +4,8 @@
 //--------------------------------------------------- Interfaces utilisées
 // (Aucune interface externe n'est utilisée.)
 
+using namespace std;
+
 //------------------------------------------------------------- Constantes
 // (Aucune constante n'est définie dans ce fichier.)
 
@@ -24,7 +26,7 @@ class User
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    virtual User* authentificateUser(std::string login, std::string mdp) const = 0;
+    virtual User* authentificateUser(string login, string mdp) const = 0;
     // Mode d'emploi :
     // Méthode virtuelle pure qui permet d'authentifier un utilisateur.
     // Les classes dérivées doivent fournir leur propre implémentation.

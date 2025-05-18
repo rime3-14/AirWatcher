@@ -1,15 +1,18 @@
 //---------- Interface de la classe <CSVLoader> (fichier CSVLoader.h) ----------------
 #if ! defined ( CSVLOADER_H )
-#define CSVOADER_H
+#define CSVLOADER_H
 
 //--------------------------------------------------- Interfaces utilisées
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
 #include <vector>
-#include "Sensor.h"
-#include "PrivateUser.h"
-#include "AirCleanerProvider.h"
-#include "Measurement.h"
+#include <map>
+#include "models/sensors/Sensor.h"
+#include "models/users/PrivateUser.h"
+#include "models/users/AirCleanerProviderUser.h"
+#include "models/sensors/Measurement.h"
 
 using namespace std;
 //------------------------------------------------------------- Constantes
@@ -35,35 +38,25 @@ public:
     
     const vector<Sensor>& getSensors() const;
     const vector<PrivateUser>& getUsers() const;
-    const vector<AirCleanerProvider>& getProviders() const;
+    const vector<AirCleanerProviderUser>& getProviders() const;
     const vector<string>& getFiles() const;
 
     void setFiles(const vector<string>& files);
     void setSensors(const vector<Sensor>& sensors);
     void setUsers(const vector<PrivateUser>& users);
-    void setProviders(const vector<AirCleanerProvider>& providers);
+    void setProviders(const vector<AirCleanerProviderUser>& providers);
     
 //------------------------------------------------------------------ PRIVE
 private:
 //------------------------------------------------- Surcharge d'opérateurs
-    CSVLoader & operator = ( const CSVLoader & unEnsemble );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
 
 //-------------------------------------------- Constructeurs - destructeur
-    CSVLoader ( const CSVLoader& );
-
     CSVLoader ( );
-
     virtual ~CSVLoader ( );
 
 //------------------------------------------------------------- Méthodes privées
-    void loadFiles(const vector<string>& files);
     vector<Sensor> loadSensors();
-    vector<Measurement> loadMeasurements(vector<Sensor>& sensors);
+    map<string,vector<Measurement>> loadMeasurements(vector<Sensor>& sensors);
     vector<vector<string>> loadAttributesInfo();
 
     void loadUsers();
@@ -73,7 +66,7 @@ private:
     vector<string> files;
     vector<Sensor> sensors;
     vector<PrivateUser> users;
-    vector<AirCleanerProvider> providers;
+    vector<AirCleanerProviderUser> providers;
 };
 
 //-------------------------------- Autres définitions dépendantes de <CSVLoader>

@@ -6,13 +6,15 @@
 #include "User.h"
 //#include "AirCleaner.h" 
 
-class AirCleanersProviderUser : public User
+using namespace std;
+
+class AirCleanerProviderUser : public User
 {
 public:
     // Constructeurs et destructeur
-    AirCleanersProviderUser();
-    AirCleanersProviderUser(std::string id, std::string login, std::string mdp);
-    virtual ~AirCleanersProviderUser();
+    AirCleanerProviderUser();
+    AirCleanerProviderUser(std::string id, std::string login, std::string mdp);
+    virtual ~AirCleanerProviderUser();
 
     // Méthode d'authentification
     User* authentificateUser(std::string login, std::string mdp) const override;

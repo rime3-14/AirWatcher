@@ -4,6 +4,8 @@
 #include <string>
 #include "User.h"
 
+using namespace std;
+
 // je suis pas sure de cette classe, à revoir
 
 class GovernmentUser : public User
