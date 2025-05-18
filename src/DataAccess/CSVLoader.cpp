@@ -41,9 +41,7 @@ vector<vector<string>> CSVLoader::loadAttributesInfo(){
     return attributesInfo;
 }
 
-
-
-map<string,vector<Measurement>> CSVLoader::loadMeasurements(vector<Sensor>& sensors){
+map<string,vector<Measurement>> CSVLoader::loadMeasurements(){
     vector<vector<string>> attributesInfo = loadAttributesInfo();
     map<string,vector<Measurement>> measurementsBySensorId;
     
@@ -126,11 +124,137 @@ vector<Sensor> CSVLoader::loadSensors(){
 
     return sensors;
 }
-void CSVLoader::loadUsers(){
 
+vector<PrivateUser> CSVLoader::loadUsers(){
+    vector<PrivateUser> users;
+
+    ifstream ifs;
+    ifs.open("data/users.csv");
+    if(!ifs.is_open()){
+        cout << "Erreur d'ouverture du fichier" << endl;
+        return;
+    }
+    string line;
+    while(getline(ifs, line)){
+        stringstream ss(line);
+        string id, sensorId;
+        getline(ss, id, ';');
+        getline(ss, sensorId, ';');
+
+        // Check if the sensorId is valid
+        bool sensorFound = false;
+        for (const auto& sensor : sensors) {
+            if (sensor.getId() == sensorId) {
+                sensorFound = true;
+                break; 
+            }
+        }
+        if(!sensorFound){
+            cout << "Erreur : le capteur avec l'ID " << sensorId << " n'existe pas." << endl;
+            continue; // Skip this user if the sensor does not exist
+        }
+        else {
+            bool userFound = false;
+            // Check if the user already exists
+            for (const auto& user : users) {
+                if (user.getId() == id) {
+                    userFound = true;
+                    user.addSensor(sensorId);
+                    break; 
+                }
+            }
+
+            // If the user does not exist, create a new one
+            if (!userFound) {
+                vector<string> userSensors;
+                userSensors.push_back(sensorId);
+                PrivateUser user(id, userSensors);
+                users.push_back(user);
+            }
+        }
+    }
+    return users;
 }
-void CSVLoader::loadProviders(){
 
+vector<AirCleaner> loadAirCleaners(){
+    vector<AirCleaner> airCleaners;
+
+    ifstream ifs;
+    ifs.open("data/cleaners.csv");
+    if(!ifs.is_open()){
+        cout << "Erreur d'ouverture du fichier" << endl;
+        return airCleaners;
+    }
+    string line;
+    while(getline(ifs, line)){
+        stringstream ss(line);
+        string id, latitudeString, longitudeString, debut, fin;
+        getline(ss, id, ';');
+        getline(ss, latitudeString, ';');
+        getline(ss, longitudeString, ';');
+        getline(ss, debut, ';');
+        getline(ss, fin, ';');
+
+
+        // Convert latitude and longitude strings to float
+        float latitude = stof(latitudeString);
+        float longitude = stof(longitudeString);
+
+        AirCleaner airCleaner(id, latitude, longitude, debut, fin);
+        airCleaners.push_back(airCleaner);
+    }
+    return airCleaners;
+}
+
+vector<AirCleanerProviderUser> CSVLoader::loadProviders(){
+    vector<AirCleanerProviderUser> providers;
+
+    ifstream ifs;
+    ifs.open("data/providers.csv");
+    if(!ifs.is_open()){
+        cout << "Erreur d'ouverture du fichier" << endl;
+        return providers;
+    }
+    string line;
+    while(getline(ifs, line)){
+        stringstream ss(line);
+        string id, airCleanerId;
+        getline(ss, id, ';');
+        getline(ss, airCleanerId, ';');
+
+        // Check if the airCleanerId is valid
+        bool airCleanerFound = false;
+        for (const auto& airCleaner : airCleaners) {
+            if (airCleaner.getId() == airCleanerId) {
+                airCleanerFound = true;
+                break; 
+            }
+        }
+        if(!airCleanerFound){
+            cout << "Erreur : le capteur avec l'ID " << airCleanerId << " n'existe pas." << endl;
+            continue; // Skip this provider if the cleaner does not exist
+        }
+        else {
+            bool providerFound = false;
+            // Check if the provider already exists
+            for (const auto& provider : providers) {
+                if (provider.getId() == id) {
+                    providerFound = true;
+                    provider.addAirCleaner(airCleanerId);
+                    break; 
+                }
+            }
+
+            // If the provider does not exist, create a new one
+            if (!providerFound) {
+                vector<string> providerSensors;
+                providerSensors.push_back(airCleanerId);
+                AirCleanerProviderUser provider(id, providerSensors);
+                providers.push_back(provider);
+            }
+        }
+    }
+    return providers;
 }
 
 const vector<Sensor>& CSVLoader::getSensors() const{
@@ -142,24 +266,6 @@ const vector<PrivateUser>& CSVLoader::getUsers() const{
 const vector<AirCleanerProviderUser>& CSVLoader::getProviders() const{
     return providers;
 }
-const vector<string>& CSVLoader::getFiles() const{
-    return files;
-}
-
-void CSVLoader::setFiles(const vector<string>& files){
-    // TODO : créer un vector contenant les noms des fichiers CSV
-    this->files = files;
-}
-void CSVLoader::setSensors(const vector<Sensor>& sensors){
-    // TODO : appeler la méthode de loadSensors
-    this->sensors = sensors;
-}
-void CSVLoader::setUsers(const vector<PrivateUser>& users){
-    this->users = users;
-}
-void CSVLoader::setProviders(const vector<AirCleanerProviderUser>& providers){
-    this->providers = providers;
-}
 
 //------------------------------------------------- Surcharge d'opérateurs
 
@@ -168,6 +274,10 @@ void CSVLoader::setProviders(const vector<AirCleanerProviderUser>& providers){
 
 CSVLoader::CSVLoader ( )
 {
+    sensors = loadSensors();
+    users = loadUsers();
+    airCleaners = loadAirCleaners();
+    providers = loadProviders();
 #ifdef MAP
     cout << "Appel au constructeur de <CSVLoader>" << endl;
 #endif
