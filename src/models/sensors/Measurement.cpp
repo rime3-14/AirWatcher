@@ -44,7 +44,7 @@ using namespace std;
         return value;
     }
     
-    std::string Measurement::GetTimestamp() const
+    time_t Measurement::GetTimestamp() const
     {
         return timestamp;
     }
@@ -72,7 +72,7 @@ using namespace std;
         value = newvalue;
     }
     
-    void Measurement::SetTimestamp(const std::string& newTimestamp)
+    void Measurement::SetTimestamp(const time_t newTimestamp)
     {
         timestamp = newTimestamp;
     }
@@ -96,7 +96,7 @@ Measurement & Measurement::operator = ( const Measurement & unMeasurement )
 
 
 //-------------------------------------------- Constructeurs - destructeur
-Measurement::Measurement() : id(""), unit(""), description(""), value(0.0f), timestamp("")
+Measurement::Measurement() : id(""), unit(""), description(""), value(0.0f), timestamp()
 // Algorithme :
 //
 {
@@ -115,7 +115,7 @@ Measurement::Measurement ( const Measurement & unMeasurement ) : id(unMeasuremen
 } //----- Fin de Measurement (constructeur de copie)
 
 
-Measurement::Measurement (std::string unId, std::string ununit, std::string unDescription, float unvalue, std::string unTimestamp) : id(unId), unit(ununit), description(unDescription), value(unvalue), timestamp(unTimestamp)
+Measurement::Measurement (std::string unId, std::string ununit, std::string unDescription, float unvalue, time_t unTimestamp) : id(unId), unit(ununit), description(unDescription), value(unvalue), timestamp(unTimestamp)
 
 // Algorithme :
 //

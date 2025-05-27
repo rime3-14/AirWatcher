@@ -36,14 +36,14 @@ public:
     std::string Getunit() const;
     std::string GetDescription() const;
     float Getvalue() const;
-    std::string GetTimestamp() const;
+    time_t GetTimestamp() const;
 
     // Setters
     void SetId(const std::string& newId);
     void Setunit(const std::string& newunit);
     void SetDescription(const std::string& newDescription);
     void Setvalue(float newvalue);
-    void SetTimestamp(const std::string& newTimestamp);
+    void SetTimestamp(const time_t newTimestamp);
 
 
 //------------------------------------------------- Surcharge d'opérateurs
@@ -61,7 +61,7 @@ public:
     // Contrat :
     //
 
-    Measurement (std::string unId, std::string ununit, std::string unDescription, float unvalue, std::string unTimestamp);
+    Measurement (std::string unId, std::string ununit, std::string unDescription, float unvalue, time_t unTimestamp);
     // Mode d'emploi :
     //
     // Contrat :
@@ -89,7 +89,7 @@ std::string id;
 std::string unit;
 std::string description;
 float value;
-std::string timestamp;
+time_t timestamp;
 };
 
 //-------------------------------- Autres définitions dépendantes de <Measurement.h>
