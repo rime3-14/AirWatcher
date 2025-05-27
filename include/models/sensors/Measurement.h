@@ -11,16 +11,16 @@
 #define MEASUREMENT_H
 
 //--------------------------------------------------- Interfaces utilisées
-
-using namespace std;
-
+using namespace std; 
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
 
+
 //------------------------------------------------------------------------
 // Rôle de la classe <Measurement>
-//
+// Permet de lister les caractéristiques d'une mesure d'un seul type (O3, NO2, SO2 ou P10)
+// d'un capteur à une date précise. 
 //
 //------------------------------------------------------------------------
 
@@ -32,19 +32,14 @@ public:
 //----------------------------------------------------- Méthodes publiques
 
     // Getters
-    std::string GetId() const;
-    std::string Getunit() const;
-    std::string GetDescription() const;
-    float Getvalue() const;
-    std::string GetTimestamp() const;
+    string getUnit() const;
+    string getDescription() const;
+    float getValue() const;
 
     // Setters
-    void SetId(const std::string& newId);
-    void Setunit(const std::string& newunit);
-    void SetDescription(const std::string& newDescription);
-    void Setvalue(float newvalue);
-    void SetTimestamp(const std::string& newTimestamp);
-
+    void setUnit(const string& newunit);
+    void setDescription(const string& newDescription);
+    void setValue(float newvalue);
 
 //------------------------------------------------- Surcharge d'opérateurs
     Measurement & operator = ( const Measurement & unMeasurement );
@@ -61,7 +56,7 @@ public:
     // Contrat :
     //
 
-    Measurement (std::string unId, std::string ununit, std::string unDescription, float unvalue, std::string unTimestamp);
+    Measurement (string ununit, string unDescription, float unvalue);
     // Mode d'emploi :
     //
     // Contrat :
@@ -85,14 +80,23 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-std::string id;
-std::string unit;
-std::string description;
-float value;
-std::string timestamp;
+    string unit;
+    string description;
+    float value;
 };
 
 //-------------------------------- Autres définitions dépendantes de <Measurement.h>
+// ------------------------------- Struct <MeasurementGroup>
+// Rôle du Struct <MeasurementGroup>
+// Permet de regrouper les 4 types de mesures recueillies par un capteur à une date précise 
+// qui sont nécessaires pour calculer la qualité de l'air.
+struct MeasurementGroup {
+    time_t timestamp;
+    Measurement measurementO3;
+    Measurement measurementNO2; 
+    Measurement measurementSO2; 
+    Measurement measurementP10; 
+};
 
 #endif // MEASUREMENT_H
 

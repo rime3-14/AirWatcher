@@ -32,7 +32,7 @@ Sensor & sensor getSensor(Sensor sensor);
 
 vector<Sensor> getSensorsInCircularRadius(float centerLatitude, float centerLongitude, float radius); 
 
-vector<Sensor> getAllSensorsExcept(float centerLatitude, float centerLongitude, float radius); 
+vector<Sensor> getAllSensorsExcept(Sensor & sensor); 
 
 void markSensorAsUnreliable(Sensor sensor); 
 
