@@ -23,6 +23,7 @@ public:
 
     // Implémentation de la méthode abstraite
     User* authentificateUser(std::string login, std::string mdp) const override;
+    UserType getRole() const override;
 
 
 protected:

@@ -16,6 +16,7 @@ public:
 
     // Surcharge de la méthode virtuelle d'authentification
     User* authentificateUser(std::string login, std::string mdp) const override;
+    UserType getRole() const override;
 
     // Méthodes spécifiques au gouvernement (exemple)
     void accessAllData() const;
