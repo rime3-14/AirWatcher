@@ -16,10 +16,15 @@ using namespace std;
 #include <string>
 #include <ctime>
 #include <sstream>
+#include <vector>
+#include <algorithm>
+#include <utility>
+#include <cmath>  // pour sqrt et abs
 
 //------------------------------------------------------ Include personnel
 #include "AirQualityService.h"
 #include "Sensor.h"
+#include "Repository.h"
 
 //------------------------------------------------------------- Constantes
 
@@ -27,23 +32,14 @@ using namespace std;
 
 //----------------------------------------------------- Méthodes publiques
 
-void AirQualityService::Executer()
-// Algorithme : Affiche un message simulant l’exécution du service
-{
-#ifdef MAP
-    cout << "Appel à AirQualityService::Executer" << endl;
-#endif
-    cout << "Analyse de la qualité de l'air en cours..." << endl;
-    // Ici on pourrait insérer des appels aux composants métier réels du service
-    cout << "Analyse terminée." << endl;
-} //----- Fin de Executer
-
 bool AirQualityService::IsEarlier(time_t t1, time_t t2)
 {
     return difftime(t1, t2) < 0;
 }
 
-int AirQualityService::calculateAirQuality(MeasurementGroup Measurements) {
+int AirQualityService::CalculateAirQuality(MeasurementGroup Measurements) 
+// Algorithme : Calcule la moyenne de qualité d'air d'un groupe de mesures donné
+{
     int IndexMax=1;
     int AirQualityIndex=0;
             for (int i=0; i<10; i++) {
@@ -55,28 +51,88 @@ int AirQualityService::calculateAirQuality(MeasurementGroup Measurements) {
             return AirQualityIndex;
 } 
 
-int AirQualityService::calculateAvgAirQuality(Sensor selectedSensor, time_t beg, time_t end) 
-// Algorithme : Affiche un message simulant l’exécution du service
+float AirQualityService::CalculateAvgAirQuality(const std::vector<MeasurementGroup>& measurements)
+// Algorithme : Calcule la moyenne de qualité d'air d'un capteur sur une période donnée
 {
-    int AirQualityIndex = 0;
-    int NbMeasurements = 0;
-    for (const Measurement& sensorMeasure : selectedSensor.GetMeasurements()) {
-        int IndexMax=1;
-        if ((beg==0 && end==0) || (IsEarlier(beg, sensorMeasure.GetTimestamp()) && IsEarlier(sensorMeasure.GetTimestamp(), end))) {
-            for (int i=0; i<10; i++) {
-                if ((sensorMeasure.GetMeasurementO2()>ATMOO3[i]) || (sensorMeasure.GetMeasurementNO2()>ATMONO2[i]) || (sensorMeasure.GetMeasurementSO2()>ATMOSO2[i]) || (sensorMeasure.GetMeasurementP10()>ATMOPM10[i])) {
-                    IndexMax++;
-                }
-            }
-            NbMeasurements = NbMeasurements + 4;
-            AirQualityIndex = AirQualityIndex + IndexMax;
-        }
-    }        
-    AirQualityIndex = AirQualityIndex/NbMeasurements;
-    return AirQualityIndex;
+    float totalIndex = 0.0f;
+    int totalMeasurements = 0;
 
+    for (const MeasurementGroup& measurementGroup : measurements) {
+        int indexMax = CalculateAirQuality(measurementGroup);
+        totalIndex += indexMax;
+        totalMeasurements=totalMeasurements + 4; 
+    }
+
+    if (totalMeasurements == 0) return 0.0f; // éviter division par zéro
+
+    return totalIndex / totalMeasurements;
+}
+
+float AirQualityService::CalculateMeanAirQuality(float centerLatitude, float centerLongitude, int radius, time_t beg, time_t end)
+// Algorithme : Calcule la moyenne de qualité d'air sur une zone circulaire donnée sur une période donnée
+{
+    SensorRepository sensorRepository;
+    std::vector<Sensor*> sensors = sensorRepository.GetSensorsInCircularRadius(centerLatitude, centerLongitude, radius);
+
+    MeasurementRepository measurementRepository;
+    std::vector<MeasurementGroup> measurements = measurementRepository.GetAllMeasurementsInTimeRange(sensors, beg, end);
+
+    float meanAirQuality = CalculateAvgAirQuality(measurements);
+    return meanAirQuality;
+}
+
+void AirQualityService::SortDescByDifference(std::vector<Sensor*>& sensors, const std::vector<int>& values)
+{
+    if (sensors.size() != values.size())
+        throw std::invalid_argument("Les vecteurs doivent avoir la même taille");
+
+    // Associer chaque sensor* à sa valeur correspondante
+    std::vector<std::pair<int, Sensor*>> paired;
+    for (size_t i = 0; i < sensors.size(); ++i)
+    {
+        paired.push_back(std::make_pair(values[i], sensors[i]));
+    }
+
+    // Trier les paires par la valeur (croissant)
+    std::sort(paired.begin(), paired.end(),
+        [](const std::pair<int, Sensor*>& a, const std::pair<int, Sensor*>& b)
+        {
+            return a.first < b.first;
+        });
+
+    // Réécrire le vecteur `sensors` trié
+    for (size_t i = 0; i < sensors.size(); ++i)
+    {
+        sensors[i] = paired[i].second;
+    }
+}
+
+
+float CompareSensorAgainstOthers(Sensor sensor, time_t beg, time_t end) 
+{
+    MeasurementRepository measurementRepository;
+    std::vector<MeasurementGroup> measurements = measurementRepository.GetMeasurementsInTimeRangeBySensor(sensor, beg, end);
+
+    float meanAirQuality = CalculateAvgAirQuality(measurements);
+    return meanAirQuality;
+
+    SensorRepository sensorRepository;
+    std::vector<Sensor*> otherSensors = sensorRepository.GetAllSensorsExcept(sensor);
+    std::vector<int> diffs;
+
+    for (const Sensor& otherSensor : otherSensors)
+    {
+        std::vector<MeasurementGroup> otherMeasurements = measurementRepository.GetMeasurementsInTimeRangeBySensor(otherSensor, beg, end);
+        float otherMeanAirQuality = CalculateAvgAirQuality(otherMeasurements);
+        int diff = std::abs(static_cast<int>(otherMeanAirQuality - MeanAirQuality));
+        diffs.push_back(diff);
+    }
+    SortDescByDifference(otherSensors, diffs);
+    return otherSensors;
 
 }
+
+
 
 //-------------------------------------------- Constructeurs - destructeur
 AirQualityService::AirQualityService()

@@ -37,17 +37,15 @@ class AirQualityService : public Service
 public:
 //----------------------------------------------------- Méthodes publiques
 
-    virtual void Executer() override;
-    // Mode d'emploi :
-    //  Exécute le service d’analyse de qualité de l’air.
-    // Contrat :
-    //  Doit être appelée via un objet concret.
-
     bool IsEarlier(time_t t1, time_t t2);
 
-    int AirQualityService::calculateAirQuality(MeasurementGroup Measurements);
+    int CalculateAirQuality(MeasurementGroup Measurements);
 
-    int calculateAvgAirQuality(Sensor selectedSensor, time_t beg, time_t end);
+    float CalculateAvgAirQuality(const std::vector<MeasurementGroup>& measurements);
+
+    float CalculateMeanAirQuality(float centerLatitude, float centerLongitude, int radius, time_t beg, time_t end);
+
+    void SortDescByDifference(std::vector<Sensor*>& sensors, const std::vector<int>& values);
 
 //-------------------------------------------- Constructeurs - destructeur
     AirQualityService();
