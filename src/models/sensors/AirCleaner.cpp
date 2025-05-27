@@ -33,7 +33,9 @@ float calculateDistance(float centerLat, float centerLong, float latitude, float
 }
 
 float AirCleaner::calculateRadiusPurifiedAir() {
-// Algorithme : Pour calculer le rayon d'air purifié d'un Air Cleaner, on récupère le niveau de qualité de l'air mesuré par les capteurs aux alentours. On regarde si le niveau s'est amélioré après la période d'activité du Air Cleaner pour chacun d'entre eux, puis on définit la distance avec le capteur le plus éloigné comme le rayon d'impact. 
+// Algorithme : Pour calculer le rayon d'air purifié d'un Air Cleaner, on récupère le niveau de qualité de l'air mesuré par les capteurs aux alentours. 
+// On regarde si le niveau s'est amélioré après la période d'activité du Air Cleaner pour chacun d'entre eux, puis on définit la distance avec 
+// le capteur le plus éloigné comme le rayon d'impact. 
 
     // Si le rayon a déjà été calculé auparavant, retourner la valeur 
         if(radius != -1) {

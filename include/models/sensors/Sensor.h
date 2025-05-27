@@ -45,6 +45,7 @@ public:
 
     //------------------------------------------------- Surcharge d'opérateurs
     Sensor& operator=(const Sensor& unSensor);
+    bool operator==(const Sensor& unSensor);
 
     //-------------------------------------------- Constructeurs - destructeur
     Sensor(); // Constructeur par défaut
