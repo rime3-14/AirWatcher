@@ -4,6 +4,10 @@ using namespace std;
 int main(){
     cout << "Hello World!" << endl;
 
-    CSVLoader& loader = CSVLoader::Instance();
+    //CSVLoader& loader = CSVLoader::Instance();
+
+    //for (auto i: loader.getSensors())
+        //cout << i << ' ';
+    cout << endl;
     return 0;
 }

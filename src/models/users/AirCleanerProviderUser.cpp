@@ -16,8 +16,8 @@ AirCleanerProviderUser::AirCleanerProviderUser()
 }
 
 // Constructeur avec paramètres
-AirCleanerProviderUser::AirCleanerProviderUser(std::string id, std::string login, std::string mdp)
-    : User(id, login, mdp)
+AirCleanerProviderUser::AirCleanerProviderUser(std::string id, vector<string> airCleanersId)
+    : User(id), airCleanersId(airCleanersId)
 {
     #ifdef MAP
         cout << "Appel au constructeur de <AirCleanerProviderUser>" << endl;
@@ -33,9 +33,9 @@ AirCleanerProviderUser::~AirCleanerProviderUser()
 }
 
 // Implémentation de la méthode d'authentification
-User* AirCleanerProviderUser::authentificateUser(std::string login, std::string mdp) const
+User* AirCleanerProviderUser::authentificateUser(std::string login) const
 {
-    if (this->login == login && this->mdp == mdp)
+    if (this->id == login)
     {
         return new AirCleanerProviderUser(*this);  // retourne une copie
     }
@@ -61,4 +61,22 @@ float AirCleanerProviderUser::calculateAirCleanerImpact() const
     for(AirCleaner elem : this.airCleaners) {
         some += elem.calculateImprovedAirLevel; 
     } return somme/(this.nbAirCleaners); 
+}
+
+string AirCleanerProviderUser::getId() const{
+    return this->id;
+}
+
+void addAirCleaner(string airCleanerId)
+{
+    for (const auto& airCleaner : airCleanersId)
+    {
+        if (airCleaner == airCleanerId)
+        {
+            cout << "Le purificateur d'air est déjà ajouté." << endl;
+            return; 
+        }
+    }
+    
+    airCleanersId.push_back(airCleanerId);
 }

@@ -15,10 +15,12 @@ public:
     static GovernmentUser* getInstance();
 
     // Surcharge de la méthode virtuelle d'authentification
-    User* authentificateUser(std::string login, std::string mdp) const override;
+    User* authentificateUser(std::string login) const override;
 
     // Méthodes spécifiques au gouvernement (exemple)
     void accessAllData() const;
+
+    string getId() const;
 
 private:
     // Constructeur privé (singleton)

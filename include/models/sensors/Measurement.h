@@ -48,10 +48,6 @@ public:
 
 //------------------------------------------------- Surcharge d'opérateurs
     Measurement & operator = ( const Measurement & unMeasurement );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 
 
 //-------------------------------------------- Constructeurs - destructeur
@@ -94,5 +90,8 @@ std::string timestamp;
 
 //-------------------------------- Autres définitions dépendantes de <Measurement.h>
 
+std::ostream& operator<<(std::ostream& os, const Measurement& m);
+
 #endif // MEASUREMENT_H
+
 

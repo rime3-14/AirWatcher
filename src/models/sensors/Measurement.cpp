@@ -94,6 +94,17 @@ Measurement & Measurement::operator = ( const Measurement & unMeasurement )
     return *this;
 } //----- Fin de operator =
 
+std::ostream& operator<<(std::ostream& os, const Measurement& m)
+{
+    os << "Measurement("
+       << "ID: " << m.GetId()
+       << ", Unit: " << m.Getunit()
+       << ", Desc: " << m.GetDescription()
+       << ", Value: " << std::fixed << std::setprecision(2) << m.Getvalue()
+       << ", Timestamp: " << m.GetTimestamp()
+       << ")";
+    return os;
+}
 
 //-------------------------------------------- Constructeurs - destructeur
 Measurement::Measurement() : id(""), unit(""), description(""), value(0.0f), timestamp("")

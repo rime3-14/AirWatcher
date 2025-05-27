@@ -90,7 +90,7 @@ map<string,vector<Measurement>> CSVLoader::loadMeasurements(){
 }
 
 vector<Sensor> CSVLoader::loadSensors(){
-    map<string,vector<Measurement>> allMeasurementsBySensorId = loadMeasurements(sensors);
+    map<string,vector<Measurement>> allMeasurementsBySensorId = loadMeasurements();
     vector<Sensor> sensors;
 
     ifstream ifs;
@@ -132,7 +132,7 @@ vector<PrivateUser> CSVLoader::loadUsers(){
     ifs.open("data/users.csv");
     if(!ifs.is_open()){
         cout << "Erreur d'ouverture du fichier" << endl;
-        return;
+        return users;
     }
     string line;
     while(getline(ifs, line)){
@@ -156,7 +156,7 @@ vector<PrivateUser> CSVLoader::loadUsers(){
         else {
             bool userFound = false;
             // Check if the user already exists
-            for (const auto& user : users) {
+            for (auto& user : users) {
                 if (user.getId() == id) {
                     userFound = true;
                     user.addSensor(sensorId);
@@ -176,7 +176,7 @@ vector<PrivateUser> CSVLoader::loadUsers(){
     return users;
 }
 
-vector<AirCleaner> loadAirCleaners(){
+vector<AirCleaner> CSVLoader::loadAirCleaners(){
     vector<AirCleaner> airCleaners;
 
     ifstream ifs;
@@ -200,7 +200,15 @@ vector<AirCleaner> loadAirCleaners(){
         float latitude = stof(latitudeString);
         float longitude = stof(longitudeString);
 
-        AirCleaner airCleaner(id, latitude, longitude, debut, fin);
+        // Convert debut and fin to time_t
+        struct tm tmDebut = {};
+        struct tm tmFin = {};
+        strptime(debut.c_str(), "%Y-%m-%d %H:%M:%S", &tmDebut);
+        strptime(fin.c_str(), "%Y-%m-%d %H:%M:%S", &tmFin);
+        time_t debutTime = mktime(&tmDebut);
+        time_t finTime = mktime(&tmFin);
+
+        AirCleaner airCleaner(id, latitude, longitude, debutTime, finTime);
         airCleaners.push_back(airCleaner);
     }
     return airCleaners;
@@ -237,7 +245,7 @@ vector<AirCleanerProviderUser> CSVLoader::loadProviders(){
         else {
             bool providerFound = false;
             // Check if the provider already exists
-            for (const auto& provider : providers) {
+            for (auto& provider : providers) {
                 if (provider.getId() == id) {
                     providerFound = true;
                     provider.addAirCleaner(airCleanerId);

@@ -30,18 +30,18 @@ public:
     //----------------------------------------------------- Méthodes publiques
 
     // Getters
-    std::string GetId() const;
-    float GetLatitude() const;
-    float GetLongitude() const;
-    bool GetReliability() const;
-    vector<Measurement> GetMeasurements() const;
+    std::string getId() const;
+    float getLatitude() const;
+    float getLongitude() const;
+    bool getReliability() const;
+    vector<Measurement> getMeasurements() const;
 
     // Setters
-    void SetId(const std::string& newId);
-    void SetLatitude(float newLatitude);
-    void SetLongitude(float newLongitude);
-    void SetReliability(bool newReliability);
-    void SetMeasurements(vector<Measurement> newMeasurements);
+    void setId(const std::string& newId);
+    void setLatitude(float newLatitude);
+    void setLongitude(float newLongitude);
+    void setReliability(bool newReliability);
+    void setMeasurements(vector<Measurement> newMeasurements);
 
     //------------------------------------------------- Surcharge d'opérateurs
     Sensor& operator=(const Sensor& unSensor);
@@ -64,3 +64,5 @@ protected:
 };
 
 #endif // SENSOR_H
+
+std::ostream& operator<<(std::ostream& os, const Sensor& sensor);
