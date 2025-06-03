@@ -1,27 +1,34 @@
+/*************************************************************************
+                           Service  -  classe abstraite
+                             -------------------
+    début                : 26/05/2025
+    copyright            : (C) 2025 par Bindech Rida
+    e-mail               : rida.bindech@gmail.com
+*************************************************************************/
+
+//---------- Réalisation de la classe <Service> (fichier Service.h) ------------
 #if ! defined ( SERVICE_H )
-#define SERVICE_H 
+#define SERVICE_H
 
 //--------------------------------------------------- Interfaces utilisées
-// (Aucune interface externe n'est utilisée.)
-
-using namespace std;
+#include <string>
 
 //------------------------------------------------------------- Constantes
-// (Aucune constante n'est définie dans ce fichier.)
 
 //------------------------------------------------------------------ Types
-// (Aucun type supplémentaire n'est défini en dehors de la classe.)
 
 //------------------------------------------------------------------------
-// Rôle de la classe <Xxx>
+// Rôle de la classe <Service>
 //
-// La classe <Service> est une classe abstraite qui sert de base pour
-// représenter un service. Elle définit des méthodes virtuelles que les
-// classes dérivées doivent implémenter pour gérer différents types de services.
-//
+// Classe abstraite servant de base aux différents services disponibles
+// dans l'application. Toute classe dérivant de Service devra implémenter
+// les méthodes virtuelles pures définies ici.
 //------------------------------------------------------------------------
+
 class Service
 {
+//----------------------------------------------------------------- PUBLIC
+
 public:
 //----------------------------------------------------- Méthodes publiques
 
@@ -47,10 +54,8 @@ protected:
 
 //----------------------------------------------------- Attributs protégés
 
-
-    // Méthodes virtuelles pures à définir dans les classes filles 
 };
 
+//------------------------------- Autres définitions dépendantes de <Service.h>
 
-
-#endif
+#endif // SERVICE_H
