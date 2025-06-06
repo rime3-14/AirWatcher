@@ -11,7 +11,6 @@
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
-using namespace std;
 #include <iostream>
 #include <string>
 #include <ctime>
@@ -21,10 +20,11 @@ using namespace std;
 #include <utility>
 #include <cmath>  // pour sqrt et abs
 
+using namespace std;
 //------------------------------------------------------ Include personnel
-#include "AirQualityService.h"
-#include "Sensor.h"
-#include "Repository.h"
+#include "services/AirQualityService.h"
+#include "models/sensors/Sensor.h"
+#include "dataAccess/Repository.h"
 
 //------------------------------------------------------------- Constantes
 

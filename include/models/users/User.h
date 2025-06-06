@@ -1,7 +1,7 @@
 #if ! defined ( USER_H )
 #define USER_H
 #include <string>
-#include <UserTypeEnum.h>
+#include "UserTypeEnum.h"
 
 //--------------------------------------------------- Interfaces utilisées
 // (Aucune interface externe n'est utilisée.)

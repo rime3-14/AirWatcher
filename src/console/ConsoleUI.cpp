@@ -4,7 +4,7 @@
 
 #include "console/ConsoleUI.h"
 
-#include <AuthManager.h>
+#include "console/AuthManager.h"
 
 #include "models/users/UserTypeEnum.h"
 

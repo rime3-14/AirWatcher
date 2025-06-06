@@ -14,9 +14,9 @@
 #include <iostream>
 #include <string>
 #include <math.h>
-#include "include/dataAccess/Repository.h"
-#include "include/dataAccess/SensorRepository.h"
-#include "include/dataAccess/CSVLoader.h"
+#include "dataAccess/Repository.h"
+#include "dataAccess/SensorRepository.h"
+#include "dataAccess/CSVLoader.h"
 using namespace std;
 
 //------------------------------------------------------ Include personnel
@@ -27,7 +27,7 @@ using namespace std;
 
 //----------------------------------------------------- Méthodes publiques
 
-Sensor & sensor SensorRepository::getSensor(Sensor sensor) {
+Sensor & SensorRepository::getSensor(Sensor sensor) {
     CSVLoader * csvLoader = new CSVLoader(); 
     vector<Sensor> & allSensors = csvLoader->getSensors(); 
     

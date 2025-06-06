@@ -10,9 +10,9 @@
 #if ! defined ( MeasurementRepository_H )
 #define MeasurementRepository_H
 
-#include "include/models/sensors/Sensor.h"
-#include "include/models/sensors/Measurement.h"
-#include "include/dataAccess/Repository.h"
+#include "models/sensors/Sensor.h"
+#include "models/sensors/Measurement.h"
+#include "dataAccess/Repository.h"
 
 
 //--------------------------------------------------- Interfaces utilisées
@@ -33,9 +33,9 @@ class MeasurementRepository : public Repository
 public:
 //----------------------------------------------------- Méthodes publiques
 
-    std::vector<Measurement> getAllMeasurementsInTimeRange(const std::vector<Sensor>& sensors, time_t begin, time_t end);
-    std::vector<Measurement> getMeasurementsInTimeRangeBySensor(const Sensor& sensor, time_t begin, time_t end);
-    std::vector<Measurement> getMeasurementsBySensor(const Sensor& sensor);
+    std::vector<Measurement> getAllMeasurementsInTimeRange(vector<Sensor> sensors, time_t begin, time_t end);
+    std::vector<Measurement> getMeasurementsInTimeRangeBySensor(Sensor sensor, time_t begin, time_t end);
+    std::vector<Measurement> getMeasurementsBySensor(Sensor& sensor);
 
 //------------------------------------------------- Surcharge d'opérateurs
     MeasurementRepository & operator = ( const MeasurementRepository & unMeasurementRepository );
@@ -49,12 +49,6 @@ public:
 
     MeasurementRepository ( const MeasurementRepository & unMeasurementRepository );
     // Mode d'emploi (constructeur de copie) :
-    //
-    // Contrat :
-    //
-
-    MeasurementRepository ( );
-    // Mode d'emploi :
     //
     // Contrat :
     //

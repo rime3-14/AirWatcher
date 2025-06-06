@@ -12,9 +12,9 @@
 
 //--------------------------------------------------- Interfaces utilisées
 #include <vector> 
-#include "include/dataAccess/Repository.h"
-#include "include/models/sensors/Sensor.h"
-#include "include/models/sensors/Measurement.h"
+#include "dataAccess/Repository.h"
+#include "models/sensors/Sensor.h"
+#include "models/sensors/Measurement.h"
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -56,12 +56,6 @@ void markSensorAsUnreliable(Sensor sensor);
     //
 
     SensorRepository ( );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-    SensorRepository ();
     // Mode d'emploi :
     //
     // Contrat :

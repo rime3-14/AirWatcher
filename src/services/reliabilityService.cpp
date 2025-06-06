@@ -4,14 +4,14 @@ using namespace std;
 #include <cmath>
 #include <numeric>
 
-#include "include/services/reliabilityService.h"
+#include "services/ReliabilityService.h"
 
-bool reliabilityService::analyseSensor(const Sensor& sensor) {
+bool ReliabilityService::analyseSensor(const Sensor& sensor) {
     // Analyse le capteur pour déterminer sa fiabilité
     return true; 
 }
 
-float reliabilityService::calculateZScoreDeviationBetween(const Sensor& sensor, const std::vector<Sensor>& otherSensors) {
+float ReliabilityService::calculateZScoreDeviationBetween(const Sensor& sensor, const std::vector<Sensor>& otherSensors) {
     if (otherSensors.empty()) {
         return 0.0f; // Pas de capteurs pour comparer
     }

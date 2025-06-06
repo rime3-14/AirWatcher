@@ -52,12 +52,6 @@ virtual void classeAbstraite() const = 0;
     // Contrat :
     //
 
-    Repository ();
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
     virtual ~Repository ( );
     // Mode d'emploi :
     //
