@@ -28,7 +28,7 @@ int main() {
     m3 = m2;
     assert(m3.getUnit() == "µg/m3"); 
     assert(m3.getDescription() == "concentration d'ozone"); 
-    assert(m3.getValue() == 50); 
+    assert(m3.getValue() == 60); 
     cout << "." << endl; 
     cout << "Tous les tests unitaires pour la classe <Measurement> ont été validés." << endl; 
 
@@ -38,12 +38,11 @@ int main() {
     Measurement m6 = Measurement("µg/m3", "concentration de P10", 15);
     MeasurementGroup mg;
     mg.measurementNO2 = m4; 
-    mg.measurementSO2 = m5;
+    mg.measurementSO = m5;
     mg.measurementP10 = m6;
     mg.measurementO3 = m2;
-
+    cout << mg << endl; 
     cout << ".";
-
 
     return EXIT_SUCCESS; 
 }

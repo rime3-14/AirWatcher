@@ -74,6 +74,8 @@ Measurement & Measurement::operator = ( const Measurement & unMeasurement )
     return *this;
 } //----- Fin de operator =
 
+
+
 ostream& operator<<(ostream& os, const Measurement& m)
 {
     os << "[" << m.getDescription()
@@ -91,13 +93,8 @@ std::ostream& operator<<(std::ostream& os, const MeasurementGroup& group)
     os << "Timestamp: " << buffer << "\n"
        << "      O3  : " << group.measurementO3 << "\n"
        << "      NO2 : " << group.measurementNO2 << "\n"
-       << "      SO2 : " << group.measurementSO2 << "\n"
+       << "      SO2 : " << group.measurementSO << "\n"
        << "      P10 : " << group.measurementP10;
-    os << "Measurement("
-       << ", Unit: " << m.getUnit()
-       << ", Desc: " << m.getDescription()
-       << ", Value: " << fixed << setprecision(2) << m.getValue()
-       << ")";
     return os;
 }
 
