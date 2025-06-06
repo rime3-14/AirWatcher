@@ -15,6 +15,7 @@ using namespace std;
 #include <string>
 #include <iostream>
 #include <ctime>
+#include <iomanip>
 
 //------------------------------------------------------ Include personnel
 #include "models/sensors/Measurement.h"
@@ -74,14 +75,12 @@ Measurement & Measurement::operator = ( const Measurement & unMeasurement )
     return *this;
 } //----- Fin de operator =
 
-std::ostream& operator<<(std::ostream& os, const Measurement& m)
+ostream& operator<<(ostream& os, const Measurement& m)
 {
     os << "Measurement("
-       << "ID: " << m.GetId()
-       << ", Unit: " << m.Getunit()
-       << ", Desc: " << m.GetDescription()
-       << ", Value: " << std::fixed << std::setprecision(2) << m.Getvalue()
-       << ", Timestamp: " << m.GetTimestamp()
+       << ", Unit: " << m.getUnit()
+       << ", Desc: " << m.getDescription()
+       << ", Value: " << fixed << setprecision(2) << m.getValue()
        << ")";
     return os;
 }

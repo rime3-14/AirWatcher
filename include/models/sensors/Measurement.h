@@ -19,8 +19,9 @@ using namespace std;
 
 //------------------------------------------------------------------------
 // Rôle de la classe <Measurement>
-// Permet de lister les caractéristiques d'une mesure d'un seul type (O3, NO2, SO2 ou P10)
-// d'un capteur à une date précise. 
+// Permet de regrouper les caractéristiques d'une mesure d'un seul type (O3, NO2, SO2 ou P10)
+// parmi les 4 qui permettent de calculer la qualité de l'air mesurée par 
+// un capteur à une date précise. Est un élément de Struct<MeasurementGroup>.
 //
 //------------------------------------------------------------------------
 
@@ -84,17 +85,20 @@ protected:
 //-------------------------------- Autres définitions dépendantes de <Measurement.h>
 // ------------------------------- Struct <MeasurementGroup>
 // Rôle du Struct <MeasurementGroup>
-// Permet de regrouper les 4 types de mesures recueillies par un capteur à une date précise 
+// Permet de regrouper les 4 types de mesures de type <Measurement>
+//  recueillies par un capteur à une date précise 
 // qui sont nécessaires pour calculer la qualité de l'air.
+
 struct MeasurementGroup {
     time_t timestamp;
-    Measurement measurementO3;
+    Measurement measurementO3; 
     Measurement measurementNO2; 
-    Measurement measurementSO2; 
+    Measurement measurementSO; 
     Measurement measurementP10; 
+    
 };
 
-std::ostream& operator<<(std::ostream& os, const Measurement& m);
+ostream& operator<<(ostream& os, const Measurement& m);
 
 #endif // MEASUREMENT_H
 
