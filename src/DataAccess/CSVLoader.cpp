@@ -17,7 +17,7 @@ CSVLoader& CSVLoader::Instance() {
     return instance;
 }
 
-vector<vector<string>> CSVLoader::loadAttributesInfo(){
+vector<vector<string>> CSVLoader::loadAttributesInfo() {
     vector<vector<string>> attributesInfo;
     
     ifstream ifsAttributes;

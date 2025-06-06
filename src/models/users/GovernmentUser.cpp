@@ -1,4 +1,4 @@
-#include "users/GovernmentUser.h"
+#include "models/users/GovernmentUser.h"
 #include <iostream>
 
 // Initialisation du pointeur statique
@@ -28,6 +28,11 @@ User* GovernmentUser::authentificateUser(std::string login) const
         return instance;
     }
     return nullptr;
+}
+
+UserType GovernmentUser::getRole() const override
+{
+    return UserType::Government;
 }
 
 // Méthode spécifique

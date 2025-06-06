@@ -1,13 +1,16 @@
 #include <iostream>
 using namespace std;
 #include "dataAccess/CSVLoader.h"
-int main(){
+#include "console/AuthManager.h"
+#include "console/ConsoleUI.h"
+
+int main() {
     cout << "Hello World!" << endl;
 
-    //CSVLoader& loader = CSVLoader::Instance();
+    ConsoleUI consoleUI;
+    consoleUI.run();  // Starts interactive loop
+    return 0;
 
-    //for (auto i: loader.getSensors())
-        //cout << i << ' ';
-    cout << endl;
+    CSVLoader& loader = CSVLoader::Instance();
     return 0;
 }

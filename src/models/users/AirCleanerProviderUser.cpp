@@ -1,7 +1,7 @@
 //---------- Réalisation de la classe <AirCleanerProviderUser> (fichier AirCleanerProviderUser.cpp) ------------
 
 //---------------------------------------------------------------- INCLUDE
-#include "users/AirCleanerProviderUser.h"
+#include "models/users/AirCleanerProviderUser.h"
 #include <iostream>
 
 using namespace std;
@@ -40,6 +40,11 @@ User* AirCleanerProviderUser::authentificateUser(std::string login) const
         return new AirCleanerProviderUser(*this);  // retourne une copie
     }
     return nullptr;
+}
+
+UserType AirCleanerProviderUser::getRole() const override
+{
+    return UserType::AirCleanerProvider;
 }
 
 // Affichage des purificateurs d'air

@@ -21,6 +21,7 @@ public:
 
     // Méthode d'authentification
     User* authentificateUser(string login) const override;
+    UserType getRole() const override;
 
     // Méthodes spécifiques
     void showAirCleaners() const;

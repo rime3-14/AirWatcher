@@ -1,5 +1,7 @@
 #if ! defined ( USER_H )
-#define USER_H 
+#define USER_H
+#include <string>
+#include <UserTypeEnum.h>
 
 //--------------------------------------------------- Interfaces utilisées
 // (Aucune interface externe n'est utilisée.)
@@ -44,7 +46,9 @@ public:
     //
     // Contrat : Aucun.
 
-    User(string id); 
+    User(string id);
+
+    virtual UserType getRole() const = 0;
 
     virtual ~User();
     // Mode d'emploi :

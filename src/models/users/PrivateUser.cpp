@@ -1,4 +1,4 @@
-#include "users/PrivateUser.h"
+#include "models/users/PrivateUser.h"
 #include <iostream>
 
 using namespace std;
@@ -63,7 +63,10 @@ User* PrivateUser::authentificateUser(std::string login) const
     return nullptr;
 }
 
-
+UserType PrivateUser::getRole() const override
+{
+    return UserType::Private;
+}
 
 
 
