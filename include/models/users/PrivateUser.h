@@ -4,7 +4,7 @@
 #include "User.h"
 #include <string>
 #include <vector>
-#include "models/sensors/PrivateSensor.h"  
+#include "models/sensors/Sensor.h"  
 
 using namespace std;
 

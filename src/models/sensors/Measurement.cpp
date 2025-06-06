@@ -15,10 +15,10 @@ using namespace std;
 #include <string>
 #include <iostream>
 #include <ctime>
+#include <iomanip>
 
 //------------------------------------------------------ Include personnel
 #include "models/sensors/Measurement.h"
-
 //------------------------------------------------------------- Constantes
 
 
@@ -76,13 +76,23 @@ Measurement & Measurement::operator = ( const Measurement & unMeasurement )
 
 std::ostream& operator<<(std::ostream& os, const Measurement& m)
 {
-    os << "Measurement("
-       << "ID: " << m.GetId()
-       << ", Unit: " << m.Getunit()
-       << ", Desc: " << m.GetDescription()
-       << ", Value: " << std::fixed << std::setprecision(2) << m.Getvalue()
-       << ", Timestamp: " << m.GetTimestamp()
-       << ")";
+    os << "[" << m.getDescription()
+       << " | " << std::fixed << std::setprecision(2) << m.getValue()
+       << " " << m.getUnit() << "]";
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const MeasurementGroup& group)
+{
+    char buffer[80];
+    std::tm* timeinfo = std::localtime(&group.timestamp);
+    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", timeinfo);
+
+    os << "Timestamp: " << buffer << "\n"
+       << "      O3  : " << group.measurementO3 << "\n"
+       << "      NO2 : " << group.measurementNO2 << "\n"
+       << "      SO2 : " << group.measurementSO2 << "\n"
+       << "      P10 : " << group.measurementP10;
     return os;
 }
 
