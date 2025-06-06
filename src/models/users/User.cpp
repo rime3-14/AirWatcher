@@ -14,13 +14,13 @@ using namespace std;
 //-------------------------------------------- Constructeurs - destructeur
 // Constructeur par défaut
 User::User()
-    : id(""), login(""), mdp("") 
+    : id("")
 {
 
 }
 
-User::User(string id, string login, string mdp)
-    : id(id), login(login), mdp(mdp)
+User::User(string id)
+    : id(id)
 {
     // Affectation directe via l'initialisation
 }

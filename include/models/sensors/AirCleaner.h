@@ -70,7 +70,7 @@ public:
     // Contrat :
     //
 
-    AirCleaner (string anId, float lat , float lon, float aRadius=-1);
+    AirCleaner (string anId, float lat , float lon, time_t debut, time_t fin);
     // Mode d'emploi :
     //
     // Contrat :
@@ -90,7 +90,8 @@ protected:
     float latitude; 
     float longitude; 
     float radius;
-
+    time_t debut;
+    time_t fin;
 };
 
 //-------------------------------- Autres définitions dépendantes de <AirCleaner>

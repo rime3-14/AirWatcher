@@ -26,7 +26,7 @@ class User
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    virtual User* authentificateUser(string login, string mdp) const = 0;
+    virtual User* authentificateUser(string login) const = 0;
     // Mode d'emploi :
     // Méthode virtuelle pure qui permet d'authentifier un utilisateur.
     // Les classes dérivées doivent fournir leur propre implémentation.
@@ -44,7 +44,7 @@ public:
     //
     // Contrat : Aucun.
 
-    User(string id, string login, string mdp); 
+    User(string id); 
 
     virtual ~User();
     // Mode d'emploi :
@@ -61,9 +61,7 @@ protected:
 
 //----------------------------------------------------- Attributs protégés
  
-string id; 
-string login; 
-string mdp;
+string id;
 
 };
 

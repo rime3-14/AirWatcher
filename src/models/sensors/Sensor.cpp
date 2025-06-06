@@ -25,54 +25,54 @@ using namespace std;
 
 // ----------- Getters -----------
 
-std::string Sensor::GetId() const
+std::string Sensor::getId() const
 {
     return id;
 }
 
-float Sensor::GetLatitude() const
+float Sensor::getLatitude() const
 {
     return latitude;
 }
 
-float Sensor::GetLongitude() const
+float Sensor::getLongitude() const
 {
     return longitude;
 }
 
-bool Sensor::GetReliability() const
+bool Sensor::getReliability() const
 {
     return reliability;
 }
 
-Measurement* Sensor::GetMeasurements() const
+Measurement* Sensor::getMeasurements() const
 {
     return measurements;
 }
 
 // ----------- Setters -----------
 
-void Sensor::SetId(const std::string& newId)
+void Sensor::setId(const std::string& newId)
 {
     id = newId;
 }
 
-void Sensor::SetLatitude(float newLatitude)
+void Sensor::setLatitude(float newLatitude)
 {
     latitude = newLatitude;
 }
 
-void Sensor::SetLongitude(float newLongitude)
+void Sensor::setLongitude(float newLongitude)
 {
     longitude = newLongitude;
 }
 
-void Sensor::SetReliability(bool newReliability)
+void Sensor::setReliability(bool newReliability)
 {
     reliability = newReliability;
 }
 
-void Sensor::SetMeasurements(Measurement* newMeasurements)
+void Sensor::setMeasurements(Measurement* newMeasurements)
 {
     measurements = newMeasurements;
 }
@@ -101,6 +101,24 @@ bool Sensor::operator==(const Sensor& unSensor) {
     }
 }
 
+std::ostream& operator<<(std::ostream& os, const Sensor& sensor)
+{
+    os << "Sensor ID: " << sensor.GetId()
+       << "\n  Location: (" << std::fixed << std::setprecision(4)
+       << sensor.GetLatitude() << ", " << sensor.GetLongitude() << ")"
+       << "\n  Reliability: " << (sensor.GetReliability() ? "true" : "false")
+       << "\n  Measurements: [";
+
+    const auto& measurements = sensor.GetMeasurements();
+    for (size_t i = 0; i < measurements.size(); ++i)
+    {
+        os << "\n    " << measurements[i];
+    }
+
+    if (!measurements.empty()) os << "\n  ";
+    os << "]";
+    return os;
+}
 
 //-------------------------------------------- Constructeurs - destructeur
 

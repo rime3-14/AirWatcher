@@ -43,10 +43,6 @@ public:
 
 //------------------------------------------------- Surcharge d'opérateurs
     Measurement & operator = ( const Measurement & unMeasurement );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 
 
 //-------------------------------------------- Constructeurs - destructeur
@@ -98,5 +94,8 @@ struct MeasurementGroup {
     Measurement measurementP10; 
 };
 
+std::ostream& operator<<(std::ostream& os, const Measurement& m);
+
 #endif // MEASUREMENT_H
+
 

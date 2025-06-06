@@ -4,7 +4,7 @@
 #include "User.h"
 #include <string>
 #include <vector>
-//#include "PrivateSensor.h"  
+#include "models/sensors/PrivateSensor.h"  
 
 using namespace std;
 
@@ -13,21 +13,22 @@ class PrivateUser : public User
 public:
     // Constructeurs et destructeur
     PrivateUser();
-    PrivateUser(string id, string login, string mdp);
+    PrivateUser(string id, vector<string> sensors);
     virtual ~PrivateUser();
 
     // Méthodes publiques
     void addPoint(bool reliable);
     void showPoints() const;
-    void addSensor();
+    void addSensor(string sensorId);
+    string getId() const;
 
     // Implémentation de la méthode abstraite
-    User* authentificateUser(std::string login, std::string mdp) const override;
+    User* authentificateUser(std::string login) const override;
 
 
 protected:
     int points;
-    //vector<PrivateSensor> sensors;
+    vector<string> sensorsId;
     bool reliability;
 };
 

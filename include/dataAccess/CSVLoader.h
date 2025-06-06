@@ -10,6 +10,7 @@
 #include <vector>
 #include <map>
 #include "models/sensors/Sensor.h"
+#include "models/sensors/AirCleaner.h"
 #include "models/users/PrivateUser.h"
 #include "models/users/AirCleanerProviderUser.h"
 #include "models/sensors/Measurement.h"
@@ -37,14 +38,9 @@ public:
 
     
     const vector<Sensor>& getSensors() const;
+    const vector<AirCleaner>& getAirCleaners() const;
     const vector<PrivateUser>& getUsers() const;
     const vector<AirCleanerProviderUser>& getProviders() const;
-    const vector<string>& getFiles() const;
-
-    void setFiles(const vector<string>& files);
-    void setSensors(const vector<Sensor>& sensors);
-    void setUsers(const vector<PrivateUser>& users);
-    void setProviders(const vector<AirCleanerProviderUser>& providers);
     
 //------------------------------------------------------------------ PRIVE
 private:
@@ -55,18 +51,21 @@ private:
     virtual ~CSVLoader ( );
 
 //------------------------------------------------------------- Méthodes privées
+    vector<AirCleaner> loadAirCleaners();
     vector<Sensor> loadSensors();
-    map<string,vector<Measurement>> loadMeasurements(vector<Sensor>& sensors);
+    map<string,vector<Measurement>> loadMeasurements();
     vector<vector<string>> loadAttributesInfo();
-
-    void loadUsers();
-    void loadProviders();
+    vector<PrivateUser>  loadUsers();
+    vector<AirCleanerProviderUser> loadProviders();
+    
 //---------------------------------------------- Attributs privés
     static CSVLoader instance;
-    vector<string> files;
+
     vector<Sensor> sensors;
+    vector<AirCleaner> airCleaners;
     vector<PrivateUser> users;
     vector<AirCleanerProviderUser> providers;
+
 };
 
 //-------------------------------- Autres définitions dépendantes de <CSVLoader>

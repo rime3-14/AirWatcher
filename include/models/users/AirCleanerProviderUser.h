@@ -13,20 +13,24 @@ using namespace std;
 class AirCleanerProviderUser : public User
 {
 public:
+
     // Constructeurs et destructeur
     AirCleanerProviderUser();
-    AirCleanerProviderUser(string id, string login, string mdp);
+    AirCleanerProviderUser(string id, vector<string> airCleanersId);
     virtual ~AirCleanerProviderUser();
 
     // Méthode d'authentification
-    User* authentificateUser(string login, string mdp) const override;
+    User* authentificateUser(string login) const override;
 
     // Méthodes spécifiques
     void showAirCleaners() const;
     float calculateAirCleanerImpact() const;
+    void addAirCleaner(string airCleanerId);
+
+    string getId() const;
 
 protected:
-    vector<AirCleaner> airCleaners;
+    vector<string> airCleanersId;
 };
 
 #endif // AIRCLEANERSPROVIDERUSER_H
