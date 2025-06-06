@@ -99,6 +99,7 @@ struct MeasurementGroup {
 };
 
 ostream& operator<<(ostream& os, const Measurement& m);
+ostream& operator<<(ostream& os, const MeasurementGroup& group);
 
 #endif // MEASUREMENT_H
 

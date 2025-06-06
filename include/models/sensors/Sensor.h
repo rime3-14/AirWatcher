@@ -13,14 +13,16 @@
 //--------------------------------------------------- Interfaces utilisées
 #include <string>
 #include <vector>
-#include "Measurement.h"
+#include <iostream>
+#include "models/users/PrivateUser.h"
+#include "models/sensors/Measurement.h"  // <-- important
 
 using namespace std;
 
 //------------------------------------------------------------------------
 // Rôle de la classe <Sensor>
 // Représente un capteur avec un identifiant, des coordonnées géographiques,
-// un indicateur de fiabilité et une collection de mesures.
+// un indicateur de fiabilité, un fournisseur et une collection de mesures groupées.
 //------------------------------------------------------------------------
 
 class Sensor
@@ -34,14 +36,16 @@ public:
     float getLatitude() const;
     float getLongitude() const;
     bool getReliability() const;
-    vector<Measurement> getMeasurements() const;
+    PrivateUser getProvider() const;
+    vector<MeasurementGroup> getMeasurements() const;
 
     // Setters
     void setId(const std::string& newId);
     void setLatitude(float newLatitude);
     void setLongitude(float newLongitude);
     void setReliability(bool newReliability);
-    void setMeasurements(vector<Measurement> newMeasurements);
+    void setProvider(const PrivateUser& newProvider);
+    void setMeasurements(const vector<MeasurementGroup>& newMeasurements);
 
     //------------------------------------------------- Surcharge d'opérateurs
     Sensor& operator=(const Sensor& unSensor);
@@ -50,7 +54,7 @@ public:
     //-------------------------------------------- Constructeurs - destructeur
     Sensor(); // Constructeur par défaut
     Sensor(const Sensor& unSensor); // Constructeur de copie
-    Sensor(std::string unId, float unLatitude, float unLongitude, bool unReliability, vector<Measurement> unMeasurements);
+    Sensor(const std::string& unId, float unLatitude, float unLongitude, bool unReliability, PrivateUser unProvider, const std::vector<MeasurementGroup>& unMeasurements);
     virtual ~Sensor();
 
 //------------------------------------------------------------------ PRIVE
@@ -60,7 +64,8 @@ protected:
     float latitude;
     float longitude;
     bool reliability;
-    vector<Measurement> measurements;
+    PrivateUser provider;
+    vector<MeasurementGroup> measurements;
 };
 
 #endif // SENSOR_H
