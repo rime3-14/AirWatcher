@@ -12,6 +12,9 @@
 
 //--------------------------------------------------- Interfaces utilisées
 #include <vector> 
+#include "include/dataAccess/Repository.h"
+#include "include/models/sensors/Sensor.h"
+#include "include/models/sensors/Measurement.h"
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -28,11 +31,11 @@ class SensorRepository : public Repository
 public:
 //----------------------------------------------------- Méthodes publiques
 
-Sensor & sensor getSensor(Sensor sensor); 
+Sensor& getSensor(const Sensor& sensor);
 
 vector<Sensor> getSensorsInCircularRadius(float centerLatitude, float centerLongitude, float radius); 
 
-vector<Sensor> getAllSensorsExcept(Sensor & sensor); 
+vector<Sensor> getAllSensorsExcept(float centerLatitude, float centerLongitude, float radius); 
 
 void markSensorAsUnreliable(Sensor sensor); 
 

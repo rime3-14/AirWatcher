@@ -44,8 +44,6 @@ using namespace std;
     }
     
     // ----------- Setters -----------
-
-    
     void Measurement::setUnit(const string& newunit)
     {
         unit = newunit;
