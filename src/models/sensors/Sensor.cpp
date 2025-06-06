@@ -92,6 +92,16 @@ Sensor& Sensor::operator=(const Sensor& unSensor)
     return *this;
 }
 
+
+bool Sensor::operator==(const Sensor& unSensor) {
+    if(unSensor.id != this.id || unSensor.latitude != this.latitude || unSensor.longitude != this.longitude) {
+        return false; 
+    } else {
+        return true; 
+    }
+}
+
+
 //-------------------------------------------- Constructeurs - destructeur
 
 Sensor::Sensor()
