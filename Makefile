@@ -1,32 +1,31 @@
-# === Variables Générales ===
+# ====== Variables ======
 SRC_DIR := src
 INCLUDE_DIR := include
 TEST_DIR := tests
 
 CXX := g++
-CXXFLAGS := -Wall -I$(INCLUDE_DIR) -std=c++17
+CXXFLAGS := -Wall -std=c++17 -I$(INCLUDE_DIR)
 
-# === Fichiers de test ===
+# ====== TESTS ======
 TEST_MEASUREMENT_SRC := $(SRC_DIR)/models/sensors/Measurement.cpp $(TEST_DIR)/testMeasurement.cpp
 TEST_PRIVATEUSER_SRC := $(SRC_DIR)/models/users/PrivateUser.cpp $(SRC_DIR)/models/users/User.cpp $(TEST_DIR)/testPrivateUser.cpp
-TEST_SENSOR_SRC := $(SRC_DIR)/models/sensors/Sensor.cpp $(TEST_DIR)/testSensor.cpp $(SRC_DIR)/models/users/PrivateUser.cpp $(SRC_DIR)/models/users/User.cpp $(SRC_DIR)/models/sensors/Measurement.cpp
+TEST_SENSOR_SRC := $(SRC_DIR)/models/sensors/Sensor.cpp $(SRC_DIR)/models/users/PrivateUser.cpp $(SRC_DIR)/models/users/User.cpp $(SRC_DIR)/models/sensors/Measurement.cpp $(TEST_DIR)/testSensor.cpp
 
 TEST_MEASUREMENT_EXE := testMeasurement.exe
 TEST_PRIVATEUSER_EXE := testPrivateUser.exe
 TEST_SENSOR_EXE := testSensor.exe
 
-# === Cibles principales ===
-.PHONY: all test exec clean help
+# ====== EXECUTION NORMALE ======
+MAIN_EXE := main
+MAIN_SRC := main.cpp
+AIR_CLEANER_SRC := AirCleaner.cpp
+PROVIDER_SRC := AirCleanerProviderUser.cpp
 
-# Règle par défaut : affiche une erreur
-all:
-	@echo "❌ Erreur : vous devez spécifier une option :"
-	@echo "    👉 make test   # pour compiler les tests"
-	@echo "    👉 make exec   # pour compiler avec CMake"
-	@echo "    👉 make clean  # pour tout nettoyer"
-	@exit 1
+# ====== Cibles ======
+# Message par défaut si aucune cible n'est précisée
+.DEFAULT_GOAL := error
 
-# === Compilation des tests ===
+# Cible : test
 test: $(TEST_MEASUREMENT_EXE) $(TEST_PRIVATEUSER_EXE) $(TEST_SENSOR_EXE)
 
 $(TEST_MEASUREMENT_EXE): $(TEST_MEASUREMENT_SRC)
@@ -38,12 +37,27 @@ $(TEST_PRIVATEUSER_EXE): $(TEST_PRIVATEUSER_SRC)
 $(TEST_SENSOR_EXE): $(TEST_SENSOR_SRC)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-# === Compilation du projet principal via CMake ===
-exec:
-	@mkdir -p build
-	cd build && cmake .. && make
+# ====== EXECUTION NORMALE ======
+SRC_FILES := $(wildcard src/**/*.cpp) $(wildcard src/*.cpp) main.cpp
+OBJ_FILES := $(SRC_FILES:.cpp=.o)
+MAIN_EXE := main
 
-# === Nettoyage ===
+exec: $(MAIN_EXE)
+
+$(MAIN_EXE): $(OBJ_FILES)
+	$(CXX) -o $@ $^
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Cible : clean
 clean:
-	rm -f $(TEST_MEASUREMENT_EXE) $(TEST_PRIVATEUSER_EXE) $(TEST_SENSOR_EXE)
-	rm -rf build
+	rm -f *.o $(MAIN_EXE) $(TEST_MEASUREMENT_EXE) $(TEST_PRIVATEUSER_EXE) $(TEST_SENSOR_EXE)
+
+# Cible d'erreur par défaut
+error:
+	@echo "⚠️  Merci de préciser une cible :"
+	@echo "    ➤ make test     : pour compiler les tests"
+	@echo "    ➤ make exec     : pour compiler le programme principal"
+	@echo "    ➤ make clean    : pour nettoyer les fichiers de compilation"
+	@exit 1
