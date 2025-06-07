@@ -33,12 +33,12 @@ public:
 //----------------------------------------------------- Méthodes publiques
 
     // Getters
-    string getUnit() const;
+    UnitType getUnit() const;
     string getDescription() const;
     float getValue() const;
 
     // Setters
-    void setUnit(const string& newunit);
+    void setUnit(const UnitType& newunit);
     void setDescription(const string& newDescription);
     void setValue(float newvalue);
 
@@ -53,7 +53,7 @@ public:
     // Contrat :
     //
 
-    Measurement (string ununit, string unDescription, float unvalue);
+    Measurement (UnitType ununit, string unDescription, float unvalue);
     // Mode d'emploi :
     //
     // Contrat :
@@ -77,7 +77,7 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-    string unit;
+    UnitType unit;
     string description;
     float value;
 };
@@ -93,10 +93,26 @@ struct MeasurementGroup {
     time_t timestamp;
     Measurement measurementO3; 
     Measurement measurementNO2; 
-    Measurement measurementSO; 
-    Measurement measurementP10; 
+    Measurement measurementSO2; 
+    Measurement measurementPM10; 
     
 };
+
+enum UnitType {
+    O3,
+    NO2,
+    SO2,
+    PM10
+};
+
+// convertisseur string -> enum
+UnitType stringToUnitType(const std::string& str) {
+    if (str == "O3") return O3;
+    else if (str == "NO2") return NO2;
+    else if (str == "SO2") return SO2;
+    else if (str == "PM10") return PM10;
+    else throw std::invalid_argument("Invalid unit type: " + str);
+}
 
 ostream& operator<<(ostream& os, const Measurement& m);
 ostream& operator<<(ostream& os, const MeasurementGroup& group);

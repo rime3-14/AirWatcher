@@ -9,8 +9,8 @@ int main() {
     mg.timestamp = time(nullptr);
     mg.measurementO3 = Measurement("µg/m³", "Ozone", 12.5f);
     mg.measurementNO2 = Measurement("µg/m³", "Dioxyde d'azote", 34.2f);
-    mg.measurementSO = Measurement("µg/m³", "Dioxyde de soufre", 20.1f);
-    mg.measurementP10 = Measurement("µg/m³", "Particules PM10", 45.6f);
+    mg.measurementSO2 = Measurement("µg/m³", "Dioxyde de soufre", 20.1f);
+    mg.measurementPM10 = Measurement("µg/m³", "Particules PM10", 45.6f);
 
     std::vector<MeasurementGroup> mgVec = {mg};
     PrivateUser userPrivate;

@@ -38,8 +38,8 @@ int main() {
     Measurement m6 = Measurement("µg/m3", "concentration de P10", 15);
     MeasurementGroup mg;
     mg.measurementNO2 = m4; 
-    mg.measurementSO = m5;
-    mg.measurementP10 = m6;
+    mg.measurementSO2 = m5;
+    mg.measurementPM10 = m6;
     mg.measurementO3 = m2;
     cout << mg << endl; 
     cout << ".";

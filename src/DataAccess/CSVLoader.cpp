@@ -43,7 +43,7 @@ vector<vector<string>> CSVLoader::loadAttributesInfo() {
 
 map<string,vector<Measurement>> CSVLoader::loadMeasurements(){
     vector<vector<string>> attributesInfo = loadAttributesInfo();
-    map<string,vector<Measurement>> measurementsBySensorId;
+    map<string,vector<MeasurementGroup>> measurementsBySensorId;
     
     ifstream ifsMeasurements;
     string fileName = "data/measurements.csv";
@@ -54,6 +54,7 @@ map<string,vector<Measurement>> CSVLoader::loadMeasurements(){
     }
 
     string line;
+    MeasurementGroup currentGroup;
     while(getline(ifsMeasurements, line)){
         stringstream ss(line);
         string timestamp, sensorId, attributeId, stringValue;
@@ -72,25 +73,43 @@ map<string,vector<Measurement>> CSVLoader::loadMeasurements(){
         }
         
         // Trouver l'attribut correspondant
-        string unit, description;
-        for (std::vector<vector<string>>::iterator i = attributesInfo.begin() ; i != attributesInfo.end(); i++)
+        UnitType unit;
+        string description;
+        bool found = false;
+        for (const auto& attr : attributesInfo)
         {
-            if ((*i)[0] == attributeId)
+            if (attr[0] == attributeId)
             {
-                unit = (*i)[1];
-                description = (*i)[2];
+                try {
+                    unit = stringToUnitType(attr[1]);
+                    description = attr[2];
+                    found = true;
+                } catch (const std::invalid_argument& e) {
+                    cout << "Erreur de type d'unité : " << attr[1] << endl;
+                    found = false;
+                }
                 break;
             }
         }
 
-        Measurement measurement(attributeId, unit, description, value, timestamp);  
-        measurementsBySensorId[sensorId].push_back(measurement);
+        if (!found) {
+            cout << "Attribut non trouvé ou invalide : " << attributeId << endl;
+            continue;
+        }
+
+        Measurement measurement(unit, description, value);
+        switch(measurement.getUnit()) {
+            case O3: currentGroup.measurementO3 = measurement; break;
+            case NO2: currentGroup.measurementNO2 = measurement; break;
+            case SO2: currentGroup.measurementSO2 = measurement; break;
+            case PM10: currentGroup.measurementPM10 = measurement; measurementsBySensorId[sensorId].push_back(currentGroup); break;
+        }
     }
     return measurementsBySensorId;
 }
 
 vector<Sensor> CSVLoader::loadSensors(){
-    map<string,vector<Measurement>> allMeasurementsBySensorId = loadMeasurements();
+    map<string,vector<MeasurementGroup>> allMeasurementsBySensorId = loadMeasurements();
     vector<Sensor> sensors;
 
     ifstream ifs;
