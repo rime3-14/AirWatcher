@@ -36,7 +36,6 @@ public:
     float getLatitude() const;
     float getLongitude() const;
     bool getReliability() const;
-    PrivateUser getProvider() const;
     vector<MeasurementGroup> getMeasurements() const;
 
     // Setters

@@ -45,11 +45,6 @@ bool Sensor::getReliability() const
     return reliability;
 }
 
-PrivateUser Sensor::getProvider() const
-{
-    return provider;
-}
-
 vector<MeasurementGroup> Sensor::getMeasurements() const
 {
     return measurements;
