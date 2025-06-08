@@ -12,6 +12,7 @@ COMMON_SRC := \
 	$(SRC_DIR)/models/users/User.cpp \
 	$(SRC_DIR)/models/users/PrivateUser.cpp \
 	$(SRC_DIR)/models/users/AirCleanerProviderUser.cpp \
+	$(SRC_DIR)/models/users/GovernmentUser.cpp \
 	$(SRC_DIR)/console/AuthManager.cpp \
 	$(SRC_DIR)/console/ConsoleUI.cpp
 MAIN_SRC := $(SRC_DIR)/main.cpp
