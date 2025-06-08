@@ -31,12 +31,13 @@ class Sensor
 //----------------------------------------------------------------- PUBLIC
 public:
     //----------------------------------------------------- Méthodes publiques
-
+    bool hasProvider() const; 
     // Getters
     std::string getId() const;
     float getLatitude() const;
     float getLongitude() const;
     bool getReliability() const;
+    PrivateUser getProvider() const; 
     vector<MeasurementGroup> getMeasurements() const;
 
     // Setters
@@ -68,6 +69,7 @@ protected:
     vector<MeasurementGroup> measurements;
 };
 
+ostream& operator<<(ostream& os, const Sensor& sensor);
+
 #endif // SENSOR_H
 
-std::ostream& operator<<(std::ostream& os, const Sensor& sensor);

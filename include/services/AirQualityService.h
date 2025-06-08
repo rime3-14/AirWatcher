@@ -47,6 +47,8 @@ public:
 
     void SortDescByDifference(std::vector<Sensor*>& sensors, const std::vector<int>& values);
 
+    void Executer() override; 
+
 //-------------------------------------------- Constructeurs - destructeur
     AirQualityService();
     // Mode d'emploi :

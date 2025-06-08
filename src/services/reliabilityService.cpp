@@ -6,6 +6,7 @@ using namespace std;
 
 #include "services/ReliabilityService.h"
 
+
 bool ReliabilityService::analyseSensor(const Sensor& sensor) {
     // Analyse le capteur pour déterminer sa fiabilité
     return true; 

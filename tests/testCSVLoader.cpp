@@ -16,7 +16,7 @@ int main() {
     /*
     for (const auto& sensor : sensors) {
         cout << "Capteur ID: " << sensor.getId()
-             << ", Latitude: " << sensor.getLatitude()
+             << ", Latitude: " << sen   sor.getLatitude()
              << ", Longitude: " << sensor.getLongitude()
              << ", Fiabilité: " << (sensor.getReliability() ? "Oui" : "Non") << endl;
     }
@@ -28,7 +28,7 @@ int main() {
     assert(!users.empty());
     cout << "Utilisateurs chargés avec succès : " << users.size() << " utilisateurs." << endl;
     // Affichage des utilisateurs pour vérification
-    /*
+    
     for (const auto& user : users) {
         cout << "Utilisateur ID: " << user.getId()
              << ", Points: " << user.getPoints()
@@ -39,19 +39,18 @@ int main() {
         }
         cout << endl;
     }
-    */
-
+    
     // ============================================================================================================================================
     // Test de chargement des purificateurs d'air
     const vector<AirCleaner>& airCleaners = loader.getAirCleaners();
     assert(!airCleaners.empty());
     cout << "Purificateurs d'air chargés avec succès : " << airCleaners.size() << " purificateurs." << endl;
     // Affichage des purificateurs d'air pour vérification
-    /*
+    
     for (const auto& airCleaner : airCleaners) {
         cout << airCleaner << endl;
     }
-    */
+    
 
     // ============================================================================================================================================
     // Test de chargement des fournisseurs de purificateurs d'air
@@ -59,13 +58,13 @@ int main() {
     assert(!providers.empty());
     cout << "Fournisseurs de purificateurs d'air chargés avec succès : " << providers.size() << " fournisseurs." << endl;
     // Affichage des fournisseurs pour vérification
-    /* 
+     
     for (const auto& provider : providers) {
         cout << "Fournisseur ID: " << provider.getId() << endl;
         provider.showAirCleaners();
         cout << endl;
     }
-    */
+
     cout << "Tous les tests unitaires pour la classe <CSVLoader> ont été validés." << endl; 
     return EXIT_SUCCESS; 
 }

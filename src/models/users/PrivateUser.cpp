@@ -21,6 +21,17 @@ using namespace std;
 
 //----------------------------------------------------------------- PUBLIC
 
+void PrivateUser::setReliability(bool unReliability) {
+    reliability = unReliability; 
+}
+
+//-------------------------------------------- Surcharges d'opérateurs 
+
+bool PrivateUser::operator==(const PrivateUser& unPrivateUser)
+{
+    return id == unPrivateUser.id; 
+}
+
 //-------------------------------------------- Constructeurs - destructeur
 
 PrivateUser::PrivateUser()

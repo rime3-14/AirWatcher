@@ -24,7 +24,9 @@ using namespace std;
 //------------------------------------------------------ Include personnel
 #include "services/AirQualityService.h"
 #include "models/sensors/Sensor.h"
-#include "dataAccess/Repository.h"
+#include "dataAccess/MeasurementRepository.h"
+#include "dataAccess/SensorRepository.h"
+#include "dataAccess/UserRepository.h"
 
 //------------------------------------------------------------- Constantes
 
@@ -43,7 +45,7 @@ int AirQualityService::CalculateAirQuality(MeasurementGroup Measurements)
     int IndexMax=1;
     int AirQualityIndex=0;
             for (int i=0; i<10; i++) {
-                if ((Measurements.GetMeasurementO2()>ATMOO3[i]) || (Measurements.GetMeasurementNO2()>ATMONO2[i]) || (Measurements.GetMeasurementSO2()>ATMOSO2[i]) || (Measurements.GetMeasurementP10()>ATMOPM10[i])) {
+                if ((Measurements.measurementO3.getValue()>ATMOO3[i]) || (Measurements.measurementNO2.getValue()>ATMONO2[i]) || (Measurements.measurementSO2.getValue()>ATMOSO2[i]) || (Measurements.measurementPM10.getValue()>ATMOPM10[i])) {
                     IndexMax++;
                 }
             }
@@ -132,6 +134,13 @@ float CompareSensorAgainstOthers(Sensor sensor, time_t beg, time_t end)
 
 }
 
+void AirQualityService::Executer()
+{
+    // Exemple basique, à adapter selon ce que tu veux que le service fasse
+    std::cout << "Exécution du service d’analyse de la qualité de l’air." << std::endl;
+
+    // Appel éventuel à d'autres méthodes d'analyse...
+}
 
 
 //-------------------------------------------- Constructeurs - destructeur

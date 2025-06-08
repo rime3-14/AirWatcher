@@ -28,8 +28,6 @@ using namespace std;
 
 //------------------------------------------------- Surcharge d'opérateurs
 Repository & Repository::operator = ( const Repository & unRepository )
-// Algorithme :
-//
 {
 
 } 
@@ -38,8 +36,6 @@ Repository & Repository::operator = ( const Repository & unRepository )
 
 //-------------------------------------------- Constructeurs - destructeur
 Repository::Repository ( const Repository & unRepository )
-// Algorithme :
-//
 {
 #ifdef MAP
     cout << "Appel au constructeur de copie de <Repository>" << endl;
@@ -47,17 +43,13 @@ Repository::Repository ( const Repository & unRepository )
 } 
 
 Repository::Repository ()
-// Algorithme :
-//
 {
 #ifdef MAP
     cout << "Appel au constructeur de <Repository>" << endl;
 #endif
 } 
 
-Repository::~Repository ( )
-// Algorithme :
-//
+Repository::~Repository ()
 {
 #ifdef MAP
     cout << "Appel au destructeur de <Repository>" << endl;
