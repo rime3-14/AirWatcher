@@ -15,12 +15,25 @@ using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
+enum MeasurementType {
+    O3,
+    NO2,
+    SO2,
+    PM10
+};
 
-
+inline MeasurementType stringToMeasurementType(const std::string& str) {
+    if (str == "O3") return O3;
+    else if (str == "NO2") return NO2;
+    else if (str == "SO2") return SO2;
+    else if (str == "PM10") return PM10;
+    else throw std::invalid_argument("Invalid measurement type: " + str);
+}
 //------------------------------------------------------------------------
 // Rôle de la classe <Measurement>
-// Permet de lister les caractéristiques d'une mesure d'un seul type (O3, NO2, SO2 ou P10)
-// d'un capteur à une date précise. 
+// Permet de regrouper les caractéristiques d'une mesure d'un seul type (O3, NO2, SO2 ou P10)
+// parmi les 4 qui permettent de calculer la qualité de l'air mesurée par 
+// un capteur à une date précise. Est un élément de Struct<MeasurementGroup>.
 //
 //------------------------------------------------------------------------
 
@@ -84,17 +97,21 @@ protected:
 //-------------------------------- Autres définitions dépendantes de <Measurement.h>
 // ------------------------------- Struct <MeasurementGroup>
 // Rôle du Struct <MeasurementGroup>
-// Permet de regrouper les 4 types de mesures recueillies par un capteur à une date précise 
+// Permet de regrouper les 4 types de mesures de type <Measurement>
+//  recueillies par un capteur à une date précise 
 // qui sont nécessaires pour calculer la qualité de l'air.
+
 struct MeasurementGroup {
     time_t timestamp;
-    Measurement measurementO3;
+    Measurement measurementO3; 
     Measurement measurementNO2; 
     Measurement measurementSO2; 
-    Measurement measurementP10; 
+    Measurement measurementPM10; 
+    
 };
 
-std::ostream& operator<<(std::ostream& os, const Measurement& m);
+ostream& operator<<(ostream& os, const Measurement& m);
+ostream& operator<<(ostream& os, const MeasurementGroup& group);
 
 #endif // MEASUREMENT_H
 

@@ -1,72 +1,119 @@
-#include "models/users/PrivateUser.h"
+/************************************************************************* 
+                           PrivateUser  -  description
+                             -------------------
+    début                : 27/05/2025
+    copyright            : (C) 2025 par Bindech Rida
+    e-mail               : rida.bindech@gmail.com
+*************************************************************************/
+
+//---------- Réalisation de la classe <PrivateUser> (fichier PrivateUser.cpp) ------------
+
+//---------------------------------------------------------------- INCLUDE
+
+//-------------------------------------------------------- Include système
 #include <iostream>
 
 using namespace std;
+//------------------------------------------------------ Include personnel
+#include "models/users/PrivateUser.h"
 
+//------------------------------------------------------------- Constantes (si besoin)
 
-// Constructeur par défaut
+//----------------------------------------------------------------- PUBLIC
+
+//-------------------------------------------- Constructeurs - destructeur
+
 PrivateUser::PrivateUser()
-    : User(), points(0), reliability(true) {}
-
-// Constructeur paramétré
-PrivateUser::PrivateUser(string id, vector<string> sensors)
-    : User(id), points(0), reliability(true), sensorsId(sensors) {}
-
-// Destructeur
-PrivateUser::~PrivateUser() {}
-
-// Ajoute un point si l'utilisateur est fiable
-void PrivateUser::addPoint(bool reliable)
+    : User(), points(0), reliability(false)
 {
-    if (reliable)
-    {
-        points++;
-    }
+#ifdef MAP
+    std::cout << "Appel au constructeur par défaut de PrivateUser" << std::endl;
+#endif
 }
 
-// Affiche le nombre de points
-void PrivateUser::showPoints() const
+PrivateUser::PrivateUser(std::string id)
+    : User(id), points(0), reliability(false)
 {
-    cout << "Points: " << points << endl;
+    sensorsId = vector<string>();
+#ifdef MAP
+    std::cout << "Appel au constructeur paramétré de PrivateUser" << std::endl;
+#endif
 }
 
-
-void PrivateUser::addSensor(string sensorId)
+PrivateUser::~PrivateUser()
 {
-    // Vérifie si le capteur n'est pas déjà dans la liste
-    for (const auto& sensor : sensors)
-    {
-        if (sensor.getId() == sensorId)
-        {
-            cout << "Le capteur est déjà ajouté." << endl;
-            return; // Le capteur est déjà présent, on ne l'ajoute pas
-        }
-    }
-    
-    // Ajoute le capteur à la liste
-    sensors.push_back(sensorId);
-    cout << "Capteur ajouté avec succès." << endl;
+#ifdef MAP
+    std::cout << "Appel au destructeur de PrivateUser" << std::endl;
+#endif
 }
 
+//----------------------------------------------------- Méthodes publiques
 
-string PrivateUser::getId() const{
-    return this->id;
-}
+// Méthodes héritées abstraites
 
-// Authentifie l'utilisateur
 User* PrivateUser::authentificateUser(std::string login) const
 {
-    if (this->id == login)
-    {
-        return new PrivateUser(*this);
-    }
+    // Simple exemple, retourne nullptr (non implémenté ici)
     return nullptr;
 }
 
-UserType PrivateUser::getRole() const override
+UserType PrivateUser::getRole() const
 {
     return UserType::Private;
 }
 
+// Méthodes existantes
 
+void PrivateUser::addPoint(bool reliable)
+{
+    if (reliable) points++;
+    reliability = reliable;
+}
 
+void PrivateUser::showPoints() const
+{
+    std::cout << "Points: " << points << std::endl;
+}
+
+void PrivateUser::addSensor(const std::string& sensorId)
+{
+    sensorsId.push_back(sensorId);
+}
+
+int PrivateUser::getPoints() const
+{
+    return points;
+}
+
+// Méthodes ajoutées
+
+std::string PrivateUser::getId() const
+{
+    return id;
+}
+
+bool PrivateUser::isReliable() const
+{
+    return reliability;
+}
+
+std::vector<std::string> PrivateUser::getSensorsId() const
+{
+    return sensorsId;
+}
+
+//------------------------------------------------- Surcharge d'opérateurs
+
+std::ostream& operator<<(std::ostream& os, const PrivateUser& user)
+{
+    os << "User ID: " << user.getId() << "\n";
+    os << "Points: " << user.points << "\n";
+    os << "Reliability: " << (user.reliability ? "true" : "false") << "\n";
+    os << "Sensors: ";
+    for (const auto& sensor : user.sensorsId)
+    {
+        os << sensor << " ";
+    }
+    os << "\n";
+    return os;
+}

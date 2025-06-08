@@ -11,11 +11,13 @@
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
-using namespace std;
 #include <iostream>
+#include <iomanip> // pour setprecision
 
 //------------------------------------------------------ Include personnel
 #include "models/sensors/Sensor.h"
+
+using namespace std;
 
 //------------------------------------------------------------- Constantes
 
@@ -45,7 +47,7 @@ bool Sensor::getReliability() const
     return reliability;
 }
 
-Measurement* Sensor::getMeasurements() const
+vector<MeasurementGroup> Sensor::getMeasurements() const
 {
     return measurements;
 }
@@ -72,7 +74,12 @@ void Sensor::setReliability(bool newReliability)
     reliability = newReliability;
 }
 
-void Sensor::setMeasurements(Measurement* newMeasurements)
+void Sensor::setProvider(const PrivateUser& newProvider)
+{
+    provider = newProvider;
+}
+
+void Sensor::setMeasurements(const vector<MeasurementGroup>& newMeasurements)
 {
     measurements = newMeasurements;
 }
@@ -87,35 +94,35 @@ Sensor& Sensor::operator=(const Sensor& unSensor)
         latitude = unSensor.latitude;
         longitude = unSensor.longitude;
         reliability = unSensor.reliability;
+        provider = unSensor.provider;
         measurements = unSensor.measurements;
     }
     return *this;
 }
 
-
-bool Sensor::operator==(const Sensor& unSensor) {
-    if(unSensor.id != this.id || unSensor.latitude != this.latitude || unSensor.longitude != this.longitude) {
-        return false; 
-    } else {
-        return true; 
-    }
+bool Sensor::operator==(const Sensor& unSensor)
+{
+    return id == unSensor.id
+        && latitude == unSensor.latitude
+        && longitude == unSensor.longitude;
 }
+
+// ----------- Opérateur d'affichage -----------
 
 std::ostream& operator<<(std::ostream& os, const Sensor& sensor)
 {
-    os << "Sensor ID: " << sensor.GetId()
+    os << "Sensor ID: " << sensor.getId()
        << "\n  Location: (" << std::fixed << std::setprecision(4)
-       << sensor.GetLatitude() << ", " << sensor.GetLongitude() << ")"
-       << "\n  Reliability: " << (sensor.GetReliability() ? "true" : "false")
-       << "\n  Measurements: [";
+       << sensor.getLatitude() << ", " << sensor.getLongitude() << ")"
+       << "\n  Reliability: " << (sensor.getReliability() ? "true" : "false")
+       << "\n  Measurements: [" << std::endl;
 
-    const auto& measurements = sensor.GetMeasurements();
-    for (size_t i = 0; i < measurements.size(); ++i)
+    const auto& measurements = sensor.getMeasurements();
+    for (const auto& group : measurements)
     {
-        os << "\n    " << measurements[i];
+        os << "    " << group << std::endl;
     }
 
-    if (!measurements.empty()) os << "\n  ";
     os << "]";
     return os;
 }
@@ -123,7 +130,7 @@ std::ostream& operator<<(std::ostream& os, const Sensor& sensor)
 //-------------------------------------------- Constructeurs - destructeur
 
 Sensor::Sensor()
-    : id(""), latitude(0.0f), longitude(0.0f), reliability(false), measurements(nullptr)
+    : id(""), latitude(0.0f), longitude(0.0f), reliability(false), provider(), measurements()
 {
 #ifdef MAP
     cout << "Appel au constructeur par défaut de Sensor" << endl;
@@ -132,16 +139,19 @@ Sensor::Sensor()
 
 Sensor::Sensor(const Sensor& unSensor)
     : id(unSensor.id), latitude(unSensor.latitude), longitude(unSensor.longitude),
-      reliability(unSensor.reliability), measurements(unSensor.measurements)
+      reliability(unSensor.reliability), provider(unSensor.provider),
+      measurements(unSensor.measurements)
 {
 #ifdef MAP
     cout << "Appel au constructeur de copie de Sensor" << endl;
 #endif
 }
 
-Sensor::Sensor(std::string unId, float unLatitude, float unLongitude, bool unReliability, Measurement* unMeasurements)
+Sensor::Sensor(const std::string& unId, float unLatitude, 
+    float unLongitude, bool unReliability, const std::vector<MeasurementGroup>& unMeasurements)
     : id(unId), latitude(unLatitude), longitude(unLongitude),
-      reliability(unReliability), measurements(unMeasurements)
+      reliability(unReliability), provider(nullopt), // No provider
+      measurements(unMeasurements)
 {
 #ifdef MAP
     cout << "Appel au constructeur paramétré de Sensor" << endl;
