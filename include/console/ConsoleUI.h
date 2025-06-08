@@ -24,11 +24,11 @@ enum class MenuAction {
 
 struct MenuOption {
     MenuAction menu_action;
-    string title;
-    string description;
-    vector<UserType> allowedRoles{};
+    std::string title;
+    std::string description;
+    std::vector<UserType> allowedRoles{};
 
-    MenuOption(const MenuAction menu_action, const string& title, const string& description, const vector<UserType>& roles)
+    MenuOption(const MenuAction menu_action, const std::string& title, const std::string& description, const std::vector<UserType>& roles)
         : menu_action(menu_action), title(title), description(description), allowedRoles(roles) {}
 };
 
@@ -36,7 +36,7 @@ class ConsoleUI
 {
     User* authenticated_user = nullptr;
 
-    vector<MenuOption> menuOptions = {
+    std::vector<MenuOption> menuOptions = {
         {
             MenuAction::EvaluateAQIAverages,
             "Evaluate AQI averages (FR3)",

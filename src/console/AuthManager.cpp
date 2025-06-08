@@ -6,5 +6,6 @@
 
 User* AuthManager::login()
 {
+
     return nullptr;
 }
