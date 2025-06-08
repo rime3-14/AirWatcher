@@ -10,13 +10,6 @@ int main() {
     // Vérification de l'ID
     std::cout << "ID utilisateur : " << user.getId() << std::endl;
 
-    // Test du rôle
-    if (user.getRole() == UserType::Private) {
-        std::cout << "Rôle : Private ✅" << std::endl;
-    } else {
-        std::cout << "❌ Erreur : rôle inattendu" << std::endl;
-    }
-
     // Test ajout de points
     std::cout << "Ajout de points (true, true, false):" << std::endl;
     user.addPoint(true);

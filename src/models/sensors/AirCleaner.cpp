@@ -17,6 +17,7 @@
 //------------------------------------------------------ Include personnel
 #include "models/sensors/AirCleaner.h"
 #include "dataAccess/SensorRepository.h"
+#include "dataAccess/MeasurementRepository.h"
 #include "services/AirQualityService.h"
 #include "utils/Util.h"
 //------------------------------------------------------------- Constantes
@@ -44,23 +45,26 @@ float AirCleaner::calculateRadiusPurifiedAir() {
     float r = 0; 
     /*
     // Récupération des capteurs situés autour du Air Cleaner 
-    SensorRepository *sensorRepository = new SensorRepository(); 
-    vector<Sensor> sensors = sensorRepository->getSensorsInCircularRadius(latitude, longitude, distanceMax); 
+    SensorRepository sensorRepository;  
+    vector<Sensor> sensors = sensorRepository.getSensorsInCircularRadius(latitude, longitude, distanceMax); 
 
     // Initialisation du service de calcul de qualité de l'air 
-    AirQualityService * airQualityService = new AirQualityService();
+    AirQualityService airQualityService;
 
     // Parcours de tous les capteurs situés autour du Air Cleaner
-    for (Sensor s : sensors) {
+    for (const Sensor& s : sensors) {
 
         float d = calculateDistance(this->latitude, this->longitude, s.getLatitude(), s.getLongitude());
 
         // Calculs du niveau de qualité de l'air avant et après la période d'activité du Air Cleaner 
-        float AQbeforeAirCleaner = airQualityService->CalculateAvgAirQuality(s) 
-        float AQafterAirCleaner = CalculateAvgAirQuality(s); 
+        MeasurementRepository measurementRepo; 
+        vector<MeasurementGroup> measurementsBefore = measurementRepo.getMeasurementsBySensorBefore(s, debut); 
+        vector<MeasurementGroup> measurementsAfter = measurementRepo.getMeasurementsBySensorAfter(s, end); 
+        float AQbeforeAirCleaner = airQualityService.CalculateAvgAirQuality(measurementsBefore); 
+        float AQafterAirCleaner = airQualityService.CalculateAvgAirQuality(measurementsAfter); 
 
         // Si on trouve un capteur plus éloigné
-        if(aQafterAirCleaner < aQbeforeAirCleaner && d > r) {
+        if(AQafterAirCleaner < AQbeforeAirCleaner && d > r) {
             r = d; 
         }
     }
@@ -71,32 +75,40 @@ float AirCleaner::calculateRadiusPurifiedAir() {
 
 float AirCleaner::calculateImprovedAirLevel() {
 //
-    float distanceMax; 
+    float distanceMax = 1000;
 
     if(radius != -1) {
         distanceMax = radius; 
-    } else {
-        distanceMax = 1000; 
-    }
+    } 
+    
     float improvedAirLevel = 0; 
 
     /*
     int nbCloseSensors = 0; 
-    SensorRepository *sensorRepository = new SensorRepository(); 
-    MeasurementRepository *measurementRepository = new MeasurementRepository();
-    vector<Sensor> sensors = sensorRepository->getSensorsInCircularRadius(latitude, longitude, distanceMax); 
+    SensorRepository sensorRepository; 
+    MeasurementRepository measurementRepo;
+    vector<Sensor> sensors = sensorRepository.getSensorsInCircularRadius(latitude, longitude, distanceMax); 
 
-    for (Sensor s : sensors) {
-        float d = calculateDistance(latitude, longitude, s.getLatitude(), s.getLongitude());
-        float AQbeforeAirCleaner = calculateAirQuality(s, measurementRepository->getMeasurements(s.getId(), 0, 0));  // !!!!!!!!!!!!!!
-        float AQafterAirCleaner = calculateAirQuality(s,); 
+    // Initialisation du service de calcul de qualité de l'air 
+    AirQualityService airQualityService;
+
+    for (const Sensor& s : sensors) {
+        vector<MeasurementGroup> measurementsBefore = measurementRepo.getMeasurementsBySensorBefore(s, debut); 
+        vector<MeasurementGroup> measurementsAfter = measurementRepo.getMeasurementsBySensorAfter(s, end); 
+
+        float AQbeforeAirCleaner = airQualityService.CalculateAvgAirQuality(measurementsBefore); 
+        float AQafterAirCleaner = airQualityService.CalculateAvgAirQuality(measurementsAfter);
+
         if(AQafterAirCleaner < AQbeforeAirCleaner) {
             nbCloseSensors++; 
-            improvedAirLevel += aQbeforeAirCleaner-aQafterAirCleaner; 
+            improvedAirLevel += AQbeforeAirCleaner-AQafterAirCleaner; 
         }
     }
 
-    improvedAirLevel /= nbCloseSensors; 
+    if(nbCloseSensors != 0) {
+        improvedAirLevel /= nbCloseSensors; 
+    }
+    
     */
     return improvedAirLevel; 
 }
@@ -114,6 +126,14 @@ AirCleaner & AirCleaner::operator = (const AirCleaner & unAirCleaner)
         fin = unAirCleaner.fin;
     }
     return *this;
+}
+
+
+bool AirCleaner::operator==(const AirCleaner& unAirCleaner)
+{
+    return id == unAirCleaner.id
+        && latitude == unAirCleaner.latitude
+        && longitude == unAirCleaner.longitude;
 }
 
 //------------------------------------------------- Getters - Setters
@@ -158,7 +178,7 @@ AirCleaner::AirCleaner ()
 
 
 
-AirCleaner::AirCleaner (string anId, float lat , float lon, float aRadius) : id(anId), latitude (lat), longitude(lon), radius(aRadius)
+AirCleaner::AirCleaner (string anId, float lat , float lon, time_t unBegin, time_t unEnd) : id(anId), latitude (lat), longitude(lon), debut(unBegin), fin(unEnd)
 {
 #ifdef MAP
     cout << "Appel au constructeur de <AirCleaner>" << endl;
@@ -173,10 +193,11 @@ AirCleaner::~AirCleaner ( )
 #endif
 } 
 
-ostream& operator<<(ostream& out, const AirCleaner& aC)
-{
-    out << "Informations concernant le Air Cleaner " << aC.getId() << " :\n";
-    out << "Latitude : " << aC.getLatitude() << "\n";
-    out << "Longitude : " << aC.getLongitude() << "\n";
-    return out;
+
+//-------------------------------------------- Surcharges d'opérateur
+ostream & operator << ( ostream & out, const AirCleaner & aC) {
+    out << "Informations concernant le Air Cleaner " << aC.getId() << " : \n"; 
+    out << "Latitude : " << aC.getLatitude() << " :\n "; 
+    out << "Longitude : " << aC.getLongitude() << " : \n"; 
+    return out;   
 }

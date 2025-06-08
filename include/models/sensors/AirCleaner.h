@@ -48,6 +48,7 @@ public:
 
 //------------------------------------------------- Surcharge d'opérateurs
     AirCleaner & operator = ( const AirCleaner & unAirCleaner );
+    bool operator == (const AirCleaner & unAirCleaner); 
 
 //------------------------------------------------- Getters - Setters
     string getId() const; 
@@ -64,7 +65,7 @@ public:
 
     AirCleaner (string anId, float lat , float lon, time_t debut, time_t fin);
 
-    virtual ~AirCleaner ( );
+    virtual ~AirCleaner ();
 //------------------------------------------------------------------ PRIVE
 
 protected:
@@ -72,20 +73,15 @@ protected:
     string id; 
     float latitude; 
     float longitude; 
-    float radius;
+    float radius=-1;
     time_t debut;
     time_t fin;
 };
 
 //-------------------------------- Autres définitions dépendantes de <AirCleaner>
 // Surchage d'opérateurs
-ostream & operator << ( ostream & out, const AirCleaner & aC) {
-    out << "Informations concernant le Air Cleaner " << aC.getId() << " : \n"; 
-    out << "ID Fournisseur : "; 
-    out << "Latitude : " << aC.getLatitude() << " :\n "; 
-    out << "Longitude : " << aC.getLongitude() << " : \n"; 
-    return out;   
-}
+ostream & operator << ( ostream & out, const AirCleaner & aC); 
+
 
 #endif // AirCleaner_H
 

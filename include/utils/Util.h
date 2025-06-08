@@ -11,6 +11,7 @@
 #define Util_H
 
 //--------------------------------------------------- Interfaces utilisées
+#include <ctime>
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -22,7 +23,9 @@
 //------------------------------------------------------------------------
 
 
-float calculateDistance(float centerLat, float centerLong, float latitude, float longitude); 
+float calculateDistance(float centerLat, float centerLong, float latitude, float longitude);
+
+void displayDate(time_t timestamp); 
 
 #endif // Util_H
 
