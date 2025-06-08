@@ -12,7 +12,7 @@
 #define AIRQUALITYSERVICE_H
 
 //--------------------------------------------------- Interfaces utilisées
-#include "Service.h"
+#include "service.h"
 #include <string>
 
 //------------------------------------------------------------- Constantes

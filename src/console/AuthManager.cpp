@@ -25,7 +25,7 @@ User* AuthManager::login()
             std::string login;
             std::cin >> login;
 
-            const CSVLoader& loader = CSVLoader::Instance();
+            CSVLoader& loader = CSVLoader::Instance();
             const vector<PrivateUser> users = loader.getUsers();
 
             for (const PrivateUser& user : users)
