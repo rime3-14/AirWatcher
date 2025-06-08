@@ -25,6 +25,12 @@ using namespace std;
 
 //----------------------------------------------------- Méthodes publiques
 
+bool Sensor::hasProvider() const {
+    if(provider.has_value()) {
+        return true; 
+    } return false; 
+} 
+
 // ----------- Getters -----------
 
 std::string Sensor::getId() const
@@ -50,6 +56,12 @@ bool Sensor::getReliability() const
 vector<MeasurementGroup> Sensor::getMeasurements() const
 {
     return measurements;
+}
+
+PrivateUser Sensor::getProvider() const {
+    if(hasProvider()) {
+        return provider.value(); 
+    }
 }
 
 // ----------- Setters -----------

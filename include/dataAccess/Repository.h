@@ -12,22 +12,27 @@
 
 //--------------------------------------------------- Interfaces utilisées
 #include <vector> 
+using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
 
 //------------------------------------------------------------------------
 // Rôle de la classe <Repository>
-// Classe abstraite qui regroupe l'ensemble des divers Repository qu'il y a, autrement dit SensorRepository, UserRepository et MeasurementRepository.
+// Classe abstraite qui regroupe l'ensemble des divers Repository qu'il y a, 
+// autrement dit SensorRepository, UserRepository et MeasurementRepository.
+// Les Repository font office de DAO et permettent de récupérer certaines
+// données souhaitées dans les requêtes appelant les services.
 //------------------------------------------------------------------------
 
+template <typename T>
 class Repository 
 {
 //----------------------------------------------------------------- PUBLIC
 
 public:
 //----------------------------------------------------- Méthodes publiques
-virtual void classeAbstraite() const = 0;
+virtual vector<T> getAll() const = 0;
 // Méthode qui permet de déclarer la classe comme abstraite.
 
 //------------------------------------------------- Surcharge d'opérateurs
