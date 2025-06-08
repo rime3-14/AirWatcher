@@ -10,7 +10,7 @@
 #include "dataAccess/CSVLoader.h"
 #include "models/users/AirCleanerProviderUser.h"
 
-User* AuthManager::login() const
+User* AuthManager::login()
 {
     UserType userType = select_user_type();
 
@@ -32,9 +32,10 @@ User* AuthManager::login() const
             {
                 if (user.getId() == login)
                 {
-                    return new PrivateUser();
+                    return new PrivateUser(user);
                 }
             }
+            break;
         }
 
         case UserType::AirCleanerProvider:
@@ -50,27 +51,39 @@ User* AuthManager::login() const
             {
                 if (provider.getId() == login)
                 {
-                    return new AirCleanerProviderUser();
+                    return new AirCleanerProviderUser(provider);
                 }
             }
+            break;
         }
     }
+
+    std::cout << "Error: User with given login does not exist.\n"  << std::endl;
     return nullptr;
 }
 
-UserType AuthManager::select_user_type() const
+UserType AuthManager::select_user_type() 
 {
     while (true)
     {
         std::cout << "Are you:\n";
         std::cout << "1 - A Private user\n";
         std::cout << "2 - A Government employee\n";
-        std::cout << "3 - An Air Cleaner Provider\n";
+        std::cout << "3 - An Air Cleaner Provider\n\n";
         std::cout << "Please select a number from above: ";
         std::cout << std::flush;
 
         int choice = 0;
-        std::cin >> choice;
+        // Check input is a number
+        if (!(std::cin >> choice)) {
+            // clear error state
+            std::cin.clear();
+
+            // discard invalid input
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid input. Please enter a number.\n";
+            continue;
+        }
 
         switch (choice)
         {

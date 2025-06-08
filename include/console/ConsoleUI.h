@@ -28,8 +28,8 @@ struct MenuOption {
     std::string description;
     std::vector<UserType> allowedRoles{};
 
-    MenuOption(const MenuAction menu_action, const std::string& title, const std::string& description, const std::vector<UserType>& roles)
-        : menu_action(menu_action), title(title), description(description), allowedRoles(roles) {}
+    MenuOption(const MenuAction menu_action, std::string  title, std::string  description, const std::vector<UserType>& roles)
+        : menu_action(menu_action), title(std::move(title)), description(std::move(description)), allowedRoles(roles) {}
 };
 
 class ConsoleUI
