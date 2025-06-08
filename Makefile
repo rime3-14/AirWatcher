@@ -1,24 +1,17 @@
-# Dossier contenant les fichiers .cpp
-SRC_DIR := src
-INCLUDE_DIR := include
+# Cible principale : création de l'exécutable
+airCleanerTest: airCleanerTest.o AirCleaner.o
+	g++ -Wall -g -o airCleanerTest airCleanerTest.o AirCleaner.o
 
-# Tous les fichiers .cpp dans src/
-SRCS := $(wildcard $(SRC_DIR)/**/*.cpp $(SRC_DIR)/*.cpp)
-OBJS := $(SRCS:.cpp=.o)
+# Compilation du fichier airCleanerTest.cpp
+airCleanerTest.o: tests/airCleanerTest.cpp include/models/sensors/AirCleaner.h
+	g++ -Wall -g -I./src -I./include -c tests/airCleanerTest.cpp -o airCleanerTest.o
 
-# Nom de l'exécutable
-TARGET := mon_programme
+# Compilation de AirCleaner.cpp
+AirCleaner.o: src/models/sensors/AirCleaner.cpp include/models/sensors/AirCleaner.h include/utils/Util.h
+	g++ -Wall -g -I./src -I./include -c src/models/sensors/AirCleaner.cpp -o AirCleaner.o
 
-# Commandes
-CXX := g++
-CXXFLAGS := -Wall -I$(INCLUDE_DIR) -std=c++17
-
-all: $(TARGET)
-
-$(TARGET): $(SRCS)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
+# Nettoyage
 clean:
-	rm -f $(TARGET) $(SRC_DIR)/*.o
+	rm -f airCleanerTest airCleanerTest.o AirCleaner.o
 
-.PHONY: all clean
+.PHONY: clean

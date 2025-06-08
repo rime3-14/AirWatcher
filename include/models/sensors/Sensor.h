@@ -68,6 +68,7 @@ protected:
     vector<MeasurementGroup> measurements;
 };
 
+ostream& operator<<(ostream& os, const Sensor& sensor);
+
 #endif // SENSOR_H
 
-std::ostream& operator<<(std::ostream& os, const Sensor& sensor);

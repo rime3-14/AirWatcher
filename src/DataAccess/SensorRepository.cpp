@@ -17,6 +17,7 @@
 #include "dataAccess/Repository.h"
 #include "dataAccess/SensorRepository.h"
 #include "dataAccess/CSVLoader.h"
+#include "utils/Util.h"
 using namespace std;
 
 //------------------------------------------------------ Include personnel
@@ -31,6 +32,20 @@ Sensor & SensorRepository::getSensor(Sensor sensor) {
     CSVLoader * csvLoader = new CSVLoader(); 
     vector<Sensor> & allSensors = csvLoader->getSensors(); 
     
+}
+
+vector<Sensor> SensorRepository::getAll() {
+    CSVLoader * csvLoader = new CSVLoader(); 
+    vector<Sensor> & allSensors = csvLoader->getSensors(); 
+    vector<Sensor> res; 
+
+    for (Sensor s : allSensors) {
+        if (s.getReliability() == true) {
+            res.push_back(s); 
+        }
+    }
+
+    return res; 
 }
 
 

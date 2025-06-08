@@ -21,7 +21,7 @@
 
 //------------------------------------------------------------------------
 // Rôle de la classe <SensorRepository>
-// Fait office de DAO et rRécupère les informations voulues sur les capteurs pour les requêtes. 
+// Fait office de DAO et récupère les informations voulues sur les capteurs pour les requêtes. 
 //------------------------------------------------------------------------
 
 class SensorRepository : public Repository
@@ -36,6 +36,8 @@ Sensor& getSensor(const Sensor& sensor);
 vector<Sensor> getSensorsInCircularRadius(float centerLatitude, float centerLongitude, float radius); 
 
 vector<Sensor> getAllSensorsExcept(float centerLatitude, float centerLongitude, float radius); 
+
+vector<Sensor> getAll(); 
 
 void markSensorAsUnreliable(Sensor sensor); 
 
@@ -75,13 +77,6 @@ protected:
 };
 
 //-------------------------------- Autres définitions dépendantes de <SensorRepository>
-
-float calculateDistance(float centerLat, float centerLong, float latitude, float longitude) {
-// Retourne la distance entre un centre et un point en degrés (pour l'instant).
-    float distanceEuclidienneDegre  = sqrt ((latitude-centerLat)*(latitude-centerLat) + (longitude - centerLong)*(longitude - centerLong)); 
-    return distanceEuclidienneDegre; 
-}
-
 
 #endif // SensorRepository_H
 
