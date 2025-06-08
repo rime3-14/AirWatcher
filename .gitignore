@@ -1,4 +1,16 @@
-Makefile copy
-Measurement.o
-measurementTest
-measurementTest.o
+# === Fichiers objets ===
+*.o
+*.obj
+
+# === Fichiers d'exécutables ===
+*.exe
+*.out
+*.a
+*.so
+*.dll
+
+# === Autres fichiers temporaires ===
+*.log
+*.tmp
+*.swp
+*~

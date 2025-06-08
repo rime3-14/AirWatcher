@@ -53,11 +53,11 @@ private:
 //------------------------------------------------------------- Méthodes privées
     vector<AirCleaner> loadAirCleaners();
     vector<Sensor> loadSensors();
-    map<string,vector<Measurement>> loadMeasurements();
+    map<string,vector<MeasurementGroup>> loadMeasurements();
     vector<vector<string>> loadAttributesInfo();
-    vector<PrivateUser>  loadUsers();
-    vector<AirCleanerProviderUser> loadProviders();
-    
+    vector<PrivateUser>  loadUsers(vector<Sensor> sensors);
+    vector<AirCleanerProviderUser> loadProviders(vector<AirCleaner> airCleaners);
+
 //---------------------------------------------- Attributs privés
     static CSVLoader instance;
 

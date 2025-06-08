@@ -11,12 +11,12 @@
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
-using namespace std;
 #include <string>
 #include <iostream>
 #include <ctime>
 #include <iomanip>
 
+using namespace std;
 //------------------------------------------------------ Include personnel
 #include "models/sensors/Measurement.h"
 //------------------------------------------------------------- Constantes
@@ -91,10 +91,10 @@ std::ostream& operator<<(std::ostream& os, const MeasurementGroup& group)
     std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", timeinfo);
 
     os << "Timestamp: " << buffer << "\n"
-       << "      O3  : " << group.measurementO3 << "\n"
-       << "      NO2 : " << group.measurementNO2 << "\n"
-       << "      SO2 : " << group.measurementSO << "\n"
-       << "      P10 : " << group.measurementP10;
+       << "      " << O3 << "  : " << group.measurementO3 << "\n"
+       << "      " << NO2 << " : " << group.measurementNO2 << "\n"
+       << "      " << SO2 << " : " << group.measurementSO2 << "\n"
+       << "      " << PM10 << " : " << group.measurementPM10;
     return os;
 }
 

@@ -15,8 +15,20 @@ using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
+enum MeasurementType {
+    O3,
+    NO2,
+    SO2,
+    PM10
+};
 
-
+inline MeasurementType stringToMeasurementType(const std::string& str) {
+    if (str == "O3") return O3;
+    else if (str == "NO2") return NO2;
+    else if (str == "SO2") return SO2;
+    else if (str == "PM10") return PM10;
+    else throw std::invalid_argument("Invalid measurement type: " + str);
+}
 //------------------------------------------------------------------------
 // Rôle de la classe <Measurement>
 // Permet de regrouper les caractéristiques d'une mesure d'un seul type (O3, NO2, SO2 ou P10)
@@ -93,8 +105,8 @@ struct MeasurementGroup {
     time_t timestamp;
     Measurement measurementO3; 
     Measurement measurementNO2; 
-    Measurement measurementSO; 
-    Measurement measurementP10; 
+    Measurement measurementSO2; 
+    Measurement measurementPM10; 
     
 };
 

@@ -1,6 +1,3 @@
-//---------- Réalisation de la classe <AirCleanerProviderUser> (fichier AirCleanerProviderUser.cpp) ------------
-
-//---------------------------------------------------------------- INCLUDE
 #include "models/users/AirCleanerProviderUser.h"
 #include <iostream>
 
@@ -42,46 +39,48 @@ User* AirCleanerProviderUser::authentificateUser(std::string login) const
     return nullptr;
 }
 
-UserType AirCleanerProviderUser::getRole() const override
+// Pas de override ici, c'est dans le .h uniquement
+UserType AirCleanerProviderUser::getRole() const
 {
     return UserType::AirCleanerProvider;
 }
 
-// Affichage des purificateurs d'air
+// Affichage des IDs des purificateurs d'air
 void AirCleanerProviderUser::showAirCleaners() const
 {
-    int i = 1; 
-    for (AirCleaner elem : this.airCleaners) {
-        cout << "Voici la liste des Air Cleaners fournis : \n"; 
-        cout << "Air Cleaner " << i << "\n"; 
-        cout << elem << "\n"; 
+    cout << "Voici la liste des IDs des Air Cleaners fournis : \n";
+    int i = 1;
+    for (const auto& id : airCleanersId)
+    {
+        cout << "Air Cleaner " << i << " : " << id << "\n";
+        ++i;
     }
 }
 
-// Calcul de l’impact total des purificateurs d’air
+// Calcul de l’impact total des purificateurs d’air (non applicable ici, donc retour neutre ou à définir)
 float AirCleanerProviderUser::calculateAirCleanerImpact() const
 {
-    float somme = 0; 
-    int nbAirCleaners; 
-    for(AirCleaner elem : this.airCleaners) {
-        some += elem.calculateImprovedAirLevel; 
-    } return somme/(this.nbAirCleaners); 
+    // Tu ne peux pas calculer un impact sans les objets AirCleaner
+    // Ici on renvoie 0 ou on peut lever une exception ou loguer une alerte.
+    cout << "Impossible de calculer l’impact : les objets AirCleaner ne sont pas disponibles.\n";
+    return 0.0f;
 }
 
-string AirCleanerProviderUser::getId() const{
+string AirCleanerProviderUser::getId() const {
     return this->id;
 }
 
-void addAirCleaner(string airCleanerId)
+// Ajout d’un ID de purificateur
+void AirCleanerProviderUser::addAirCleaner(string airCleanerId)
 {
     for (const auto& airCleaner : airCleanersId)
     {
         if (airCleaner == airCleanerId)
         {
             cout << "Le purificateur d'air est déjà ajouté." << endl;
-            return; 
+            return;
         }
     }
-    
+
     airCleanersId.push_back(airCleanerId);
 }

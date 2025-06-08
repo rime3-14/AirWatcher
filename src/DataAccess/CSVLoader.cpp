@@ -23,7 +23,7 @@ vector<vector<string>> CSVLoader::loadAttributesInfo() {
     ifstream ifsAttributes;
     ifsAttributes.open("data/attributes.csv");
     if(!ifsAttributes.is_open()){
-        cout << "Erreur d'ouverture du fichier" << endl;
+        cout << "Erreur loadAttributesInfo() : erreur d'ouverture du fichier" << endl;
         return attributesInfo;
     }
     string line;
@@ -41,19 +41,20 @@ vector<vector<string>> CSVLoader::loadAttributesInfo() {
     return attributesInfo;
 }
 
-map<string,vector<Measurement>> CSVLoader::loadMeasurements(){
+map<string,vector<MeasurementGroup>> CSVLoader::loadMeasurements(){
     vector<vector<string>> attributesInfo = loadAttributesInfo();
-    map<string,vector<Measurement>> measurementsBySensorId;
+    map<string,vector<MeasurementGroup>> measurementsBySensorId;
     
     ifstream ifsMeasurements;
     string fileName = "data/measurements.csv";
     ifsMeasurements.open(fileName);
     if(!ifsMeasurements.is_open()){
-        cout << "Erreur d'ouverture du fichier" << endl;
+        cout << "Erreur loadMeasurements() : erreur d'ouverture du fichier" << endl;
         return measurementsBySensorId;
     }
 
     string line;
+    MeasurementGroup currentGroup;
     while(getline(ifsMeasurements, line)){
         stringstream ss(line);
         string timestamp, sensorId, attributeId, stringValue;
@@ -67,36 +68,55 @@ map<string,vector<Measurement>> CSVLoader::loadMeasurements(){
         try {
             value = stof(stringValue);
         } catch (const invalid_argument& e) {
-            cout << "Erreur de conversion de la valeur : " << stringValue << endl;
+            cout << "Erreur loadMeasurements() : erreur de conversion de la valeur : " << stringValue << endl;
             continue;
         }
         
         // Trouver l'attribut correspondant
+        MeasurementType attributeIdEnum; ;
         string unit, description;
-        for (std::vector<vector<string>>::iterator i = attributesInfo.begin() ; i != attributesInfo.end(); i++)
+        bool found = false;
+        for (const auto& attr : attributesInfo)
         {
-            if ((*i)[0] == attributeId)
+            if (attr[0] == attributeId)
             {
-                unit = (*i)[1];
-                description = (*i)[2];
+                try {
+                    attributeIdEnum = stringToMeasurementType(attr[0]);
+                    unit = attr[1];
+                    description = attr[2];
+                    found = true;
+                } catch (const std::invalid_argument& e) {
+                    cout << "Erreur loadMeasurements() : erreur de type de mesure : " << attr[0] << endl;
+                    found = false;
+                }
                 break;
             }
         }
 
-        Measurement measurement(attributeId, unit, description, value, timestamp);  
-        measurementsBySensorId[sensorId].push_back(measurement);
+        if (!found) {
+            cout << "Attribut non trouvé ou invalide : " << attributeId << endl;
+            continue;
+        }
+
+        Measurement measurement(unit, description, value);
+        switch(attributeIdEnum) {
+            case O3: currentGroup.measurementO3 = measurement; break;
+            case NO2: currentGroup.measurementNO2 = measurement; break;
+            case SO2: currentGroup.measurementSO2 = measurement; break;
+            case PM10: currentGroup.measurementPM10 = measurement; measurementsBySensorId[sensorId].push_back(currentGroup); break;
+        }
     }
     return measurementsBySensorId;
 }
 
 vector<Sensor> CSVLoader::loadSensors(){
-    map<string,vector<Measurement>> allMeasurementsBySensorId = loadMeasurements();
+    map<string,vector<MeasurementGroup>> allMeasurementsBySensorId = loadMeasurements();
     vector<Sensor> sensors;
 
     ifstream ifs;
     ifs.open("data/sensors.csv");
     if(!ifs.is_open()){
-        cout << "Erreur d'ouverture du fichier" << endl;
+        cout << "Erreur loadSensors() : erreur d'ouverture du fichier" << endl;
         return sensors;
     }
     string line;
@@ -108,7 +128,7 @@ vector<Sensor> CSVLoader::loadSensors(){
         getline(ss, longitudeString, ';');
 
 
-        vector<Measurement> measurements;
+        vector<MeasurementGroup> measurements;
         // Add measurements to the sensor
         if (allMeasurementsBySensorId.find(id) != allMeasurementsBySensorId.end()) {
             measurements = allMeasurementsBySensorId[id];
@@ -117,7 +137,7 @@ vector<Sensor> CSVLoader::loadSensors(){
         // Convert latitude and longitude strings to float
         float latitude = stof(latitudeString);
         float longitude = stof(longitudeString);
-        
+
         Sensor sensor(id, latitude, longitude, true, measurements);
         sensors.push_back(sensor);
     }
@@ -125,13 +145,13 @@ vector<Sensor> CSVLoader::loadSensors(){
     return sensors;
 }
 
-vector<PrivateUser> CSVLoader::loadUsers(){
+vector<PrivateUser> CSVLoader::loadUsers(vector<Sensor> sensors){
     vector<PrivateUser> users;
 
     ifstream ifs;
     ifs.open("data/users.csv");
     if(!ifs.is_open()){
-        cout << "Erreur d'ouverture du fichier" << endl;
+        cout << "Erreur loadUsers() : erreur d'ouverture du fichier" << endl;
         return users;
     }
     string line;
@@ -150,7 +170,7 @@ vector<PrivateUser> CSVLoader::loadUsers(){
             }
         }
         if(!sensorFound){
-            cout << "Erreur : le capteur avec l'ID " << sensorId << " n'existe pas." << endl;
+            cout << "Erreur loadUsers() : le capteur avec l'ID " << sensorId << " n'existe pas." << endl;
             continue; // Skip this user if the sensor does not exist
         }
         else {
@@ -166,9 +186,8 @@ vector<PrivateUser> CSVLoader::loadUsers(){
 
             // If the user does not exist, create a new one
             if (!userFound) {
-                vector<string> userSensors;
-                userSensors.push_back(sensorId);
-                PrivateUser user(id, userSensors);
+                PrivateUser user(id);
+                user.addSensor(sensorId);
                 users.push_back(user);
             }
         }
@@ -182,7 +201,7 @@ vector<AirCleaner> CSVLoader::loadAirCleaners(){
     ifstream ifs;
     ifs.open("data/cleaners.csv");
     if(!ifs.is_open()){
-        cout << "Erreur d'ouverture du fichier" << endl;
+        cout << "Erreur loadAirCleaners() : erreur d'ouverture du fichier" << endl;
         return airCleaners;
     }
     string line;
@@ -194,8 +213,7 @@ vector<AirCleaner> CSVLoader::loadAirCleaners(){
         getline(ss, longitudeString, ';');
         getline(ss, debut, ';');
         getline(ss, fin, ';');
-
-
+ 
         // Convert latitude and longitude strings to float
         float latitude = stof(latitudeString);
         float longitude = stof(longitudeString);
@@ -214,13 +232,14 @@ vector<AirCleaner> CSVLoader::loadAirCleaners(){
     return airCleaners;
 }
 
-vector<AirCleanerProviderUser> CSVLoader::loadProviders(){
+vector<AirCleanerProviderUser> CSVLoader::loadProviders(vector<AirCleaner> airCleaners){
+
     vector<AirCleanerProviderUser> providers;
 
     ifstream ifs;
     ifs.open("data/providers.csv");
     if(!ifs.is_open()){
-        cout << "Erreur d'ouverture du fichier" << endl;
+        cout << "Erreur loadProviders() : erreur d'ouverture du fichier" << endl;
         return providers;
     }
     string line;
@@ -239,8 +258,8 @@ vector<AirCleanerProviderUser> CSVLoader::loadProviders(){
             }
         }
         if(!airCleanerFound){
-            cout << "Erreur : le capteur avec l'ID " << airCleanerId << " n'existe pas." << endl;
-            continue; // Skip this provider if the cleaner does not exist
+            cout << "Erreur loadProviders() : le capteur avec l'ID " << airCleanerId << " n'existe pas." << endl;
+            continue;
         }
         else {
             bool providerFound = false;
@@ -274,7 +293,9 @@ const vector<PrivateUser>& CSVLoader::getUsers() const{
 const vector<AirCleanerProviderUser>& CSVLoader::getProviders() const{
     return providers;
 }
-
+const vector<AirCleaner>& CSVLoader::getAirCleaners() const{
+    return airCleaners;
+}
 //------------------------------------------------- Surcharge d'opérateurs
 
 
@@ -283,9 +304,9 @@ const vector<AirCleanerProviderUser>& CSVLoader::getProviders() const{
 CSVLoader::CSVLoader ( )
 {
     sensors = loadSensors();
-    users = loadUsers();
+    users = loadUsers(sensors);
     airCleaners = loadAirCleaners();
-    providers = loadProviders();
+    providers = loadProviders(airCleaners);
 #ifdef MAP
     cout << "Appel au constructeur de <CSVLoader>" << endl;
 #endif
