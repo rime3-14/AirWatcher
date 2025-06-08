@@ -11,12 +11,12 @@
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
-using namespace std;
 #include <string>
 #include <iostream>
 #include <ctime>
 #include <iomanip>
 
+using namespace std;
 //------------------------------------------------------ Include personnel
 #include "models/sensors/Measurement.h"
 //------------------------------------------------------------- Constantes
@@ -28,7 +28,7 @@ using namespace std;
 
     // ----------- Getters -----------
     
-    UnitType Measurement::getUnit() const
+    string Measurement::getUnit() const
     {
         return unit;
     }
@@ -44,7 +44,7 @@ using namespace std;
     }
     
     // ----------- Setters -----------
-    void Measurement::setUnit(const UnitType& newunit)
+    void Measurement::setUnit(const string& newunit)
     {
         unit = newunit;
     }

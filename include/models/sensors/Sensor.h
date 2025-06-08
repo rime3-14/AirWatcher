@@ -14,8 +14,9 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <optional>
 #include "models/users/PrivateUser.h"
-#include "models/sensors/Measurement.h"  // <-- important
+#include "models/sensors/Measurement.h"
 
 using namespace std;
 
@@ -53,7 +54,7 @@ public:
     //-------------------------------------------- Constructeurs - destructeur
     Sensor(); // Constructeur par défaut
     Sensor(const Sensor& unSensor); // Constructeur de copie
-    Sensor(const std::string& unId, float unLatitude, float unLongitude, bool unReliability, PrivateUser unProvider, const std::vector<MeasurementGroup>& unMeasurements);
+    Sensor(const std::string& unId, float unLatitude, float unLongitude, bool unReliability, const std::vector<MeasurementGroup>& unMeasurements);
     virtual ~Sensor();
 
 //------------------------------------------------------------------ PRIVE
@@ -63,7 +64,7 @@ protected:
     float latitude;
     float longitude;
     bool reliability;
-    PrivateUser provider;
+    optional<PrivateUser> provider; // Optional to allow for sensors without a provider
     vector<MeasurementGroup> measurements;
 };
 

@@ -17,6 +17,8 @@
 //------------------------------------------------------ Include personnel
 #include "models/sensors/Sensor.h"
 
+using namespace std;
+
 //------------------------------------------------------------- Constantes
 
 //----------------------------------------------------------------- PUBLIC
@@ -146,9 +148,9 @@ Sensor::Sensor(const Sensor& unSensor)
 }
 
 Sensor::Sensor(const std::string& unId, float unLatitude, 
-    float unLongitude, bool unReliability, PrivateUser unProvider, const std::vector<MeasurementGroup>& unMeasurements)
+    float unLongitude, bool unReliability, const std::vector<MeasurementGroup>& unMeasurements)
     : id(unId), latitude(unLatitude), longitude(unLongitude),
-      reliability(unReliability), provider(unProvider),
+      reliability(unReliability), provider(nullopt), // No provider
       measurements(unMeasurements)
 {
 #ifdef MAP

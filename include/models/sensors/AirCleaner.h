@@ -11,7 +11,10 @@
 #define AirCleaner_H
 
 //--------------------------------------------------- Interfaces utilisées
-#include <vector> 
+#include <vector>
+#include <ostream>
+
+using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -96,13 +99,8 @@ protected:
 
 //-------------------------------- Autres définitions dépendantes de <AirCleaner>
 
-ostream & operator << ( ostream & out, const AirCleaner & aC) {
-    out << "Informations concernant le Air Cleaner " << aC.getId() << " : \n"; 
-    out << "ID Fournisseur : "; 
-    out << "Latitude : " << aC.getLatitude() << " :\n "; 
-    out << "Longitude : " << aC.getLongitude() << " : \n"; 
-    return out;   
-}
+ostream& operator<<(ostream& out, const AirCleaner& aC);
+
 
 #endif // AirCleaner_H
 

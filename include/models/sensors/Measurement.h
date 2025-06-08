@@ -15,8 +15,20 @@ using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
+enum MeasurementType {
+    O3,
+    NO2,
+    SO2,
+    PM10
+};
 
-
+inline MeasurementType stringToMeasurementType(const std::string& str) {
+    if (str == "O3") return O3;
+    else if (str == "NO2") return NO2;
+    else if (str == "SO2") return SO2;
+    else if (str == "PM10") return PM10;
+    else throw std::invalid_argument("Invalid measurement type: " + str);
+}
 //------------------------------------------------------------------------
 // Rôle de la classe <Measurement>
 // Permet de regrouper les caractéristiques d'une mesure d'un seul type (O3, NO2, SO2 ou P10)
@@ -33,12 +45,12 @@ public:
 //----------------------------------------------------- Méthodes publiques
 
     // Getters
-    UnitType getUnit() const;
+    string getUnit() const;
     string getDescription() const;
     float getValue() const;
 
     // Setters
-    void setUnit(const UnitType& newunit);
+    void setUnit(const string& newunit);
     void setDescription(const string& newDescription);
     void setValue(float newvalue);
 
@@ -53,7 +65,7 @@ public:
     // Contrat :
     //
 
-    Measurement (UnitType ununit, string unDescription, float unvalue);
+    Measurement (string ununit, string unDescription, float unvalue);
     // Mode d'emploi :
     //
     // Contrat :
@@ -77,7 +89,7 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-    UnitType unit;
+    string unit;
     string description;
     float value;
 };
@@ -97,22 +109,6 @@ struct MeasurementGroup {
     Measurement measurementPM10; 
     
 };
-
-enum UnitType {
-    O3,
-    NO2,
-    SO2,
-    PM10
-};
-
-// convertisseur string -> enum
-UnitType stringToUnitType(const std::string& str) {
-    if (str == "O3") return O3;
-    else if (str == "NO2") return NO2;
-    else if (str == "SO2") return SO2;
-    else if (str == "PM10") return PM10;
-    else throw std::invalid_argument("Invalid unit type: " + str);
-}
 
 ostream& operator<<(ostream& os, const Measurement& m);
 ostream& operator<<(ostream& os, const MeasurementGroup& group);

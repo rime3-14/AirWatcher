@@ -13,6 +13,7 @@
 //-------------------------------------------------------- Include système
 #include <iostream>
 
+using namespace std;
 //------------------------------------------------------ Include personnel
 #include "models/users/PrivateUser.h"
 
@@ -33,6 +34,7 @@ PrivateUser::PrivateUser()
 PrivateUser::PrivateUser(std::string id)
     : User(id), points(0), reliability(false)
 {
+    sensorsId = vector<string>();
 #ifdef MAP
     std::cout << "Appel au constructeur paramétré de PrivateUser" << std::endl;
 #endif
