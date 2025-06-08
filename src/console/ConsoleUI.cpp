@@ -15,9 +15,6 @@ MenuAction ConsoleUI::select_action() const
 {
     const UserType role = authenticated_user->getRole();
 
-    std::cout << "Welcome to AirWatcher\n";
-
-    std::cout << "You can use this tool to access different information regarding air quality of the area.\n";
     std::cout << "What would you like to do?\n";
 
     std::vector<const MenuOption*> availableOptions;
@@ -47,6 +44,11 @@ MenuAction ConsoleUI::select_action() const
 
 void ConsoleUI::run()
 {
+    std::cout << "Welcome to AirWatcher\n";
+    std::cout << "You can use this tool to access different information regarding air quality of the area.\n";
+
+    std::cout << "To begin you need to log in.\n";
+
     // Log user in
     AuthManager authManager;
     authenticated_user = authManager.login();

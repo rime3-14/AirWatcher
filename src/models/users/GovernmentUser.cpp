@@ -30,7 +30,7 @@ User* GovernmentUser::authentificateUser(std::string login) const
     return nullptr;
 }
 
-UserType GovernmentUser::getRole() const override
+UserType GovernmentUser::getRole() const
 {
     return UserType::Government;
 }
