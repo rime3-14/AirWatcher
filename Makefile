@@ -12,8 +12,7 @@ COMMON_SRC := \
 	$(SRC_DIR)/models/users/User.cpp \
 	$(SRC_DIR)/models/users/PrivateUser.cpp \
 	$(SRC_DIR)/models/users/AirCleanerProviderUser.cpp
-MAIN_EXE := main
-MAIN_SRC := main.cpp
+MAIN_SRC := $(SRC_DIR)/main.cpp
 
 # ====== TESTS ======
 TEST_MEASUREMENT_SRC := $(SRC_DIR)/models/sensors/Measurement.cpp $(TEST_DIR)/testMeasurement.cpp
@@ -60,18 +59,22 @@ run-tests:
 	@./$(TEST_CSVLOADER_EXE)
 	@echo "\n================================================================================\n\n"
 
+
 # ====== EXECUTION NORMALE ======
-SRC_FILES := $(wildcard src/**/*.cpp) $(wildcard src/*.cpp) main.cpp
+SRC_FILES := $(MAIN_SRC) $(COMMON_SRC) $(SRC_DIR)/dataAccess/CSVLoader.cpp
 OBJ_FILES := $(SRC_FILES:.cpp=.o)
 MAIN_EXE := main
 
 exec: $(MAIN_EXE)
 
 $(MAIN_EXE): $(OBJ_FILES)
-	$(CXX) -o $@ $^
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
 %.o: %.cpp
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+
 
 # Cible : clean
 clean:
