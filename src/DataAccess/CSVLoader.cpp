@@ -98,12 +98,17 @@ map<string,vector<MeasurementGroup>> CSVLoader::loadMeasurements(){
             continue;
         }
 
+        // Convertir le timestamp en time_t
+        struct tm tm = {};
+        strptime(timestamp.c_str(), "%Y-%m-%d %H:%M:%S", &tm);
+        time_t timestampTime = mktime(&tm);
+
         Measurement measurement(unit, description, value);
         switch(attributeIdEnum) {
             case O3: currentGroup.measurementO3 = measurement; break;
             case NO2: currentGroup.measurementNO2 = measurement; break;
             case SO2: currentGroup.measurementSO2 = measurement; break;
-            case PM10: currentGroup.measurementPM10 = measurement; measurementsBySensorId[sensorId].push_back(currentGroup); break;
+            case PM10: currentGroup.measurementPM10 = measurement; currentGroup.timestamp = timestampTime; measurementsBySensorId[sensorId].push_back(currentGroup); break;
         }
     }
     return measurementsBySensorId;

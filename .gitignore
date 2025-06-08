@@ -8,6 +8,7 @@
 *.a
 *.so
 *.dll
+main
 
 # === Autres fichiers temporaires ===
 *.log

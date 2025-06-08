@@ -18,7 +18,19 @@ int main() {
         cout << "Capteur ID: " << sensor.getId()
              << ", Latitude: " << sensor.getLatitude()
              << ", Longitude: " << sensor.getLongitude()
-             << ", Fiabilité: " << (sensor.getReliability() ? "Oui" : "Non") << endl;
+             << ", Fiabilité: " << (sensor.getReliability() ? "Oui" : "Non") ;
+        if (!sensor.getMeasurements().empty()) {
+            cout << ", Nombre de mesures: " << sensor.getMeasurements().size();
+            // Affichage des mesures pour vérification
+            for (const auto& group : sensor.getMeasurements()) {
+                cout << "\n  Mesure à " << ctime(&group.timestamp)
+                     << "    O3: " << group.measurementO3.getValue() << " " << group.measurementO3.getUnit()
+                     << ", NO2: " << group.measurementNO2.getValue() << " " << group.measurementNO2.getUnit()
+                     << ", SO2: " << group.measurementSO2.getValue() << " " << group.measurementSO2.getUnit()
+                     << ", PM10: " << group.measurementPM10.getValue() << " " << group.measurementPM10.getUnit();
+            }
+        }
+        cout << endl;
     }
     */
 
