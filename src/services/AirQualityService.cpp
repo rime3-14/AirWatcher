@@ -74,10 +74,10 @@ float AirQualityService::CalculateMeanAirQuality(float centerLatitude, float cen
 // Algorithme : Calcule la moyenne de qualité d'air sur une zone circulaire donnée sur une période donnée
 {
     SensorRepository sensorRepository;
-    std::vector<Sensor*> sensors = sensorRepository.GetSensorsInCircularRadius(centerLatitude, centerLongitude, radius);
+    std::vector<Sensor> sensors = sensorRepository.getSensorsInCircularRadius(centerLatitude, centerLongitude, radius);
 
     MeasurementRepository measurementRepository;
-    std::vector<MeasurementGroup> measurements = measurementRepository.GetAllMeasurementsInTimeRange(sensors, beg, end);
+    const std::vector<MeasurementGroup> measurements = measurementRepository.getAllMeasurementsInTimeRange(sensors, beg, end);
 
     float meanAirQuality = CalculateAvgAirQuality(measurements);
     return meanAirQuality;
@@ -110,28 +110,30 @@ void AirQualityService::SortDescByDifference(std::vector<Sensor*>& sensors, cons
 }
 
 
-float CompareSensorAgainstOthers(Sensor sensor, time_t beg, time_t end) 
+std::vector<Sensor*> AirQualityService::CompareSensorAgainstOthers(Sensor sensor, time_t beg, time_t end) 
 {
     MeasurementRepository measurementRepository;
-    std::vector<MeasurementGroup> measurements = measurementRepository.GetMeasurementsInTimeRangeBySensor(sensor, beg, end);
+    const std::vector<MeasurementGroup> measurements = measurementRepository.getMeasurementsInTimeRangeBySensor(sensor, beg, end);
 
-    float meanAirQuality = CalculateAvgAirQuality(measurements);
-    return meanAirQuality;
+    int meanAirQuality = CalculateAvgAirQuality(measurements);
 
     SensorRepository sensorRepository;
-    std::vector<Sensor*> otherSensors = sensorRepository.GetAllSensorsExcept(sensor);
+    std::vector<Sensor> rawSensors = sensorRepository.getAllSensorsExcept(sensor);
+    std::vector<Sensor*> otherSensors;
     std::vector<int> diffs;
 
-    for (const Sensor& otherSensor : otherSensors)
+    for (Sensor& otherSensor : rawSensors)
     {
-        std::vector<MeasurementGroup> otherMeasurements = measurementRepository.GetMeasurementsInTimeRangeBySensor(otherSensor, beg, end);
+        otherSensors.push_back(&otherSensor); // conversion en pointeur
+
+        std::vector<MeasurementGroup> otherMeasurements = measurementRepository.getMeasurementsInTimeRangeBySensor(otherSensor, beg, end);
         float otherMeanAirQuality = CalculateAvgAirQuality(otherMeasurements);
-        int diff = std::abs(static_cast<int>(otherMeanAirQuality - MeanAirQuality));
+        int diff = std::abs(static_cast<int>(otherMeanAirQuality - meanAirQuality));
         diffs.push_back(diff);
     }
+
     SortDescByDifference(otherSensors, diffs);
     return otherSensors;
-
 }
 
 void AirQualityService::Executer()

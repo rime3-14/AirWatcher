@@ -45,6 +45,8 @@ public:
 
     float CalculateMeanAirQuality(float centerLatitude, float centerLongitude, int radius, time_t beg, time_t end);
 
+    std::vector<Sensor*> CompareSensorAgainstOthers(Sensor sensor, time_t beg, time_t end);
+
     void SortDescByDifference(std::vector<Sensor*>& sensors, const std::vector<int>& values);
 
     void Executer() override; 
