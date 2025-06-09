@@ -2,12 +2,12 @@
 #include <cassert>
 #include <vector>
 #include <ctime>
-#include "services/AirQualityService.h"
-#include "models/sensors/Sensor.h"
-#include "models/sensors/Measurement.h"
-#include "dataAccess/MeasurementRepository.h"
-#include "dataAccess/SensorRepository.h"
-#include "utils/Util.h"
+#include "../include/services/AirQualityService.h"
+#include "../include/models/sensors/Sensor.h"
+#include "../include/models/sensors/Measurement.h"
+#include "../include/dataAccess/MeasurementRepository.h"
+#include "../include/dataAccess/SensorRepository.h"
+#include "../include/utils/Util.h"
 
 using namespace std;
 
@@ -54,63 +54,110 @@ void testCalculateAvgAirQuality() {
 void testCalculateMeanAirQuality() {
     AirQualityService service;
     SensorRepository sensorRepo;
-    MeasurementRepository measureRepo;
 
     vector<Sensor> sensors = sensorRepo.getAll();
     assert(!sensors.empty());
 
-    tm timeStruct = {};
-    timeStruct.tm_year = 2019 - 1900;
-    timeStruct.tm_mon = 0;  // janvier
-    timeStruct.tm_mday = 2;
-    time_t timestamp = mktime(&timeStruct);
+    // On prend les coordonnées du premier capteur
+    float latitude = sensors[0].getLatitude();
+    float longitude = sensors[0].getLongitude();
+    int radius = 1000; // en mètres, à adapter selon ta logique métier
 
-    // Méthode testée
-    float result = service.CalculateMeanAirQuality(sensors[0], timestamp);
-    cout << "Air quality moyenne du capteur " << sensors[0].getId() << " à la date du 02/01/2019 : " << result << endl;
+    // Définir une période de temps autour du 02/01/2019
+    tm timeStructStart = {};
+    timeStructStart.tm_year = 2019 - 1900;
+    timeStructStart.tm_mon = 0;  // janvier
+    timeStructStart.tm_mday = 1;
+    time_t beg = mktime(&timeStructStart);
 
-    assert(result >= 0 && result <= 5); // Selon ton barème de qualité de l'air
+    tm timeStructEnd = {};
+    timeStructEnd.tm_year = 2019 - 1900;
+    timeStructEnd.tm_mon = 0;  // janvier
+    timeStructEnd.tm_mday = 3;
+    time_t end = mktime(&timeStructEnd);
+
+    // Appel de la méthode
+    float result = service.CalculateMeanAirQuality(latitude, longitude, radius, beg, end);
+    cout << "Qualité de l'air moyenne entre le 01/01/2019 et le 03/01/2019 autour du capteur " 
+         << sensors[0].getId() << " : " << result << endl;
+
+    // Vérification que le résultat est dans une plage réaliste
+    assert(result >= 0 && result <= 5);
 }
 
 void testCompareSensorAgainstOthers() {
+    cout << "\n--- Test : CompareSensorAgainstOthers ---" << endl;
+
     AirQualityService service;
     SensorRepository sensorRepo;
 
     vector<Sensor> sensors = sensorRepo.getAll();
-    assert(sensors.size() >= 10);
+    assert(sensors.size() >= 2);  // il faut au moins 2 capteurs
 
-    tm timeStruct = {};
-    timeStruct.tm_year = 2019 - 1900;
-    timeStruct.tm_mon = 0;
-    timeStruct.tm_mday = 2;
-    time_t timestamp = mktime(&timeStruct);
+    Sensor sensorRef = sensors[0];
 
-    vector<pair<string, float>> comparison = service.CompareSensorAgainstOthers(sensors[0], sensors, timestamp);
-    cout << "Comparaison du capteur " << sensors[0].getId() << " avec les autres à la date du 02/01/2019 : " << endl;
+    // Définir l'intervalle de temps
+    tm timeStructBeg = {};
+    timeStructBeg.tm_year = 2019 - 1900;
+    timeStructBeg.tm_mon = 0;
+    timeStructBeg.tm_mday = 2;
+    time_t beg = mktime(&timeStructBeg);
 
-    for (const auto& [id, diff] : comparison) {
-        cout << " -> " << id << " : " << diff << endl;
-        assert(diff >= 0); // Une différence absolue est toujours positive
+    tm timeStructEnd = {};
+    timeStructEnd.tm_year = 2019 - 1900;
+    timeStructEnd.tm_mon = 0;
+    timeStructEnd.tm_mday = 3;
+    time_t end = mktime(&timeStructEnd);
+
+    // Appel de la méthode réelle
+    vector<Sensor*> comparison = service.CompareSensorAgainstOthers(sensorRef, beg, end);
+
+    cout << "Comparaison du capteur " << sensorRef.getId() << " avec les autres :\n";
+    for (Sensor* s : comparison) {
+        cout << " -> " << s->getId() << endl;
+        assert(s->getId() != sensorRef.getId()); // on ne compare pas à soi-même
     }
 
     assert(!comparison.empty());
+    cout << "✅ Comparaison terminée avec succès." << endl;
 }
+
 
 void testSortDescByDifference() {
+    cout << "\n--- Test : SortDescByDifference ---" << endl;
+
+    // Création de capteurs avec le constructeur complet
+    std::vector<MeasurementGroup> emptyMeasurements;
+    Sensor s1("S1", 0.0f, 0.0f, true, emptyMeasurements);
+    Sensor s2("S2", 0.0f, 0.0f, true, emptyMeasurements);
+    Sensor s3("S3", 0.0f, 0.0f, true, emptyMeasurements);
+
+    // Vecteur de pointeurs vers capteurs
+    std::vector<Sensor*> sensors = { &s1, &s2, &s3 };
+
+    // Valeurs associées
+    std::vector<int> values = { 20, 10, 30 }; // S1=20, S2=10, S3=30
+
+    // Appel de la méthode
     AirQualityService service;
+    service.SortDescByDifference(sensors, values);
 
-    vector<pair<string, float>> diffs = {
-        {"Sensor1", 1.0},
-        {"Sensor2", 3.5},
-        {"Sensor3", 2.0}
-    };
+    // Affichage pour vérification visuelle
+    cout << "Ordre après tri (croissant attendu selon la fonction actuelle):" << endl;
+    for (Sensor* s : sensors) {
+        cout << s->getId() << " ";
+    }
+    cout << endl;
 
-    vector<pair<string, float>> sorted = service.SortDescByDifference(diffs);
+    // Vérifications
+    assert(sensors[0]->getId() == "S3"); // 10
+    assert(sensors[1]->getId() == "S1"); // 20
+    assert(sensors[2]->getId() == "S2"); // 30
 
-    assert(sorted[0].second >= sorted[1].second);
-    assert(sorted[1].second >= sorted[2].second);
-    cout << "Tri décroissant des différences : OK" << endl;
+    cout << "Tri effectué correctement (décroissant)." << endl;
 }
+
+
 
 int main() {
     cout << "=== Début des tests AirQualityService ===" << endl;

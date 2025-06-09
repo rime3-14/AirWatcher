@@ -99,7 +99,7 @@ void AirQualityService::SortDescByDifference(std::vector<Sensor*>& sensors, cons
     std::sort(paired.begin(), paired.end(),
         [](const std::pair<int, Sensor*>& a, const std::pair<int, Sensor*>& b)
         {
-            return a.first < b.first;
+            return a.first > b.first;
         });
 
     // Réécrire le vecteur `sensors` trié
