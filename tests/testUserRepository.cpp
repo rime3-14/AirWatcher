@@ -15,10 +15,36 @@ int main() {
     assert(!privateUsers.empty());
     cout << "Nombre d'utilisateurs privés chargés : " << privateUsers.size() << endl;
 
+    // Test getPrivateUserById() avec ID existant
+    string existingId = privateUsers[0].getId();
+    PrivateUser foundUser = userRepo.getPrivateUserById(existingId);
+    assert(foundUser.getId() == existingId);
+    cout << "getPrivateUserById avec ID existant a réussi." << endl;
+
+    // Test getPrivateUserById() avec ID inexistant
+    PrivateUser notFoundUser = userRepo.getPrivateUserById("ID_qui_n_existe_pas");
+    assert(notFoundUser.getId() == "");  // supposé que l'objet vide a id = ""
+    cout << "getPrivateUserById avec ID inexistant retourne un utilisateur vide." << endl;
+
     // Test getAllAirCleanerProviderUsers()
     vector<AirCleanerProviderUser> providers = userRepo.getAllAirCleanerProviderUsers();
     assert(!providers.empty());
     cout << "Nombre de fournisseurs de purificateurs d'air : " << providers.size() << endl;
+
+    // Test getAirCleanerProviderUserById avec un ID existant
+    if (!providers.empty()) {
+        string existingProviderId = providers[0].getId(); // Assure-toi que getId() existe
+        AirCleanerProviderUser foundProvider = userRepo.getAirCleanerProviderUserById(existingProviderId);
+        assert(foundProvider.getId() == existingProviderId);
+        cout << "getAirCleanerProviderUserById avec un ID existant a réussi." << endl;
+    } else {
+        cout << "Aucun fournisseur pour tester getAirCleanerProviderUserById avec un ID existant." << endl;
+    }
+
+    // Test getAirCleanerProviderUserById avec un ID inexistant
+    AirCleanerProviderUser notFoundProvider = userRepo.getAirCleanerProviderUserById("ID_INEXISTANT_123");
+    assert(notFoundProvider.getId() == ""); // ou toute autre condition définissant un objet "vide"
+    cout << "getAirCleanerProviderUserById avec un ID inexistant retourne un objet vide comme attendu." << endl;
 
     // Test markPrivateUserAsUnreliable()
     PrivateUser testUser = privateUsers[0];
