@@ -10,6 +10,7 @@
 *.so
 *.dll
 main
+AirWatcher
 
 # === Autres fichiers temporaires ===
 *.log
