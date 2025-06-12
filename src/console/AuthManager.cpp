@@ -5,6 +5,7 @@
 #include "console/AuthManager.h"
 
 #include <iostream>
+#include <limits>
 
 User* AuthManager::login()
 {

@@ -5,6 +5,9 @@
 #include "console/ConsoleUI.h"
 
 #include <iostream>
+#include <limits>
+#include <algorithm>
+
 
 void ConsoleUI::run()
 {
