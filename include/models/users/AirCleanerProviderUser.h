@@ -29,6 +29,7 @@ public:
     void addAirCleaner(string airCleanerId);
 
     string getId() const;
+    vector<string> getAirCleanersId() const;
 
 protected:
     vector<string> airCleanersId;
