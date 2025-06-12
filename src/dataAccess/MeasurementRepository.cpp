@@ -12,12 +12,7 @@
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
-#include <iostream>
-#include <string>
-#include <math.h>
-#include <ctime>
 #include "dataAccess/MeasurementRepository.h"
-#include "dataAccess/CSVLoader.h"
 using namespace std;
 
 //------------------------------------------------------ Include personnel

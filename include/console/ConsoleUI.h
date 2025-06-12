@@ -10,6 +10,7 @@
 
 #include "models/users/User.h"
 #include "models/users/UserTypeEnum.h"
+#include "console/AuthManager.h"
 
 enum class MenuAction {
     Quit,

@@ -22,7 +22,7 @@ int main() {
 
     // Test markPrivateUserAsUnreliable()
     PrivateUser testUser = privateUsers[0];
-    bool wasReliable = testUser.isReliable(); 
+    // bool wasReliable = testUser.isReliable(); unused variable, can be removed
     bool success = userRepo.markPrivateUserAsUnreliable(testUser);
 
     cout << "markPrivateUserAsUnreliable a retourné : " << (success ? "true" : "false") << endl;

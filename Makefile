@@ -9,6 +9,8 @@ CXX := g++
 CXXFLAGS := -Wall -std=c++17 -g -I$(INCLUDE_DIR) -MMD -MP
 
 # ====== Source Files ======
+MAIN_SRC := $(SRC_DIR)/main.cpp
+
 COMMON_SRC := \
     $(SRC_DIR)/models/sensors/Measurement.cpp \
     $(SRC_DIR)/models/sensors/Sensor.cpp \
@@ -19,175 +21,71 @@ COMMON_SRC := \
     $(SRC_DIR)/models/users/GovernmentUser.cpp \
     $(SRC_DIR)/console/AuthManager.cpp \
     $(SRC_DIR)/console/ConsoleUI.cpp \
+    $(SRC_DIR)/dataAccess/CSVLoader.cpp \
     $(SRC_DIR)/dataAccess/MeasurementRepository.cpp \
     $(SRC_DIR)/dataAccess/UserRepository.cpp \
     $(SRC_DIR)/dataAccess/SensorRepository.cpp \
-    $(SRC_DIR)/utils/Util.cpp
+    $(SRC_DIR)/utils/Util.cpp \
+    $(SRC_DIR)/services/AirQualityService.cpp \
+    $(SRC_DIR)/services/AlgoPerformance.cpp \
+    $(SRC_DIR)/services/Service.cpp
 
-MAIN_SRC := $(SRC_DIR)/main.cpp
-
-# ====== TESTS ======
-TEST_MEASUREMENT_SRC := $(SRC_DIR)/models/sensors/Measurement.cpp $(TEST_DIR)/testMeasurement.cpp
-TEST_PRIVATEUSER_SRC := $(SRC_DIR)/models/users/PrivateUser.cpp $(SRC_DIR)/models/users/User.cpp $(TEST_DIR)/testPrivateUser.cpp
-TEST_SENSOR_SRC := $(SRC_DIR)/models/sensors/Sensor.cpp $(SRC_DIR)/models/users/PrivateUser.cpp $(SRC_DIR)/models/users/User.cpp $(SRC_DIR)/models/sensors/Measurement.cpp $(TEST_DIR)/testSensor.cpp
-TEST_CSVLOADER_SRC := $(SRC_DIR)/dataAccess/CSVLoader.cpp $(COMMON_SRC) $(TEST_DIR)/testCSVLoader.cpp
-TEST_SENSORREPOSITORY_SRC := $(SRC_DIR)/dataAccess/SensorRepository.cpp $(COMMON_SRC) $(TEST_DIR)/testSensorRepository.cpp
-TEST_MEASUREMENTREPOSITORY_SRC := $(SRC_DIR)/dataAccess/MeasurementRepository.cpp $(COMMON_SRC) $(TEST_DIR)/testMeasurementRepository.cpp
-TEST_AIRCLEANER_SRC := $(SRC_DIR)/models/sensors/AirCleaner.cpp $(COMMON_SRC) $(TEST_DIR)/testAirCleaner.cpp
-TEST_USERREPOSITORY_SRC := $(SRC_DIR)/dataAccess/UserRepository.cpp $(COMMON_SRC) $(TEST_DIR)/testUserRepository.cpp
-TEST_AIRQUALITYSERVICE_SRC := $(TEST_DIR)/testAirQualityService.cpp	$(SRC_DIR)/services/AirQualityService.cpp $(SRC_DIR)/models/sensors/Sensor.cpp $(SRC_DIR)/models/sensors/Measurement.cpp $(SRC_DIR)/dataAccess/MeasurementRepository.cpp $(SRC_DIR)/dataAccess/SensorRepository.cpp $(SRC_DIR)/utils/Util.cpp
-TEST_ALGOPERFORMANCE_SRC := $(SRC_DIR)/services/AlgoPerformance.cpp $(COMMON_SRC) $(TEST_DIR)/testAlgoPerformance.cpp
-
-
-TEST_MEASUREMENT_EXE := testMeasurement.exe
-TEST_PRIVATEUSER_EXE := testPrivateUser.exe
-TEST_SENSOR_EXE := testSensor.exe
-TEST_CSVLOADER_EXE := testCSVLoader.exe
-TEST_SENSORREPOSITORY_EXE := testSensorRepository.exe
-TEST_MEASUREMENTREPOSITORY_EXE := testMeasurementRepository.exe
-TEST_AIRCLEANER_EXE := testAirCleaner.exe
-TEST_USERREPOSITORY_EXE := testUserRepository.exe
-TEST_AIRQUALITYSERVICE_EXE := testAirQualityService.exe
-TEST_ALGOPERFORMANCE_EXE := testAlgoPerformance.exe
-
-# Message par défaut si aucune cible n'est précisée
-.DEFAULT_GOAL := error
-
-# Cible : test
-test: $(TEST_MEASUREMENT_EXE) $(TEST_PRIVATEUSER_EXE) $(TEST_SENSOR_EXE) $(TEST_CSVLOADER_EXE) $(TEST_AIRCLEANER_EXE) $(TEST_SENSORREPOSITORY_EXE) $(TEST_MEASUREMENTREPOSITORY_EXE) $(TEST_USERREPOSITORY_EXE) $(TEST_AIRQUALITYSERVICE_EXE) $(TEST_ALGOPERFORMANCE_EXE)
-	@echo "Compilation des tests réussie. Executions de tous les tests : `make run-tests`"
-
-$(TEST_MEASUREMENT_EXE): $(TEST_MEASUREMENT_SRC)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
-$(TEST_PRIVATEUSER_EXE): $(TEST_PRIVATEUSER_SRC)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
-$(TEST_SENSOR_EXE): $(TEST_SENSOR_SRC)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
-$(TEST_CSVLOADER_EXE): $(TEST_CSVLOADER_SRC)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
-$(TEST_AIRCLEANER_EXE): $(TEST_AIRCLEANER_SRC)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
-$(TEST_SENSORREPOSITORY_EXE): $(TEST_SENSORREPOSITORY_SRC)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
-$(TEST_MEASUREMENTREPOSITORY_EXE): $(TEST_MEASUREMENTREPOSITORY_SRC)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
-$(TEST_USERREPOSITORY_EXE): $(TEST_USERREPOSITORY_SRC)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
-$(TEST_AIRQUALITYSERVICE_EXE): $(TEST_AIRQUALITYSERVICE_SRC)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-	
-$(TEST_ALGOPERFORMANCE_EXE): $(TEST_ALGOPERFORMANCE_SRC)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
-# Cible : run-tests
-# Exécute les tests compilés
-run-tests:
-	@echo "\n======================  Exécutions de tous les tests.  =============================\n"
-	@echo "====================================================================================\n"
-	@echo "=====================  Executions de $(TEST_MEASUREMENT_EXE).  ========================\n"
-	@./$(TEST_MEASUREMENT_EXE)
-	@echo "\n=====================  Executions de $(TEST_PRIVATEUSER_EXE).  =======================\n"
-	@./$(TEST_PRIVATEUSER_EXE)
-	@echo "\n=====================  Executions de $(TEST_SENSOR_EXE).  =======================\n"
-	@./$(TEST_SENSOR_EXE)
-	@echo "\n===================  Executions de $(TEST_CSVLOADER_EXE).  =======================\n"
-	@./$(TEST_CSVLOADER_EXE)
-	@echo "\n===================  Executions de $(TEST_AIRCLEANER_EXE).  =======================\n"
-	@./$(TEST_AIRCLEANER_EXE)
-	@echo "\n===================  Executions de $(TEST_SENSORREPOSITORY_EXE).  =======================\n"
-	@./$(TEST_SENSORREPOSITORY_EXE)
-	@echo "\n===================  Executions de $(TEST_MEASUREMENTREPOSITORY_EXE).  =======================\n"
-	@./$(TEST_MEASUREMENTREPOSITORY_EXE)
-	@echo "\n===================  Executions de $(TEST_USERREPOSITORY_EXE).  =======================\n"
-	@./$(TEST_USERREPOSITORY_EXE)
-	@echo "\n===================  Executions de $(TEST_AIRQUALITYSERVICE_EXE).  =======================\n"
-	@./$(TEST_AIRQUALITYSERVICE_EXE)
-	@echo "\n===================  Executions de $(TEST_ALGOPERFORMANCE_EXE).  =======================\n"
-	@./$(TEST_ALGOPERFORMANCE_EXE)
-	@echo "\n================================================================================\n\n"
-
-
-# ====== EXECUTION NORMALE ======
-SRC_FILES := $(MAIN_SRC) $(COMMON_SRC) $(SRC_DIR)/dataAccess/CSVLoader.cpp
-OBJ_FILES := $(SRC_FILES:.cpp=.o)
-MAIN_EXE := main
-
-SRC_FILES := $(MAIN_SRC) $(COMMON_SRC) $(SRC_DIR)/dataAccess/CSVLoader.cpp
-
-# ====== Object and Dependency Files ======
+SRC_FILES := $(MAIN_SRC) $(COMMON_SRC)
 OBJ_FILES := $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(SRC_FILES))
 DEP_FILES := $(OBJ_FILES:.o=.d)
 
-# ====== Map .cpp -> build/.o ======
+# ====== Mapping compilation ======
 $(BUILD_DIR)/%.o: %.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# ====== Main executable ======
+# ====== Main Executable ======
+MAIN_EXE := main
 exec: $(MAIN_EXE)
 
 $(MAIN_EXE): $(OBJ_FILES)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-# ====== Test definitions ======
-define MAKE_TEST_RULES
-$(1)_SRC := $(2)
-$(1)_OBJ := $$(patsubst %.cpp,$$(BUILD_DIR)/%.o,$$($(1)_SRC))
-$(1) := $(1).exe
+# ====== Tests definitions ======
+define TEST
+TEST_$(1)_SRC := $(2)
+TEST_$(1)_OBJ := $$(patsubst %.cpp,$$(BUILD_DIR)/%.o,$$(TEST_$(1)_SRC))
+TEST_$(1)_EXE := test$(1).exe
+TEST_TARGETS += $$(TEST_$(1)_EXE)
 
-$$(BUILD_DIR)/%.o: %.cpp
-	@mkdir -p $$(dir $$@)
-	$$(CXX) $$(CXXFLAGS) -c $$< -o $$@
-
-$$($(1)): $$($(1)_OBJ)
+$$(TEST_$(1)_EXE): $$(TEST_$(1)_OBJ)
 	$$(CXX) $$(CXXFLAGS) -o $$@ $$^
-
 endef
 
-# ====== Declare test rules ======
-$(eval $(call MAKE_TEST_RULES,TEST_MEASUREMENT,$(SRC_DIR)/models/sensors/Measurement.cpp $(TEST_DIR)/testMeasurement.cpp))
-$(eval $(call MAKE_TEST_RULES,TEST_PRIVATEUSER,$(SRC_DIR)/models/users/PrivateUser.cpp $(SRC_DIR)/models/users/User.cpp $(TEST_DIR)/testPrivateUser.cpp))
-$(eval $(call MAKE_TEST_RULES,TEST_SENSOR,$(SRC_DIR)/models/sensors/Sensor.cpp $(SRC_DIR)/models/sensors/Measurement.cpp $(SRC_DIR)/models/users/PrivateUser.cpp $(SRC_DIR)/models/users/User.cpp $(TEST_DIR)/testSensor.cpp))
-$(eval $(call MAKE_TEST_RULES,TEST_CSVLOADER,$(SRC_DIR)/dataAccess/CSVLoader.cpp $(COMMON_SRC) $(TEST_DIR)/testCSVLoader.cpp))
-$(eval $(call MAKE_TEST_RULES,TEST_SENSORREPOSITORY,$(SRC_DIR)/dataAccess/SensorRepository.cpp $(COMMON_SRC) $(TEST_DIR)/testSensorRepository.cpp))
-$(eval $(call MAKE_TEST_RULES,TEST_MEASUREMENTREPOSITORY,$(SRC_DIR)/dataAccess/MeasurementRepository.cpp $(COMMON_SRC) $(TEST_DIR)/testMeasurementRepository.cpp))
-$(eval $(call MAKE_TEST_RULES,TEST_AIRCLEANER,$(SRC_DIR)/models/sensors/AirCleaner.cpp $(COMMON_SRC) $(TEST_DIR)/testAirCleaner.cpp))
-$(eval $(call MAKE_TEST_RULES,TEST_USERREPOSITORY,$(SRC_DIR)/dataAccess/UserRepository.cpp $(COMMON_SRC) $(TEST_DIR)/testUserRepository.cpp))
+# ====== Declaring test cases ======
+$(eval $(call TEST,Measurement,$(SRC_DIR)/models/sensors/Measurement.cpp $(TEST_DIR)/testMeasurement.cpp))
+$(eval $(call TEST,PrivateUser,$(SRC_DIR)/models/users/PrivateUser.cpp $(SRC_DIR)/models/users/User.cpp $(TEST_DIR)/testPrivateUser.cpp))
+$(eval $(call TEST,Sensor,$(SRC_DIR)/models/sensors/Sensor.cpp $(SRC_DIR)/models/users/PrivateUser.cpp $(SRC_DIR)/models/users/User.cpp $(SRC_DIR)/models/sensors/Measurement.cpp $(TEST_DIR)/testSensor.cpp))
+$(eval $(call TEST,CSVLoader,$(COMMON_SRC) $(TEST_DIR)/testCSVLoader.cpp))
+$(eval $(call TEST,SensorRepository,$(COMMON_SRC) $(TEST_DIR)/testSensorRepository.cpp))
+$(eval $(call TEST,MeasurementRepository,$(COMMON_SRC) $(TEST_DIR)/testMeasurementRepository.cpp))
+$(eval $(call TEST,AirCleaner,$(COMMON_SRC) $(TEST_DIR)/testAirCleaner.cpp))
+$(eval $(call TEST,UserRepository,$(COMMON_SRC) $(TEST_DIR)/testUserRepository.cpp))
+$(eval $(call TEST,AirQualityService,$(COMMON_SRC) $(TEST_DIR)/testAirQualityService.cpp))
+$(eval $(call TEST,AlgoPerformance,$(COMMON_SRC) $(TEST_DIR)/testAlgoPerformance.cpp))
 
-# ====== Group test targets ======
-TEST_TARGETS := \
-	$(TEST_MEASUREMENT) \
-	$(TEST_PRIVATEUSER) \
-	$(TEST_SENSOR) \
-	$(TEST_CSVLOADER) \
-	$(TEST_SENSORREPOSITORY) \
-	$(TEST_MEASUREMENTREPOSITORY) \
-	$(TEST_AIRCLEANER) \
-	$(TEST_USERREPOSITORY)
-
+# ====== Cibles tests ======
 test: $(TEST_TARGETS)
-	@echo "✅ Compilation des tests réussie. Exécutez-les avec: make run-tests"
+	@echo "✅ Compilation des tests réussie. Utilisez 'make run-tests' pour les lancer."
 
 run-tests:
 	@for exe in $(TEST_TARGETS); do \
-		echo "\n===== Running $$exe ====="; \
+		echo "\n\n====================================================================================="; \
+		echo "\n======================== Running $$exe =========================="; \
+		echo "\n======================================================================================\n"; \
 		./$$exe || exit 1; \
 	done
 
 # ====== Clean ======
 clean:
-	rm -rf $(BUILD_DIR) *.exe $(MAIN_EXE)
+	rm -rf $(BUILD_DIR) $(MAIN_EXE) $(TEST_TARGETS)
 
-# ====== Dependency includes ======
+# ====== Dépendances ======
 -include $(DEP_FILES)
 
-# ====== Default goal ======
 .DEFAULT_GOAL := exec

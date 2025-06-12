@@ -10,12 +10,18 @@
 #if ! defined ( MeasurementRepository_H )
 #define MeasurementRepository_H
 
-#include "models/sensors/Sensor.h"
-#include "models/sensors/Measurement.h"
-
 //--------------------------------------------------- Interfaces utilisées
 #include <vector> 
+#include <iostream>
+#include <string>
+#include <math.h>
+#include <ctime>
+
 using namespace std; 
+
+#include "models/sensors/Sensor.h"
+#include "models/sensors/Measurement.h"
+#include "dataAccess/CSVLoader.h"
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types

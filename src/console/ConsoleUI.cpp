@@ -3,8 +3,6 @@
 //
 
 #include "console/ConsoleUI.h"
-#include "console/AuthManager.h"
-#include "models/users/UserTypeEnum.h"
 
 #include <iostream>
 

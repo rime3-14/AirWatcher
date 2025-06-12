@@ -12,9 +12,12 @@
 
 //--------------------------------------------------- Interfaces utilisées
 #include <vector> 
-//#include "Repository.h"
 #include "models/sensors/Sensor.h"
 #include "models/sensors/Measurement.h"
+#include "dataAccess/UserRepository.h"
+#include "dataAccess/CSVLoader.h"
+#include "models/users/PrivateUser.h"
+#include "utils/Util.h"
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types

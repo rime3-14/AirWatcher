@@ -6,10 +6,6 @@
 
 #include <iostream>
 
-#include "models/users/GovernmentUser.h"
-#include "dataAccess/CSVLoader.h"
-#include "models/users/AirCleanerProviderUser.h"
-
 User* AuthManager::login()
 {
     UserType userType = select_user_type();

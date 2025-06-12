@@ -15,12 +15,8 @@
 #include <string>
 #include <math.h>
 #include <optional>
-#include "dataAccess/Repository.h"
 #include "dataAccess/SensorRepository.h"
-#include "dataAccess/UserRepository.h"
-#include "dataAccess/CSVLoader.h"
-#include "models/users/PrivateUser.h"
-#include "utils/Util.h"
+
 using namespace std;
 
 //------------------------------------------------------ Include personnel

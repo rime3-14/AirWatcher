@@ -1,8 +1,9 @@
-using namespace std;
 #include <iostream>    
 #include <cstring>     
 #include <cmath>
 #include <numeric>
+
+using namespace std;
 
 #include "services/ReliabilityService.h"
 
@@ -20,7 +21,7 @@ float ReliabilityService::calculateZScoreDeviationBetween(const Sensor& sensor, 
     // calculer la moyenne des mesures des autres capteurs 
     float sum = 0.0f;
     for(const auto& otherSensor : otherSensors) {
-        sum += std::accumulate(otherSensor.GetMeasurements().begin(), otherSensor.GetMeasurements().end(), 0.0f, [](float acc, const Measurement& m) {return acc+m.Getvalue();});
+        sum += std::accumulate(otherSensor.getMeasurements().begin(), otherSensor.getMeasurements().end(), 0.0f, [](float acc, const Measurement& m) {return acc+m.getValue();});
     }
     float mean = sum / otherSensors.size(); 
 
@@ -29,17 +30,17 @@ float ReliabilityService::calculateZScoreDeviationBetween(const Sensor& sensor, 
     // calculer l'ecart type des mesures des autres capteurs 
     float sq_sum = 0.0f;
     for (const auto& otherSensor : otherSensors) {
-        for (const auto& measurement : otherSensor.GetMeasurements()) {
-            float diff = measurement.Getvalue() - mean;
+        for (const auto& measurement : otherSensor.getMeasurements()) {
+            float diff = measurement.getValue() - mean;
             sq_sum += diff * diff; 
         }
     }
-    float stddev = std::sqrt(sq_sum / (otherSensors.size()*otherSensors[0].GetMeasurements().size()));
+    float stddev = std::sqrt(sq_sum / (otherSensors.size()*otherSensors[0].getMeasurements().size()));
 
-    // calculer le z-score pour le capteur 
-    float sensorSum = std::accumulate(sensor.GetMeasurements().begin(), sensor.GetMeasurements().end(), 0.0f, [](float acc, const Measurement& m) {return acc +m.Getvalue();});
-    float sensorMean = sensorSum/sensor.GetMeasurements().size();
-    
+    // calculer le z-score pour le capteur
+    float sensorSum = std::accumulate(sensor.getMeasurements().begin(), sensor.getMeasurements().end(), 0.0f, [](float acc, const Measurement& m) {return acc +m.getValue();});
+    float sensorMean = sensorSum/sensor.getMeasurements().size();
+
     if (stddev == 0) {
         return 0.0f; // Écart type nul
     }

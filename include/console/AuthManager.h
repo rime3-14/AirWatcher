@@ -6,6 +6,9 @@
 #define AUTHMANAGER_H
 
 #include "models/users/User.h"
+#include "models/users/GovernmentUser.h"
+#include "dataAccess/CSVLoader.h"
+#include "models/users/AirCleanerProviderUser.h"
 
 class AuthManager {
 public:

@@ -40,7 +40,7 @@ float AirCleaner::calculateRadiusPurifiedAir() {
 
     // Par hypothèse, un AirCleaner ne peut pas avoir un impact sur un rayon > distanceMax. 
     // Choix arbitraire du rayon d'impact maximum d'un AirCleaner
-    //float distanceMax = 1000; 
+    float distanceMax = 1000; 
     // Initialisation de la valeur de retour
     float r = 0; 
 
@@ -59,7 +59,7 @@ float AirCleaner::calculateRadiusPurifiedAir() {
         // Calculs du niveau de qualité de l'air avant et après la période d'activité du Air Cleaner 
         MeasurementRepository measurementRepo; 
         vector<MeasurementGroup> measurementsBefore = measurementRepo.getMeasurementsBySensorBefore(s, debut); 
-        vector<MeasurementGroup> measurementsAfter = measurementRepo.getMeasurementsBySensorAfter(s, end); 
+        vector<MeasurementGroup> measurementsAfter = measurementRepo.getMeasurementsBySensorAfter(s, fin); 
         float AQbeforeAirCleaner = airQualityService.CalculateAvgAirQuality(measurementsBefore); 
         float AQafterAirCleaner = airQualityService.CalculateAvgAirQuality(measurementsAfter); 
 
@@ -93,7 +93,7 @@ float AirCleaner::calculateImprovedAirLevel() {
 
     for (const Sensor& s : sensors) {
         vector<MeasurementGroup> measurementsBefore = measurementRepo.getMeasurementsBySensorBefore(s, debut); 
-        vector<MeasurementGroup> measurementsAfter = measurementRepo.getMeasurementsBySensorAfter(s, end); 
+        vector<MeasurementGroup> measurementsAfter = measurementRepo.getMeasurementsBySensorAfter(s, fin); 
 
         float AQbeforeAirCleaner = airQualityService.CalculateAvgAirQuality(measurementsBefore); 
         float AQafterAirCleaner = airQualityService.CalculateAvgAirQuality(measurementsAfter);
