@@ -16,7 +16,10 @@ COMMON_SRC := \
 	$(SRC_DIR)/dataAccess/MeasurementRepository.cpp \
 	$(SRC_DIR)/dataAccess/UserRepository.cpp \
 	$(SRC_DIR)/utils/Util.cpp \
-	$(SRC_DIR)/dataAccess/SensorRepository.cpp
+	$(SRC_DIR)/dataAccess/SensorRepository.cpp \
+	$(SRC_DIR)/dataAccess/AirCleanerRepository.cpp
+
+	
 MAIN_SRC := $(SRC_DIR)/main.cpp
 
 # ====== TESTS ======
@@ -29,6 +32,8 @@ TEST_MEASUREMENTREPOSITORY_SRC := $(SRC_DIR)/dataAccess/MeasurementRepository.cp
 TEST_AIRCLEANER_SRC := $(SRC_DIR)/models/sensors/AirCleaner.cpp $(COMMON_SRC) $(TEST_DIR)/testAirCleaner.cpp
 TEST_USERREPOSITORY_SRC := $(SRC_DIR)/dataAccess/UserRepository.cpp $(COMMON_SRC) $(TEST_DIR)/testUserRepository.cpp
 TEST_ALGOPERFORMANCE_SRC := $(SRC_DIR)/services/AlgoPerformance.cpp $(COMMON_SRC) $(TEST_DIR)/testAlgoPerformance.cpp
+TEST_AIRCLEANERREPOSITORY_SRC := $(SRC_DIR)/dataAccess/AirCleanerRepository.cpp $(COMMON_SRC) $(TEST_DIR)/testAirCleanerRepository.cpp
+TEST_AIRCLEANERPROVIDERUSER_SRC := $(SRC_DIR)/models/users/AirCleanerProviderUser.cpp $(COMMON_SRC) $(TEST_DIR)/testAirCleanerProviderUser.cpp
 
 
 TEST_MEASUREMENT_EXE := testMeasurement.exe
@@ -40,12 +45,14 @@ TEST_MEASUREMENTREPOSITORY_EXE := testMeasurementRepository.exe
 TEST_AIRCLEANER_EXE := testAirCleaner.exe
 TEST_USERREPOSITORY_EXE := testUserRepository.exe
 TEST_ALGOPERFORMANCE_EXE := testAlgoPerformance.exe
+TEST_AIRCLEANERREPOSITORY_EXE := testAirCleanerRepository.exe
+TEST_AIRCLEANERPROVIDERUSER_EXE := testAirCleanerProviderUser.exe
 
 # Message par défaut si aucune cible n'est précisée
 .DEFAULT_GOAL := error
 
 # Cible : test
-test: $(TEST_MEASUREMENT_EXE) $(TEST_PRIVATEUSER_EXE) $(TEST_SENSOR_EXE) $(TEST_CSVLOADER_EXE) $(TEST_AIRCLEANER_EXE) $(TEST_SENSORREPOSITORY_EXE) $(TEST_MEASUREMENTREPOSITORY_EXE) $(TEST_USERREPOSITORY_EXE) $(TEST_ALGOPERFORMANCE_EXE)
+test: $(TEST_MEASUREMENT_EXE) $(TEST_PRIVATEUSER_EXE) $(TEST_SENSOR_EXE) $(TEST_CSVLOADER_EXE) $(TEST_AIRCLEANER_EXE) $(TEST_SENSORREPOSITORY_EXE) $(TEST_MEASUREMENTREPOSITORY_EXE) $(TEST_USERREPOSITORY_EXE) $(TEST_ALGOPERFORMANCE_EXE) $(TEST_AIRCLEANERREPOSITORY_EXE) $(TEST_AIRCLEANERPROVIDERUSER_EXE)
 	@echo "Compilation des tests réussie. Executions de tous les tests : `make run-tests`"
 
 $(TEST_MEASUREMENT_EXE): $(TEST_MEASUREMENT_SRC)
@@ -75,6 +82,12 @@ $(TEST_USERREPOSITORY_EXE): $(TEST_USERREPOSITORY_SRC)
 $(TEST_ALGOPERFORMANCE_EXE): $(TEST_ALGOPERFORMANCE_SRC)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
+$(TEST_AIRCLEANERREPOSITORY_EXE): $(TEST_AIRCLEANERREPOSITORY_SRC)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+$(TEST_AIRCLEANERPROVIDERUSER_EXE): $(TEST_AIRCLEANERPROVIDERUSER_SRC)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
 # Cible : run-tests
 # Exécute les tests compilés
 run-tests:
@@ -98,6 +111,10 @@ run-tests:
 	@./$(TEST_USERREPOSITORY_EXE)
 	@echo "\n===================  Executions de $(TEST_ALGOPERFORMANCE_EXE).  =======================\n"
 	@./$(TEST_ALGOPERFORMANCE_EXE)
+	@echo "\n===================  Executions de $(TEST_AIRCLEANERREPOSITORY_EXE).  =======================\n"
+	@./$(TEST_AIRCLEANERREPOSITORY_EXE)
+	@echo "\n===================  Executions de $(TEST_AIRCLEANERPROVIDERUSER_EXE).  =======================\n"
+	@./$(TEST_AIRCLEANERPROVIDERUSER_EXE)
 	@echo "\n================================================================================\n\n"
 
 
@@ -119,7 +136,7 @@ $(MAIN_EXE): $(OBJ_FILES)
 
 # Cible : clean
 clean:
-	rm -f *.o $(MAIN_EXE) $(TEST_MEASUREMENT_EXE) $(TEST_PRIVATEUSER_EXE) $(TEST_SENSOR_EXE) $(TEST_CSVLOADER_EXE) $(TEST_SENSORREPOSITORY_EXE) $(TEST_MEASUREMENTREPOSITORY_EXE) $(TEST_AIRCLEANER_EXE) $(TEST_USERREPOSITORY_EXE)
+	rm -f *.o $(MAIN_EXE) $(TEST_MEASUREMENT_EXE) $(TEST_PRIVATEUSER_EXE) $(TEST_SENSOR_EXE) $(TEST_CSVLOADER_EXE) $(TEST_SENSORREPOSITORY_EXE) $(TEST_MEASUREMENTREPOSITORY_EXE) $(TEST_AIRCLEANER_EXE) $(TEST_USERREPOSITORY_EXE) $(TEST_ALGOPERFORMANCE_EXE) $(TEST_AIRCLEANERREPOSITORY_EXE) $(TEST_AIRCLEANERPROVIDERUSER_EXE)
 
 # Cible d'erreur par défaut
 error:

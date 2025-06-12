@@ -26,9 +26,11 @@ public:
     // Méthodes spécifiques
     void showAirCleaners() const;
     float calculateAirCleanerImpact() const;
-    void addAirCleaner(string airCleanerId);
+    void addAirCleaner(string airCleanerId); 
 
+    // Setters et Getters
     string getId() const;
+    vector<string> getAirCleanersId() const; 
 
 protected:
     vector<string> airCleanersId;

@@ -58,6 +58,10 @@ public:
     float getLongitude() const; 
 
     float getRadius() const; 
+
+    time_t getDebut() const;
+    
+    time_t getFin() const;
 //-------------------------------------------- Constructeurs - destructeur
     AirCleaner ( const AirCleaner & unAirCleaner );
 

@@ -13,6 +13,8 @@
 //-------------------------------------------------------- Include système
 #include <math.h>
 #include <iostream> 
+#include <iomanip>
+#include <sstream>
 
 //------------------------------------------------------ Include personnel
 #include "utils/Util.h"
@@ -38,4 +40,18 @@ void displayDate(time_t timestamp)
               << (timeinfo->tm_min < 10 ? "0" : "") << timeinfo->tm_min << ":"
               << (timeinfo->tm_sec < 10 ? "0" : "") << timeinfo->tm_sec
               << std::endl;
+}
+
+
+std::string dateToString(time_t timestamp) {
+    struct tm* timeinfo = localtime(&timestamp);
+    std::ostringstream oss;
+    oss << std::setfill('0')
+        << std::setw(2) << timeinfo->tm_mday << "/"
+        << std::setw(2) << (timeinfo->tm_mon + 1) << "/"
+        << (1900 + timeinfo->tm_year) << " "
+        << std::setw(2) << timeinfo->tm_hour << ":"
+        << std::setw(2) << timeinfo->tm_min << ":"
+        << std::setw(2) << timeinfo->tm_sec;
+    return oss.str();
 }
