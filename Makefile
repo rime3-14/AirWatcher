@@ -27,6 +27,7 @@ COMMON_SRC := \
     $(SRC_DIR)/dataAccess/SensorRepository.cpp \
     $(SRC_DIR)/utils/Util.cpp \
     $(SRC_DIR)/services/AirQualityService.cpp \
+    $(SRC_DIR)/services/ReliabilityService.cpp \
     $(SRC_DIR)/services/AlgoPerformance.cpp \
     $(SRC_DIR)/services/Service.cpp
 
@@ -67,6 +68,7 @@ $(eval $(call TEST,MeasurementRepository,$(COMMON_SRC) $(TEST_DIR)/testMeasureme
 $(eval $(call TEST,AirCleaner,$(COMMON_SRC) $(TEST_DIR)/testAirCleaner.cpp))
 $(eval $(call TEST,UserRepository,$(COMMON_SRC) $(TEST_DIR)/testUserRepository.cpp))
 $(eval $(call TEST,AirQualityService,$(COMMON_SRC) $(TEST_DIR)/testAirQualityService.cpp))
+$(eval $(call TEST,ReliabilityService,$(COMMON_SRC) $(TEST_DIR)/testReliabilityService.cpp))
 $(eval $(call TEST,AlgoPerformance,$(COMMON_SRC) $(TEST_DIR)/testAlgoPerformance.cpp))
 
 # ====== Cibles tests ======
