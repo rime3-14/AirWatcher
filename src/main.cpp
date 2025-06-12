@@ -5,12 +5,7 @@ using namespace std;
 #include "console/ConsoleUI.h"
 
 int main() {
-    cout << "Hello World!" << endl;
-
     ConsoleUI consoleUI;
-    consoleUI.run();  // Starts interactive loop
-    return 0;
-
-    CSVLoader& loader = CSVLoader::Instance();
+    consoleUI.run();
     return 0;
 }

@@ -9,9 +9,9 @@
 
 class AuthManager {
 public:
-    User* login() const;
+    static User* login() ;
 private:
-    UserType select_user_type() const;
+    static UserType select_user_type();
 };
 
 
