@@ -40,7 +40,7 @@ $(BUILD_DIR)/%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # ====== Main Executable ======
-MAIN_EXE := main
+MAIN_EXE := AirWatcher
 exec: $(MAIN_EXE)
 
 $(MAIN_EXE): $(OBJ_FILES)
