@@ -10,8 +10,10 @@ using namespace std;
 
 class ReliabilityService : public Service
 {
+public:
     bool analyseSensor(const Sensor& sensor);
     float calculateZScoreDeviationBetween(const Sensor& sensor, const std::vector<Sensor>& otherSensors);
+    void Executer() override;
 };
 
 #endif 

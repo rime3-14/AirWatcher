@@ -7,6 +7,9 @@ using namespace std;
 
 #include "../../include/services/reliabilityService.h"
 
+void ReliabilityService::Executer() {
+    cout << "Exécution du service d'analyse de fiabilité des capteurs." << endl;
+}
 
 bool ReliabilityService::analyseSensor(const Sensor& sensor) {
     // Analyse le capteur pour déterminer sa fiabilité
