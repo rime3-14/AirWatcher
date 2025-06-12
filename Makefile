@@ -36,6 +36,8 @@ TEST_MEASUREMENTREPOSITORY_SRC := $(SRC_DIR)/dataAccess/MeasurementRepository.cp
 TEST_AIRCLEANER_SRC := $(SRC_DIR)/models/sensors/AirCleaner.cpp $(COMMON_SRC) $(TEST_DIR)/testAirCleaner.cpp
 TEST_USERREPOSITORY_SRC := $(SRC_DIR)/dataAccess/UserRepository.cpp $(COMMON_SRC) $(TEST_DIR)/testUserRepository.cpp
 TEST_AIRQUALITYSERVICE_SRC := $(TEST_DIR)/testAirQualityService.cpp	$(SRC_DIR)/services/AirQualityService.cpp $(SRC_DIR)/models/sensors/Sensor.cpp $(SRC_DIR)/models/sensors/Measurement.cpp $(SRC_DIR)/dataAccess/MeasurementRepository.cpp $(SRC_DIR)/dataAccess/SensorRepository.cpp $(SRC_DIR)/utils/Util.cpp
+TEST_ALGOPERFORMANCE_SRC := $(SRC_DIR)/services/AlgoPerformance.cpp $(COMMON_SRC) $(TEST_DIR)/testAlgoPerformance.cpp
+
 
 TEST_MEASUREMENT_EXE := testMeasurement.exe
 TEST_PRIVATEUSER_EXE := testPrivateUser.exe
@@ -46,12 +48,13 @@ TEST_MEASUREMENTREPOSITORY_EXE := testMeasurementRepository.exe
 TEST_AIRCLEANER_EXE := testAirCleaner.exe
 TEST_USERREPOSITORY_EXE := testUserRepository.exe
 TEST_AIRQUALITYSERVICE_EXE := testAirQualityService.exe
+TEST_ALGOPERFORMANCE_EXE := testAlgoPerformance.exe
 
 # Message par défaut si aucune cible n'est précisée
 .DEFAULT_GOAL := error
 
 # Cible : test
-test: $(TEST_MEASUREMENT_EXE) $(TEST_PRIVATEUSER_EXE) $(TEST_SENSOR_EXE) $(TEST_CSVLOADER_EXE) $(TEST_AIRCLEANER_EXE) $(TEST_SENSORREPOSITORY_EXE) $(TEST_MEASUREMENTREPOSITORY_EXE) $(TEST_USERREPOSITORY_EXE) $(TEST_AIRQUALITYSERVICE_EXE)
+test: $(TEST_MEASUREMENT_EXE) $(TEST_PRIVATEUSER_EXE) $(TEST_SENSOR_EXE) $(TEST_CSVLOADER_EXE) $(TEST_AIRCLEANER_EXE) $(TEST_SENSORREPOSITORY_EXE) $(TEST_MEASUREMENTREPOSITORY_EXE) $(TEST_USERREPOSITORY_EXE) $(TEST_AIRQUALITYSERVICE_EXE) $(TEST_ALGOPERFORMANCE_EXE)
 	@echo "Compilation des tests réussie. Executions de tous les tests : `make run-tests`"
 
 $(TEST_MEASUREMENT_EXE): $(TEST_MEASUREMENT_SRC)
@@ -80,6 +83,9 @@ $(TEST_USERREPOSITORY_EXE): $(TEST_USERREPOSITORY_SRC)
 
 $(TEST_AIRQUALITYSERVICE_EXE): $(TEST_AIRQUALITYSERVICE_SRC)
 	$(CXX) $(CXXFLAGS) -o $@ $^
+	
+$(TEST_ALGOPERFORMANCE_EXE): $(TEST_ALGOPERFORMANCE_SRC)
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
 # Cible : run-tests
 # Exécute les tests compilés
@@ -104,6 +110,10 @@ run-tests:
 	@./$(TEST_USERREPOSITORY_EXE)
 	@echo "\n===================  Executions de $(TEST_AIRQUALITYSERVICE_EXE).  =======================\n"
 	@./$(TEST_AIRQUALITYSERVICE_EXE)
+	@echo "\n===================  Executions de $(TEST_ALGOPERFORMANCE_EXE).  =======================\n"
+	@./$(TEST_ALGOPERFORMANCE_EXE)
+	@echo "\n================================================================================\n\n"
+
 
 # ====== EXECUTION NORMALE ======
 SRC_FILES := $(MAIN_SRC) $(COMMON_SRC) $(SRC_DIR)/dataAccess/CSVLoader.cpp
