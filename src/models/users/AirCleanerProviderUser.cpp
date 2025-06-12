@@ -113,5 +113,3 @@ void AirCleanerProviderUser::addAirCleaner(string airCleanerId)
 
     airCleanersId.push_back(airCleanerId);
 }
-
-vector<string> AirCleanerProviderUser::getAirCleanersId() const { return airCleanersId; };

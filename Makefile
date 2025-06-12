@@ -62,6 +62,8 @@ endef
 # ====== Declaring test cases ======
 $(eval $(call TEST,Measurement,$(SRC_DIR)/models/sensors/Measurement.cpp $(TEST_DIR)/testMeasurement.cpp))
 $(eval $(call TEST,PrivateUser,$(SRC_DIR)/models/users/PrivateUser.cpp $(SRC_DIR)/models/users/User.cpp $(TEST_DIR)/testPrivateUser.cpp))
+$(eval $(call TEST,AirCleanerProviderUser,$(COMMON_SRC) $(TEST_DIR)/testAirCleanerProviderUser.cpp))
+$(eval $(call TEST,GovernmentUser,$(COMMON_SRC) $(TEST_DIR)/testGovernmentUser.cpp))
 $(eval $(call TEST,Sensor,$(SRC_DIR)/models/sensors/Sensor.cpp $(SRC_DIR)/models/users/PrivateUser.cpp $(SRC_DIR)/models/users/User.cpp $(SRC_DIR)/models/sensors/Measurement.cpp $(TEST_DIR)/testSensor.cpp))
 $(eval $(call TEST,CSVLoader,$(COMMON_SRC) $(TEST_DIR)/testCSVLoader.cpp))
 $(eval $(call TEST,SensorRepository,$(COMMON_SRC) $(TEST_DIR)/testSensorRepository.cpp))
