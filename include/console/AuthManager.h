@@ -7,10 +7,11 @@
 
 #include "models/users/User.h"
 
-
 class AuthManager {
-    public:
-      User* login();
+public:
+    User* login() const;
+private:
+    UserType select_user_type() const;
 };
 
 

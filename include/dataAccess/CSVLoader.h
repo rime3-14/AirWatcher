@@ -49,10 +49,12 @@ public:
 
 //----------------------------------------------------- Méthodes publiques
 
-    
-    const vector<Sensor>& getSensors() const;
+    //Une fois chargés, on souhaitera modifier les données des capteurs (fiabilité) 
+    // et éventuellement des PrivateUser (points et fiabilité) d'où l'abscence
+    // du const.
+    vector<Sensor>& getSensors();
+    vector<PrivateUser>& getUsers();
     const vector<AirCleaner>& getAirCleaners() const;
-    const vector<PrivateUser>& getUsers() const;
     const vector<AirCleanerProviderUser>& getProviders() const;
     
 //------------------------------------------------------------------ PRIVE

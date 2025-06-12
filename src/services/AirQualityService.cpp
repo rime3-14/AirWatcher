@@ -24,7 +24,9 @@ using namespace std;
 //------------------------------------------------------ Include personnel
 #include "services/AirQualityService.h"
 #include "models/sensors/Sensor.h"
-#include "dataAccess/Repository.h"
+#include "dataAccess/MeasurementRepository.h"
+#include "dataAccess/SensorRepository.h"
+#include "dataAccess/UserRepository.h"
 
 //------------------------------------------------------------- Constantes
 
@@ -43,7 +45,7 @@ int AirQualityService::CalculateAirQuality(MeasurementGroup Measurements)
     int IndexMax=1;
     int AirQualityIndex=0;
             for (int i=0; i<10; i++) {
-                if ((Measurements.GetMeasurementO2()>ATMOO3[i]) || (Measurements.GetMeasurementNO2()>ATMONO2[i]) || (Measurements.GetMeasurementSO2()>ATMOSO2[i]) || (Measurements.GetMeasurementP10()>ATMOPM10[i])) {
+                if ((Measurements.measurementO3.getValue()>ATMOO3[i]) || (Measurements.measurementNO2.getValue()>ATMONO2[i]) || (Measurements.measurementSO2.getValue()>ATMOSO2[i]) || (Measurements.measurementPM10.getValue()>ATMOPM10[i])) {
                     IndexMax++;
                 }
             }
@@ -72,10 +74,10 @@ float AirQualityService::CalculateMeanAirQuality(float centerLatitude, float cen
 // Algorithme : Calcule la moyenne de qualité d'air sur une zone circulaire donnée sur une période donnée
 {
     SensorRepository sensorRepository;
-    std::vector<Sensor*> sensors = sensorRepository.GetSensorsInCircularRadius(centerLatitude, centerLongitude, radius);
+    std::vector<Sensor> sensors = sensorRepository.getSensorsInCircularRadius(centerLatitude, centerLongitude, radius);
 
     MeasurementRepository measurementRepository;
-    std::vector<MeasurementGroup> measurements = measurementRepository.GetAllMeasurementsInTimeRange(sensors, beg, end);
+    const std::vector<MeasurementGroup> measurements = measurementRepository.getAllMeasurementsInTimeRange(sensors, beg, end);
 
     float meanAirQuality = CalculateAvgAirQuality(measurements);
     return meanAirQuality;
@@ -97,7 +99,7 @@ void AirQualityService::SortDescByDifference(std::vector<Sensor*>& sensors, cons
     std::sort(paired.begin(), paired.end(),
         [](const std::pair<int, Sensor*>& a, const std::pair<int, Sensor*>& b)
         {
-            return a.first < b.first;
+            return a.first > b.first;
         });
 
     // Réécrire le vecteur `sensors` trié
@@ -108,30 +110,39 @@ void AirQualityService::SortDescByDifference(std::vector<Sensor*>& sensors, cons
 }
 
 
-float CompareSensorAgainstOthers(Sensor sensor, time_t beg, time_t end) 
+std::vector<Sensor*> AirQualityService::CompareSensorAgainstOthers(Sensor sensor, time_t beg, time_t end) 
 {
     MeasurementRepository measurementRepository;
-    std::vector<MeasurementGroup> measurements = measurementRepository.GetMeasurementsInTimeRangeBySensor(sensor, beg, end);
+    const std::vector<MeasurementGroup> measurements = measurementRepository.getMeasurementsInTimeRangeBySensor(sensor, beg, end);
 
-    float meanAirQuality = CalculateAvgAirQuality(measurements);
-    return meanAirQuality;
+    int meanAirQuality = CalculateAvgAirQuality(measurements);
 
     SensorRepository sensorRepository;
-    std::vector<Sensor*> otherSensors = sensorRepository.GetAllSensorsExcept(sensor);
+    std::vector<Sensor> rawSensors = sensorRepository.getAllSensorsExcept(sensor);
+    std::vector<Sensor*> otherSensors;
     std::vector<int> diffs;
 
-    for (const Sensor& otherSensor : otherSensors)
+    for (Sensor& otherSensor : rawSensors)
     {
-        std::vector<MeasurementGroup> otherMeasurements = measurementRepository.GetMeasurementsInTimeRangeBySensor(otherSensor, beg, end);
+        otherSensors.push_back(&otherSensor); // conversion en pointeur
+
+        std::vector<MeasurementGroup> otherMeasurements = measurementRepository.getMeasurementsInTimeRangeBySensor(otherSensor, beg, end);
         float otherMeanAirQuality = CalculateAvgAirQuality(otherMeasurements);
-        int diff = std::abs(static_cast<int>(otherMeanAirQuality - MeanAirQuality));
+        int diff = std::abs(static_cast<int>(otherMeanAirQuality - meanAirQuality));
         diffs.push_back(diff);
     }
+
     SortDescByDifference(otherSensors, diffs);
     return otherSensors;
-
 }
 
+void AirQualityService::Executer()
+{
+    // Exemple basique, à adapter selon ce que tu veux que le service fasse
+    std::cout << "Exécution du service d’analyse de la qualité de l’air." << std::endl;
+
+    // Appel éventuel à d'autres méthodes d'analyse...
+}
 
 
 //-------------------------------------------- Constructeurs - destructeur

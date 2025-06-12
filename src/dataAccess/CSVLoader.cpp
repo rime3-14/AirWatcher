@@ -289,10 +289,10 @@ vector<AirCleanerProviderUser> CSVLoader::loadProviders(vector<AirCleaner> airCl
     return providers;
 }
 
-const vector<Sensor>& CSVLoader::getSensors() const{
+vector<Sensor>& CSVLoader::getSensors() {
     return sensors;
 }
-const vector<PrivateUser>& CSVLoader::getUsers() const{
+vector<PrivateUser>& CSVLoader::getUsers() {
     return users;
 }
 const vector<AirCleanerProviderUser>& CSVLoader::getProviders() const{

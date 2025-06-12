@@ -26,6 +26,8 @@ class PrivateUser : public User
 {
 //----------------------------------------------------------------- PUBLIC
 public:
+     //-------------------------------------------- Surcharges d'opérateurs
+    bool operator==(const PrivateUser& unPrivateUser);
     //-------------------------------------------- Constructeurs - destructeur
     PrivateUser();
     explicit PrivateUser(const std::string id);
@@ -38,12 +40,14 @@ public:
     void addPoint(bool reliable);
     void showPoints() const;
     void addSensor(const std::string& sensorId);
-    int getPoints() const;
 
-    // **Méthodes ajoutées**
+    //----------------------------------------------------- Setters - Getters
+    int getPoints() const;
     std::string getId() const;
     bool isReliable() const;
     std::vector<std::string> getSensorsId() const;
+
+    void setReliability(bool unReliability); 
 
     //-------------------------------------------- Surcharge opérateur <<
     friend std::ostream& operator<<(std::ostream& os, const PrivateUser& user);
