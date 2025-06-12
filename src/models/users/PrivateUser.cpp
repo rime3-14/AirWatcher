@@ -62,12 +62,14 @@ PrivateUser::~PrivateUser()
 
 // Méthodes héritées abstraites
 
-User* PrivateUser::authentificateUser(std::string login) const
+User* PrivateUser::authentificateUser(const std::string login) const
 {
-    // Simple exemple, retourne nullptr (non implémenté ici)
+    if (id == login)
+    {
+        return new PrivateUser(*this);  // retourne une copie
+    }
     return nullptr;
 }
-
 UserType PrivateUser::getRole() const
 {
     return UserType::Private;
@@ -78,9 +80,9 @@ UserType PrivateUser::getRole() const
 void PrivateUser::addPoint(bool reliable)
 {
     if (reliable) points++;
-    reliability = reliable;
+    // Définir une logique pour estimer la fiabilité, ici : fiable si >= 2 points
+    reliability = points >= 2;
 }
-
 void PrivateUser::showPoints() const
 {
     std::cout << "Points: " << points << std::endl;
