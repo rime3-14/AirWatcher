@@ -152,6 +152,14 @@ float AirCleaner::getRadius() const {
     return radius; 
 }
 
+time_t AirCleaner::getDebut() const {
+    return debut; 
+}
+
+time_t AirCleaner::getFin() const {
+    return fin; 
+}
+
 
 //-------------------------------------------- Constructeurs - destructeur
 AirCleaner::AirCleaner (const AirCleaner & unAirCleaner)
@@ -194,8 +202,15 @@ AirCleaner::~AirCleaner ( )
 
 //-------------------------------------------- Surcharges d'opérateur
 ostream & operator << ( ostream & out, const AirCleaner & aC) {
-    out << "Informations concernant le Air Cleaner " << aC.getId() << " : \n"; 
-    out << "Latitude : " << aC.getLatitude() << " :\n "; 
-    out << "Longitude : " << aC.getLongitude() << " : \n"; 
+    out << "Informations concernant le Air Cleaner " << " : \n"; 
+    out << "- ID : " << aC.getId() << "\n";
+    out << "- Latitude : " << aC.getLatitude() << "\n"; 
+    out << "- Longitude : " << aC.getLongitude() << "\n"; 
+    if(aC.getRadius() == -1) {
+        out << "- Rayon d'impact : Non calculé\n"; 
+    } else {
+        out << "- Rayon d'impact : " << aC.getRadius() << "\n"; 
+    }
+    out << "- Période d'activité : de " << dateToString(aC.getDebut()) << " à " << dateToString(aC.getFin()) << "\n";
     return out;   
 }

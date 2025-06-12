@@ -25,6 +25,7 @@ COMMON_SRC := \
     $(SRC_DIR)/dataAccess/MeasurementRepository.cpp \
     $(SRC_DIR)/dataAccess/UserRepository.cpp \
     $(SRC_DIR)/dataAccess/SensorRepository.cpp \
+	$(SRC_DIR)/dataAccess/AirCleanerRepository.cpp \
     $(SRC_DIR)/utils/Util.cpp \
     $(SRC_DIR)/services/AirQualityService.cpp \
     $(SRC_DIR)/services/ReliabilityService.cpp \
@@ -67,6 +68,7 @@ $(eval $(call TEST,SensorRepository,$(COMMON_SRC) $(TEST_DIR)/testSensorReposito
 $(eval $(call TEST,MeasurementRepository,$(COMMON_SRC) $(TEST_DIR)/testMeasurementRepository.cpp))
 $(eval $(call TEST,AirCleaner,$(COMMON_SRC) $(TEST_DIR)/testAirCleaner.cpp))
 $(eval $(call TEST,UserRepository,$(COMMON_SRC) $(TEST_DIR)/testUserRepository.cpp))
+$(eval $(call TEST,AirCleanerRepository,$(COMMON_SRC) $(TEST_DIR)/testAirCleanerRepository.cpp))
 $(eval $(call TEST,AirQualityService,$(COMMON_SRC) $(TEST_DIR)/testAirQualityService.cpp))
 $(eval $(call TEST,ReliabilityService,$(COMMON_SRC) $(TEST_DIR)/testReliabilityService.cpp))
 $(eval $(call TEST,AlgoPerformance,$(COMMON_SRC) $(TEST_DIR)/testAlgoPerformance.cpp))
