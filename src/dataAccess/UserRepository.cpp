@@ -27,9 +27,35 @@ vector<PrivateUser> UserRepository::getAllPrivateUsers() {
     return csvLoader.getUsers();  
 }
 
+PrivateUser UserRepository::getPrivateUserById(const string & privateUserId) {
+    CSVLoader& csvLoader = CSVLoader::Instance();
+    vector<PrivateUser> & allPrivateUsers = csvLoader.getUsers(); 
+
+    for(const PrivateUser & privateU : allPrivateUsers) {
+        if(privateU.getId() == privateUserId) {
+            return privateU; 
+        }
+    }
+
+    return PrivateUser(); 
+}
+
 vector<AirCleanerProviderUser> UserRepository::getAllAirCleanerProviderUsers() {
     CSVLoader& csvLoader = CSVLoader::Instance();
     return csvLoader.getProviders();
+}
+
+AirCleanerProviderUser UserRepository::getAirCleanerProviderUserById(const string & airCleanerProviderId) {
+    CSVLoader& csvLoader = CSVLoader::Instance();
+    vector<AirCleanerProviderUser> allProviders = csvLoader.getProviders(); 
+
+    for(const AirCleanerProviderUser & provider : allProviders) {
+        if(provider.getId() == airCleanerProviderId) {
+            return provider; 
+        }
+    }
+
+    return AirCleanerProviderUser(); 
 }
 
 bool UserRepository::markPrivateUserAsUnreliable(PrivateUser privateUser) {

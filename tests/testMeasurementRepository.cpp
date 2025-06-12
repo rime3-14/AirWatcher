@@ -85,6 +85,7 @@ int main() {
     time_t timestamp3_2 = std::mktime(&timeStruct3_2);
 
     vector<MeasurementGroup> range = repo.getMeasurementsInTimeRangeBySensor(sensors[0], timestamp3_1, timestamp3_2);
+    // assert(range.size() == 3); 
     cout << "Nombre de groupes de mesures mesurées par le capteur "<< sensors[0].getId() << " entre le 01/01/2019  et le 03/01/2019: " << range.size() << endl;
 
     // ------------------------------

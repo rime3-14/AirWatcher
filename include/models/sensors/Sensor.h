@@ -15,8 +15,8 @@
 #include <vector>
 #include <iostream>
 #include <optional>
-#include "models/users/PrivateUser.h"
-#include "models/sensors/Measurement.h"
+#include "../users/PrivateUser.h"
+#include "Measurement.h"
 
 using namespace std;
 

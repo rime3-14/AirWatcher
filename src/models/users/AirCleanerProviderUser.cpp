@@ -1,4 +1,6 @@
 #include "models/users/AirCleanerProviderUser.h"
+#include "dataAccess/AirCleanerRepository.h"
+#include "models/sensors/AirCleaner.h"
 #include <iostream>
 
 using namespace std;
@@ -34,12 +36,11 @@ User* AirCleanerProviderUser::authentificateUser(std::string login) const
 {
     if (this->id == login)
     {
-        return new AirCleanerProviderUser(*this);  // retourne une copie
+        return new AirCleanerProviderUser(*this);  
     }
     return nullptr;
 }
 
-// Pas de override ici, c'est dans le .h uniquement
 UserType AirCleanerProviderUser::getRole() const
 {
     return UserType::AirCleanerProvider;
@@ -48,26 +49,54 @@ UserType AirCleanerProviderUser::getRole() const
 // Affichage des IDs des purificateurs d'air
 void AirCleanerProviderUser::showAirCleaners() const
 {
-    cout << "Voici la liste des IDs des Air Cleaners fournis : \n";
+    cout << "Liste des Air Cleaners fournis par : " << this->id << "\n";
     int i = 1;
-    for (const auto& id : airCleanersId)
-    {
-        cout << "Air Cleaner " << i << " : " << id << "\n";
-        ++i;
+    if (airCleanersId.empty()) {
+        cout << "Aucun purificateur d'air n'est associé à cet utilisateur.\n";
+    } else {
+        AirCleanerRepository airCleanerRepo;
+        cout << "Nombre de purificateurs d'air associés : " << airCleanersId.size() << endl;
+        for (const string & airCleanerId : airCleanersId) {
+            AirCleaner airCleaner = airCleanerRepo.getAirCleanerById(airCleanerId);
+            if (airCleaner.getId() == "") {
+                cout << "Purificateur d'air [" << i << "] : ID invalide ou inexistant." << endl;
+                continue;
+            }
+            cout << "Purificateur d'air " << i << " : " << endl; 
+            cout << airCleaner << endl;  
+        }
     }
 }
 
 // Calcul de l’impact total des purificateurs d’air (non applicable ici, donc retour neutre ou à définir)
 float AirCleanerProviderUser::calculateAirCleanerImpact() const
 {
-    // Tu ne peux pas calculer un impact sans les objets AirCleaner
-    // Ici on renvoie 0 ou on peut lever une exception ou loguer une alerte.
+    if (!airCleanersId.empty())
+    {
+        float totalImpact = 0.0f;
+        for (const auto& airCleanerId : airCleanersId)
+        {
+            AirCleanerRepository airCleanerRepo;
+            AirCleaner airCleaner = airCleanerRepo.getAirCleanerById(airCleanerId);
+            if (airCleaner.getId() != "")
+            {
+                totalImpact += airCleaner.calculateRadiusPurifiedAir();
+            }
+        }
+        return totalImpact;
+    }
     cout << "Impossible de calculer l’impact : les objets AirCleaner ne sont pas disponibles.\n";
     return 0.0f;
 }
 
+
+// Setters et Getters
 string AirCleanerProviderUser::getId() const {
     return this->id;
+}
+
+vector<string> AirCleanerProviderUser::getAirCleanersId() const {
+    return this->airCleanersId;
 }
 
 // Ajout d’un ID de purificateur
