@@ -43,7 +43,7 @@ float AirCleaner::calculateRadiusPurifiedAir() {
     //float distanceMax = 1000; 
     // Initialisation de la valeur de retour
     float r = 0; 
-    /*
+
     // Récupération des capteurs situés autour du Air Cleaner 
     SensorRepository sensorRepository;  
     vector<Sensor> sensors = sensorRepository.getSensorsInCircularRadius(latitude, longitude, distanceMax); 
@@ -68,7 +68,7 @@ float AirCleaner::calculateRadiusPurifiedAir() {
             r = d; 
         }
     }
-    */
+
     radius = r; 
     return r; 
 }
@@ -83,7 +83,6 @@ float AirCleaner::calculateImprovedAirLevel() {
     
     float improvedAirLevel = 0; 
 
-    /*
     int nbCloseSensors = 0; 
     SensorRepository sensorRepository; 
     MeasurementRepository measurementRepo;
@@ -109,7 +108,6 @@ float AirCleaner::calculateImprovedAirLevel() {
         improvedAirLevel /= nbCloseSensors; 
     }
     
-    */
     return improvedAirLevel; 
 }
 
