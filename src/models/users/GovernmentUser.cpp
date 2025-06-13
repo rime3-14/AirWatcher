@@ -1,4 +1,4 @@
-#include "users/GovernmentUser.h"
+#include "models/users/GovernmentUser.h"
 #include <iostream>
 
 // Initialisation du pointeur statique
@@ -6,7 +6,7 @@ GovernmentUser* GovernmentUser::instance = nullptr;
 
 // Constructeur privé
 GovernmentUser::GovernmentUser()
-    : User("gov_id", "admin", "admin123") // Identifiants d'exemple
+    : User("gov_id") // Identifiants d'exemple
 {
 }
 
@@ -21,17 +21,27 @@ GovernmentUser* GovernmentUser::getInstance()
 }
 
 // Authentification
-User* GovernmentUser::authentificateUser(std::string login, std::string mdp) const
+User* GovernmentUser::authentificateUser(std::string login) const
 {
-    if (this->login == login && this->mdp == mdp)
+    if (this->id == login)
     {
         return instance;
     }
     return nullptr;
 }
 
+UserType GovernmentUser::getRole() const
+{
+    return UserType::Government;
+}
+
 // Méthode spécifique
 void GovernmentUser::accessAllData() const
 {
     std::cout << "[GovernmentUser] accès à toutes les données du système." << std::endl;
+}
+
+
+string GovernmentUser::getId() const{
+    return this->id;
 }

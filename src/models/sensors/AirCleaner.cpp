@@ -12,98 +12,127 @@
 
 //-------------------------------------------------------- Include système
 #include <iostream>
-#include <string>
 #include <math.h>
-using namespace std;
 
 //------------------------------------------------------ Include personnel
-#include "sensors/AirCleaner.h"
-//#include "SensorRepository.h"
-
+#include "models/sensors/AirCleaner.h"
+#include "dataAccess/SensorRepository.h"
+#include "dataAccess/MeasurementRepository.h"
+#include "services/AirQualityService.h"
+#include "utils/Util.h"
 //------------------------------------------------------------- Constantes
 
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
 
-float calculateDistance(float centerLat, float centerLong, float latitude, float longitude) {
-// Retourne la distance entre un centre et un point en degrés (pour l'instant).
-    float distanceEuclidienneDegre  = sqrt ((latitude-centerLat)*(latitude-centerLat) + (longitude - centerLong)*(longitude - centerLong)); 
-    return distanceEuclidienneDegre; 
-}
 
 float AirCleaner::calculateRadiusPurifiedAir() {
-// Algorithme : Pour calculer le rayon d'air purifié d'un Air Cleaner, on récupère le niveau de qualité de l'air mesuré par les capteurs aux alentours. On regarde si le niveau s'est amélioré après la période d'activité du Air Cleaner pour chacun d'entre eux, puis on définit la distance avec le capteur le plus éloigné comme le rayon d'impact. 
+// Algorithme : Pour calculer le rayon d'air purifié d'un Air Cleaner, on récupère le niveau de qualité de l'air 
+// mesuré par les capteurs aux alentours. 
+// On regarde si le niveau s'est amélioré après la période d'activité du Air Cleaner pour chacun d'entre eux, 
+// puis on définit la distance avec le capteur le plus éloigné comme le rayon d'impact. 
 
     // Si le rayon a déjà été calculé auparavant, retourner la valeur 
-        if(radius != -1) {
+    if(radius != -1) {
         return radius;
     }
 
     // Par hypothèse, un AirCleaner ne peut pas avoir un impact sur un rayon > distanceMax. 
     // Choix arbitraire du rayon d'impact maximum d'un AirCleaner
-    float distanceMax = 1000; 
+    float distanceMax = 100000; 
     // Initialisation de la valeur de retour
     float r = 0; 
 
     // Récupération des capteurs situés autour du Air Cleaner 
-    SensorRepository sensorRepository = new SensorRepository(); 
+    SensorRepository sensorRepository;  
     vector<Sensor> sensors = sensorRepository.getSensorsInCircularRadius(latitude, longitude, distanceMax); 
 
-    for s in sensors {
+    // Initialisation du service de calcul de qualité de l'air 
+    AirQualityService airQualityService;
 
-        float d = calculateDistance(this.latitude, this.longitude, s.getLatitude(), s.getLongitude());
+    // Parcours de tous les capteurs situés autour du Air Cleaner
+    for (const Sensor& s : sensors) {
+
+        float d = calculateDistance(this->latitude, this->longitude, s.getLatitude(), s.getLongitude());
 
         // Calculs du niveau de qualité de l'air avant et après la période d'activité du Air Cleaner 
-        float AQbeforeAirCleaner = calculateAirQuality(s, ); 
-        float AQafterAirCleaner = calculateAirQuality(s,); 
+        MeasurementRepository measurementRepo; 
+        vector<MeasurementGroup> measurementsBefore = measurementRepo.getMeasurementsBySensorBefore(s, debut); 
+        vector<MeasurementGroup> measurementsAfter = measurementRepo.getMeasurementsBySensorAfter(s, fin); 
+        float AQbeforeAirCleaner = airQualityService.CalculateAvgAirQuality(measurementsBefore); 
+        float AQafterAirCleaner = airQualityService.CalculateAvgAirQuality(measurementsAfter); 
 
         // Si on trouve un capteur plus éloigné
         if(AQafterAirCleaner < AQbeforeAirCleaner && d > r) {
             r = d; 
         }
     }
-    
+
     radius = r; 
     return r; 
 }
 
 float AirCleaner::calculateImprovedAirLevel() {
 //
-    float distanceMax; 
+    float distanceMax = 100000;
 
     if(radius != -1) {
         distanceMax = radius; 
-    } else {
-        distanceMax = 1000; 
-    }
-
+    } 
+    
     float improvedAirLevel = 0; 
+
     int nbCloseSensors = 0; 
-    SensorRepository sensorRepository = new SensorRepository(); 
+    SensorRepository sensorRepository; 
+    MeasurementRepository measurementRepo;
     vector<Sensor> sensors = sensorRepository.getSensorsInCircularRadius(latitude, longitude, distanceMax); 
 
-    for s in sensors {
-        float d = calculateDistance(latitude, longitude, s.getLatitude(), s.getLongitude());
-        float AQbeforeAirCleaner = calculateAirQuality(s, ); 
-        float AQafterAirCleaner = calculateAirQuality(s,); 
+    // Initialisation du service de calcul de qualité de l'air 
+    AirQualityService airQualityService;
+
+    for (const Sensor& s : sensors) {
+        vector<MeasurementGroup> measurementsBefore = measurementRepo.getMeasurementsBySensorBefore(s, debut); 
+        vector<MeasurementGroup> measurementsAfter = measurementRepo.getMeasurementsBySensorAfter(s, fin); 
+
+        float AQbeforeAirCleaner = airQualityService.CalculateAvgAirQuality(measurementsBefore); 
+        float AQafterAirCleaner = airQualityService.CalculateAvgAirQuality(measurementsAfter);
+
         if(AQafterAirCleaner < AQbeforeAirCleaner) {
             nbCloseSensors++; 
             improvedAirLevel += AQbeforeAirCleaner-AQafterAirCleaner; 
         }
     }
 
-    improvedAirLevel /= nbCloseSensors; 
+    if(nbCloseSensors != 0) {
+        improvedAirLevel /= nbCloseSensors; 
+    }
+    
     return improvedAirLevel; 
 }
 
 //------------------------------------------------- Surcharge d'opérateurs
-AirCleaner & AirCleaner::operator = ( const AirCleaner & unAirCleaner )
-// Algorithme :
-//
+AirCleaner & AirCleaner::operator = (const AirCleaner & unAirCleaner)
 {
+    if (this != &unAirCleaner)
+    {
+        id = unAirCleaner.id;
+        latitude = unAirCleaner.latitude;
+        longitude = unAirCleaner.longitude;
+        radius = unAirCleaner.radius;
+        debut = unAirCleaner.debut;
+        fin = unAirCleaner.fin;
+    }
+    return *this;
+}
 
-} 
+
+bool AirCleaner::operator==(const AirCleaner& unAirCleaner)
+{
+    return id == unAirCleaner.id
+        && latitude == unAirCleaner.latitude
+        && longitude == unAirCleaner.longitude;
+}
 
 //------------------------------------------------- Getters - Setters
 
@@ -123,20 +152,30 @@ float AirCleaner::getRadius() const {
     return radius; 
 }
 
+time_t AirCleaner::getDebut() const {
+    return debut; 
+}
+
+time_t AirCleaner::getFin() const {
+    return fin; 
+}
+
 
 //-------------------------------------------- Constructeurs - destructeur
-AirCleaner::AirCleaner ( const AirCleaner & unAirCleaner )
-// Algorithme :
-//
+AirCleaner::AirCleaner (const AirCleaner & unAirCleaner)
+: id(unAirCleaner.id),
+  latitude(unAirCleaner.latitude),
+  longitude(unAirCleaner.longitude),
+  radius(unAirCleaner.radius),
+  debut(unAirCleaner.debut),
+  fin(unAirCleaner.fin)
 {
 #ifdef MAP
     cout << "Appel au constructeur de copie de <AirCleaner>" << endl;
 #endif
-} 
+}
 
 AirCleaner::AirCleaner ()
-// Algorithme :
-//
 {
 #ifdef MAP
     cout << "Appel au constructeur de <AirCleaner>" << endl;
@@ -145,25 +184,33 @@ AirCleaner::AirCleaner ()
 
 
 
-AirCleaner::AirCleaner (string anId, float lat , float lon, float aRadius) : id(anId), latitude (lat), longitude(lon), radius(aRadius)
-// Algorithme :
-//
+AirCleaner::AirCleaner (string anId, float lat , float lon, time_t unBegin, time_t unEnd) : id(anId), latitude (lat), longitude(lon), debut(unBegin), fin(unEnd)
 {
 #ifdef MAP
     cout << "Appel au constructeur de <AirCleaner>" << endl;
-    this.id = id; 
-    this.latitude = la; 
-    this.longitude = lo;
-    this.radius = -1; 
 #endif
-} 
+}
 
 
 AirCleaner::~AirCleaner ( )
-// Algorithme :
-//
 {
 #ifdef MAP
     cout << "Appel au destructeur de <AirCleaner>" << endl;
 #endif
 } 
+
+
+//-------------------------------------------- Surcharges d'opérateur
+ostream & operator << ( ostream & out, const AirCleaner & aC) {
+    out << "Informations concernant le Air Cleaner " << " : \n"; 
+    out << "- ID : " << aC.getId() << "\n";
+    out << "- Latitude : " << aC.getLatitude() << "\n"; 
+    out << "- Longitude : " << aC.getLongitude() << "\n"; 
+    if(aC.getRadius() == -1) {
+        out << "- Rayon d'impact : Non calculé\n"; 
+    } else {
+        out << "- Rayon d'impact : " << aC.getRadius() << "\n"; 
+    }
+    out << "- Période d'activité : de " << dateToString(aC.getDebut()) << " à " << dateToString(aC.getFin()) << "\n";
+    return out;   
+}

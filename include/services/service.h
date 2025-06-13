@@ -1,76 +1,51 @@
 /*************************************************************************
-                           Measurement  -  description
+                           Service  -  classe abstraite
                              -------------------
-    début                : 16/05/2025
+    début                : 26/05/2025
     copyright            : (C) 2025 par Bindech Rida
     e-mail               : rida.bindech@gmail.com
 *************************************************************************/
 
-//---------- Interface de la classe <GovSensor> (fichier GovSensor.h) ----------------
-#if ! defined ( GOVSENSOR_H )
-#define GOVSENSOR_H
-
+//---------- Réalisation de la classe <Service> (fichier Service.h) ------------
+#if ! defined ( SERVICE_H )
+#define SERVICE_H
 
 //--------------------------------------------------- Interfaces utilisées
-#include "Sensor.h"
+#include <string>
 
-using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
 
 //------------------------------------------------------------------------
-// Rôle de la classe <Xxx>
+// Rôle de la classe <Service>
 //
-//
+// Classe abstraite servant de base aux différents services disponibles
+// dans l'application. Toute classe dérivant de Service devra implémenter
+// les méthodes virtuelles pures définies ici.
 //------------------------------------------------------------------------
 
-class GovSensor : public Sensor
+class Service
 {
 //----------------------------------------------------------------- PUBLIC
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    // type Méthode ( liste des paramètres );
+
+    virtual void Executer() = 0;
     // Mode d'emploi :
-    //
+    //  Méthode pure virtuelle que les classes dérivées doivent implémenter.
     // Contrat :
-    //
-
-
-//------------------------------------------------- Surcharge d'opérateurs
-    GovSensor & operator = ( const GovSensor & unGovSensor );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
+    //  Doit être surchargée dans toute classe héritant de Service.
 
 //-------------------------------------------- Constructeurs - destructeur
-
-    GovSensor();
+    Service ( );
     // Mode d'emploi :
-    //
-    // Contrat :
-    //
+    //  Constructeur par défaut
 
-    GovSensor(const GovSensor& other);
-    // Mode d'emploi (constructeur de copie) :
-    //
-    // Contrat :
-    //
-
-    GovSensor(std::string id, float latitude, float longitude, bool reliability, Measurement* measurements);
+    virtual ~Service ( );
     // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-    virtual ~GovSensor();
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
+    //  Destructeur virtuel
 
 //------------------------------------------------------------------ PRIVE
 
@@ -81,6 +56,6 @@ protected:
 
 };
 
-//-------------------------------- Autres définitions dépendantes de <Xxx>
+//------------------------------- Autres définitions dépendantes de <Service.h>
 
-#endif // GOUVSENSOR_H
+#endif // SERVICE_H

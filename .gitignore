@@ -1,0 +1,22 @@
+# === Fichiers objets ===
+*.o
+*.obj
+*.d
+
+# === Fichiers d'exécutables ===
+*.exe
+*.out
+*.a
+*.so
+*.dll
+main
+AirWatcher
+
+# === Autres fichiers temporaires ===
+*.log
+*.tmp
+*.swp
+*~
+
+/build
+.DS_Store

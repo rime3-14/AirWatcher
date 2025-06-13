@@ -1,70 +1,28 @@
-#if ! defined ( USER_H )
-#define USER_H 
+#ifndef USER_H
+#define USER_H
 
-//--------------------------------------------------- Interfaces utilisées
-// (Aucune interface externe n'est utilisée.)
+#include <string>
+#include "UserTypeEnum.h"
 
-using namespace std;
-
-//------------------------------------------------------------- Constantes
-// (Aucune constante n'est définie dans ce fichier.)
-
-//------------------------------------------------------------------ Types
-// (Aucun type supplémentaire n'est défini en dehors de la classe.)
-
-//------------------------------------------------------------------------
-// Rôle de la classe <Xxx>
-//
-// La classe <User> est une classe abstraite qui sert de base pour
-// représenter un utilisateur. Elle définit des méthodes virtuelles que les
-// classes dérivées doivent implémenter pour gérer différents types d'utilisateurs.
-//
-//------------------------------------------------------------------------
 class User
 {
-//----------------------------------------------------------------- PUBLIC
-
 public:
-//----------------------------------------------------- Méthodes publiques
-    virtual User* authentificateUser(string login, string mdp) const = 0;
-    // Mode d'emploi :
-    // Méthode virtuelle pure qui permet d'authentifier un utilisateur.
-    // Les classes dérivées doivent fournir leur propre implémentation.
-    //
-    // Contrat : Aucun.
 
-//------------------------------------------------- Surcharge d'opérateurs
-// (Aucune surcharge d'opérateurs définie dans ce fichier.)
+    // Méthode virtuelle pure : authentification par ID
+    virtual User* authentificateUser(std::string login) const = 0;
 
-//-------------------------------------------- Constructeurs - destructeur
+    // Méthode virtuelle pure : retourne le rôle de l'utilisateur
+    virtual UserType getRole() const = 0;
+
+    // Constructeurs
     User();
-    // Mode d'emploi :
-    // Constructeur par défaut qui initialise un utilisateur
-    // par défaut ou vides.
-    //
-    // Contrat : Aucun.
+    User(std::string id);
 
-    User(string id, string login, string mdp); 
-
+    // Destructeur virtuel
     virtual ~User();
-    // Mode d'emploi :
-    // Destructeur virtuel pour permettre une destruction correcte des
-    // objets dérivés et pour libérer la mémoire allouée dynamiquement.
-    //
-    // Contrat : Aucun.
-
-//------------------------------------------------------------------ PRIVE
 
 protected:
-//----------------------------------------------------- Méthodes protégées
-// (Aucune méthode protégée n'est définie.)
-
-//----------------------------------------------------- Attributs protégés
- 
-string id; 
-string login; 
-string mdp;
-
+    std::string id;
 };
 
 #endif

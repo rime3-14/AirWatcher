@@ -1,34 +1,65 @@
-#ifndef PRIVATE_USER_H
-#define PRIVATE_USER_H
+/************************************************************************* 
+                           PrivateUser  -  description
+                             -------------------
+    début                : 27/05/2025
+    copyright            : (C) 2025 par Bindech Rida
+    e-mail               : rida.bindech@gmail.com
+*************************************************************************/
 
+//---------- Réalisation de la classe <PrivateUser> (fichier PrivateUser.h) ------------
+#ifndef PRIVATEUSER_H
+#define PRIVATEUSER_H
+
+//--------------------------------------------------- Interfaces utilisées
 #include "User.h"
-#include <string>
 #include <vector>
-//#include "PrivateSensor.h"  
+#include <string>
+#include <iostream>
 
-using namespace std;
+//------------------------------------------------------------------------
+// Rôle de la classe <PrivateUser>
+// Hérite de User. Représente un utilisateur privé avec un identifiant,
+// un nombre de points accumulés, une fiabilité, et une liste d'ID de capteurs.
+//------------------------------------------------------------------------
 
 class PrivateUser : public User
 {
+//----------------------------------------------------------------- PUBLIC
 public:
-    // Constructeurs et destructeur
+     //-------------------------------------------- Surcharges d'opérateurs
+    bool operator==(const PrivateUser& unPrivateUser);
+    //-------------------------------------------- Constructeurs - destructeur
     PrivateUser();
-    PrivateUser(string id, string login, string mdp);
+    explicit PrivateUser(const std::string id);
     virtual ~PrivateUser();
 
-    // Méthodes publiques
+    //----------------------------------------------------- Méthodes publiques
+    User* authentificateUser(const std::string login) const override;
+    UserType getRole() const override;
+
     void addPoint(bool reliable);
     void showPoints() const;
-    void addSensor();
+    void addSensor(const std::string& sensorId);
 
-    // Implémentation de la méthode abstraite
-    User* authentificateUser(std::string login, std::string mdp) const override;
+    //----------------------------------------------------- Setters - Getters
+    int getPoints() const;
+    std::string getId() const;
+    bool isReliable() const;
+    std::vector<std::string> getSensorsId() const;
 
+    void setReliability(bool unReliability); 
 
-protected:
+    //-------------------------------------------- Surcharge opérateur <<
+    friend std::ostream& operator<<(std::ostream& os, const PrivateUser& user);
+
+//------------------------------------------------------------------ PRIVE
+private:
     int points;
-    //vector<PrivateSensor> sensors;
+    std::vector<std::string> sensorsId;
     bool reliability;
 };
 
-#endif
+#endif // PRIVATEUSER_H
+
+// Déclaration hors classe pour la surcharge opérateur <<
+std::ostream& operator<<(std::ostream& os, const PrivateUser& user);

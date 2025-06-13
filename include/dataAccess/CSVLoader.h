@@ -10,6 +10,7 @@
 #include <vector>
 #include <map>
 #include "models/sensors/Sensor.h"
+#include "models/sensors/AirCleaner.h"
 #include "models/users/PrivateUser.h"
 #include "models/users/AirCleanerProviderUser.h"
 #include "models/sensors/Measurement.h"
@@ -18,7 +19,20 @@ using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
+enum MeasurementType {
+    O3,
+    NO2,
+    SO2,
+    PM10
+};
 
+inline MeasurementType stringToMeasurementType(const std::string& str) {
+    if (str == "O3") return O3;
+    else if (str == "NO2") return NO2;
+    else if (str == "SO2") return SO2;
+    else if (str == "PM10") return PM10;
+    else throw std::invalid_argument("Invalid measurement type: " + str);
+}
 //------------------------------------------------------------------------
 // Rôle de la classe <CSVLoader>
 //
@@ -35,16 +49,13 @@ public:
 
 //----------------------------------------------------- Méthodes publiques
 
-    
-    const vector<Sensor>& getSensors() const;
-    const vector<PrivateUser>& getUsers() const;
+    //Une fois chargés, on souhaitera modifier les données des capteurs (fiabilité) 
+    // et éventuellement des PrivateUser (points et fiabilité) d'où l'abscence
+    // du const.
+    vector<Sensor>& getSensors();
+    vector<PrivateUser>& getUsers();
+    const vector<AirCleaner>& getAirCleaners() const;
     const vector<AirCleanerProviderUser>& getProviders() const;
-    const vector<string>& getFiles() const;
-
-    void setFiles(const vector<string>& files);
-    void setSensors(const vector<Sensor>& sensors);
-    void setUsers(const vector<PrivateUser>& users);
-    void setProviders(const vector<AirCleanerProviderUser>& providers);
     
 //------------------------------------------------------------------ PRIVE
 private:
@@ -55,18 +66,21 @@ private:
     virtual ~CSVLoader ( );
 
 //------------------------------------------------------------- Méthodes privées
+    vector<AirCleaner> loadAirCleaners();
     vector<Sensor> loadSensors();
-    map<string,vector<Measurement>> loadMeasurements(vector<Sensor>& sensors);
+    map<string,vector<MeasurementGroup>> loadMeasurements();
     vector<vector<string>> loadAttributesInfo();
+    vector<PrivateUser>  loadUsers(vector<Sensor> sensors);
+    vector<AirCleanerProviderUser> loadProviders(vector<AirCleaner> airCleaners);
 
-    void loadUsers();
-    void loadProviders();
 //---------------------------------------------- Attributs privés
     static CSVLoader instance;
-    vector<string> files;
+
     vector<Sensor> sensors;
+    vector<AirCleaner> airCleaners;
     vector<PrivateUser> users;
     vector<AirCleanerProviderUser> providers;
+
 };
 
 //-------------------------------- Autres définitions dépendantes de <CSVLoader>
