@@ -64,10 +64,51 @@ void ConsoleUI::run()
 
         switch (action)
         {
-            case MenuAction::EvaluateAQIAverages:
+            case MenuAction::EvaluateAQIAverages: {
                 std::cout << "===== Evaluate AQI Averages: ====\n";
-                std::cout << "" << std::endl;
+                std::cout << "In which are area would you like to view the mean air quality ?" << std::endl;
+                std::cout << "Please enter the coordinates of the center area :" << std::endl;
+                std::cout << "  - Latitude (e.g. 48.8566): ";
+                float latitude;
+                std::cin >> latitude;
+                std::cout << "  - Longitude (e.g. 2.3522): ";
+                float longitude;
+                std::cin >> longitude;
+                std::cout << "Please enter the radius of the area in meters (e.g. 1000): ";
+                float radius;
+                std::cin >> radius;
+                std::cout << "Please enter the calculation start date (YYYY-MM-DD HH:MM:SS): ";
+                std::string startDateStr;
+                std::cin >> startDateStr;
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                time_t startDate = stringToDate(startDateStr);
+                std::cout << "Please enter calculation the end date (YYYY-MM-DD HH:MM:SS): ";
+                std::string endDateStr;
+                std::cin >> endDateStr;
+                time_t endDate = stringToDate(endDateStr);
+                algoPerformance.begin("EvaluateAQIAverages");
+                vector<Sensor> sensors = sensorRepo.getSensorsInCircularRadius(latitude, longitude, radius);
+                if (sensors.empty()) {
+                    std::cout << "No sensors found in the specified area." << std::endl;
+                    algoPerformance.end(); 
+                    break;
+                } else {
+                    std::cout << sensors.size() << " sensors found in the specified area." << std::endl;
+                    for (const Sensor& sensor : sensors) {
+                        std::cout << sensor.getId() << " | Location: (" << sensor.getLatitude() << ", " << sensor.getLongitude() << ")" << std::endl;
+                    }
+                }
+
+                std::cout << std::endl << "Evaluating AQI averages in area centered at (" << latitude << ", " << longitude << ") with a " << radius << " meters radius ..." << std::endl << std::endl; 
+
+                vector<MeasurementGroup> measurements = measurementRepo.getAllMeasurementsInTimeRange(sensors, startDate, endDate);
+                std::cout << "Found " << measurements.size() << " measurements in the specified time range." << std::endl;
+                float averageAQI = airQualityService.CalculateAvgAirQuality(measurements);
+                std::cout << "Average AQI calculated successfully." << std::endl << std::endl; 
+                std::cout << "→ Average AQI in the specified area: " << averageAQI << std::endl;
+                algoPerformance.end(); 
             break;
+            }
             case MenuAction::CompareAQISimilarity: {
                 std::cout << "==== Compare AQI Similarity: ====\n";
                 std::cout << "Which sensor would you like to compare against others ?" << std::endl;
