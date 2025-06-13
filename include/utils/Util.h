@@ -23,14 +23,20 @@
 // dans plusieurs classes.
 //------------------------------------------------------------------------
 
-float calculateDistance(float centerLat, float centerLong, float latitude, float longitude);
+float calculateDistanceEuclidienne(float centerLat, float centerLong, float latitude, float longitude);
 // Calcule la distance entre un centre et un point en degrés.
+
+float calculateDistance(float lat1, float lon1, float lat2, float lon2); 
+// Calcule la distance entre un centre et un point en mètres.
 
 void displayDate(time_t timestamp); 
 //  Affiche la date au format JJ/MM/AAAA HH:MM:SS à partir d'un timestamp.
 
 std::string dateToString(time_t timestamp);
 // Convertit un timestamp en une chaîne de caractères au format JJ/MM/AAAA HH:MM:SS.
+
+time_t stringToDate(const std::string& input); 
+// Convertit une chaîne de caractères au format JJ/MM/AAAA HH:MM:SS en un timestamp.
 
 #endif // Util_H
 

@@ -16,7 +16,7 @@ enum class MenuAction {
     Quit,
     EvaluateAQIAverages,              // FR3
     CompareAQISimilarity,             // FR2
-    CalculateAirTrackerImpact,        // FR4
+    CalculateAirCleanerImpact,        // FR4
     EvaluateAirTrackerReliability,    // FR5
     EvaluatePrivateSubmission,        // FR7
     SharePrivateData,                 // FR6
@@ -51,9 +51,9 @@ class ConsoleUI
             {UserType::Private, UserType::AirCleanerProvider, UserType::Government}
         },
         {
-            MenuAction::CalculateAirTrackerImpact,
-            "Calculate an AirTracker's air quality impact (FR4)",
-            "Choose an AirTracker sensor and calculate: radius of air it has purified, and level of AQI improvement.",
+            MenuAction::CalculateAirCleanerImpact,
+            "Calculate an AirCleaner's air quality impact (FR4)",
+            "Choose an AirCleaner and calculate: radius of air it has purified, and level of AQI improvement.",
             {UserType::Private, UserType::AirCleanerProvider, UserType::Government}
         },
         {

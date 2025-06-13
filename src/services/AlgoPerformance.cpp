@@ -38,7 +38,7 @@
         if (onGoingAlgoStart.has_value()) {
             TimePoint onGoingAlgoEnd = Clock::now();
             performances.back().second = chrono::duration_cast<duree_t>(onGoingAlgoEnd - onGoingAlgoStart.value());
-            onGoingAlgoStart.reset(); // On "supprime" la valeur après usage
+            onGoingAlgoStart.reset();
         } else {
             cout << "Aucun algorithme en cours d'exécution à terminer." << endl;
         }
@@ -109,11 +109,11 @@ ostream & operator << (ostream & out, AlgoPerformance & algoPerformance) {
     } else {
         for (size_t i = 0; i<allPerformances.size(); i++) {
             pair<string,duree_t> p = allPerformances[i]; 
-            out << "    Algorithme " << i+1 << " | " << p.first << endl; 
+            out << "    - Algorithme " << i+1 << " | " << p.first << endl; 
             if(p.second == duree_t::zero()) {
-                out << "L'algorithme est en cours d'exécution." << endl; 
+                out << "        L'algorithme est en cours d'exécution." << endl; 
             } else {
-                out << "Temps d'exécution : " << p.second.count() << " ms"<< endl;
+                out << "        Temps d'exécution : " << p.second.count() << " ms"<< endl;
             }
         } cout << endl; 
     }
