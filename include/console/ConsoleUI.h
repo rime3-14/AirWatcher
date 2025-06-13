@@ -11,6 +11,7 @@
 #include "models/users/User.h"
 #include "models/users/UserTypeEnum.h"
 #include "console/AuthManager.h"
+#include "services/AlgoPerformance.h"
 
 enum class MenuAction {
     Quit,
@@ -101,6 +102,9 @@ class ConsoleUI
     // User-input getters
     float getValidFloat(const std::string& prompt);
     time_t getValidDate(const std::string& prompt);
+
+    // Performance metric
+    AlgoPerformance algoPerformance;
 
 public:
     void run();

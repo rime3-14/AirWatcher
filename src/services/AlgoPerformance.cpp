@@ -24,7 +24,7 @@
 
     void AlgoPerformance::begin(const string & algoName) {
         if (onGoingAlgoStart.has_value()) {
-            cout << "Un algorithme est déjà en cours d'exécution : Impossible de débuter l'exécution d'un autre algorithme avant d'avoir terminé celui-ci." << endl;
+            cout << "An algorithm is already running: Cannot start another algorithm until this one has finished." << endl;
         } else {
             pair<string, duree_t> p; 
             p.first = algoName; 
@@ -40,7 +40,7 @@
             performances.back().second = chrono::duration_cast<duree_t>(onGoingAlgoEnd - onGoingAlgoStart.value());
             onGoingAlgoStart.reset();
         } else {
-            cout << "Aucun algorithme en cours d'exécution à terminer." << endl;
+            cout << "No algorithm currently running to terminate." << endl;
         }
     }
 
@@ -52,16 +52,16 @@
     void AlgoPerformance::displayLastPerformance() {
         if(!performances.empty()) {
             pair<string, duree_t> p = performances.back();
-            cout << " Performances du dernier algorithme exécuté : " << endl;  
-            cout << "   - Algorithme : " << p.first << endl; 
+            cout << " Last executed algorithm performance: " << endl;
+            cout << "   - Algorithm: " << p.first << endl;
             if(p.second == duree_t::zero()) {
-                cout << "L'algorithme est en cours d'exécution." << endl; 
+                cout << "The algorithm is currently running." << endl;
             } else {
-                cout << "   - Temps d'exécution " << (p.second).count() << " ms"<< endl; 
+                cout << "   - Execution time: " << (p.second).count() << " ms" << endl;
             }
         } else {
-            cout << "   Aucun algorithme exécuté depuis le lancement de l'application." << endl; 
-        } 
+            cout << "   No algorithm has been executed since the application started." << endl;
+        }
     }
 
 //------------------------------------------------- Surcharge d'opérateurs
@@ -84,14 +84,14 @@ AlgoPerformance::AlgoPerformance(const AlgoPerformance & unAlgoPerformance)
 #endif
 } 
 
-AlgoPerformance::AlgoPerformance ()
+AlgoPerformance::AlgoPerformance()
 {
 #ifdef MAP
     cout << "Appel au constructeur de <AlgoPerformance>" << endl;
 #endif
 } 
 
-AlgoPerformance::~AlgoPerformance ( )
+AlgoPerformance::~AlgoPerformance()
 {
 #ifdef MAP
     cout << "Appel au destructeur de <AlgoPerformance>" << endl;
@@ -100,26 +100,31 @@ AlgoPerformance::~AlgoPerformance ( )
 
 
 //-------------------------------------------- Surcharges d'opérateur
-ostream & operator << (ostream & out, AlgoPerformance & algoPerformance) {
-    out << "Performances de l'ensemble des algorithmes exécutés jusqu'à présent : " << endl;
-    vector<pair<string,duree_t>> allPerformances = algoPerformance.getPerformances(); 
+ostream & operator << (ostream & out, AlgoPerformance & algoPerformance)
+{
+    out << "Performance of all algorithms executed so far: " << endl;
+    vector<pair<string,duree_t>> allPerformances = algoPerformance.getPerformances();
 
-    if(allPerformances.empty()) {
-        out << "   Aucun algorithme exécuté depuis le lancement de l'application." << endl; 
-    } else {
-        for (size_t i = 0; i<allPerformances.size(); i++) {
-            pair<string,duree_t> p = allPerformances[i]; 
-            out << "    - Algorithme " << i+1 << " | " << p.first << endl; 
-            if(p.second == duree_t::zero()) {
-                out << "        L'algorithme est en cours d'exécution." << endl; 
-            } else {
-                out << "        Temps d'exécution : " << p.second.count() << " ms"<< endl;
-            }
-        } cout << endl; 
+    if(allPerformances.empty())
+    {
+        out << "   No algorithm has been executed since the application started." << endl;
     }
-    
+    else
+    {
+        for (size_t i = 0; i < allPerformances.size(); i++)
+        {
+            pair<string,duree_t> p = allPerformances[i];
+            out << "    - Algorithm " << i+1 << " | " << p.first << endl;
+            if(p.second == duree_t::zero())
+            {
+                out << "        The algorithm is currently running." << endl;
+            }
+            else
+            {
+                out << "        Execution time: " << p.second.count() << " ms" << endl;
+            }
+        } cout << endl;
+    }
 
-
-
-    return out;   
+    return out;
 }

@@ -5,7 +5,6 @@
 #include "console/ConsoleUI.h"
 #include "services/AirQualityService.h"
 #include "services/ReliabilityService.h"
-#include "services/AlgoPerformance.h"
 
 #include "dataAccess/SensorRepository.h"
 #include "dataAccess/MeasurementRepository.h"
@@ -22,7 +21,6 @@
 
 void ConsoleUI::run()
 {
-    static AlgoPerformance algoPerformance; 
     std::cout << "Welcome to AirWatcher\n";
     std::cout << "You can use this tool to access different information regarding air quality of the area.\n\n";
 
@@ -51,16 +49,6 @@ void ConsoleUI::run()
         }
 
         std::cout << "=================================\n\n";
-
-        AirQualityService airQualityService;
-        ReliabilityService reliabilityService; 
-
-        MeasurementRepository measurementRepo; 
-        SensorRepository sensorRepo;
-        AirCleanerRepository airCleanerRepo; 
-        UserRepository userRepo; 
-
-        
 
         switch (action)
         {
@@ -158,7 +146,6 @@ void ConsoleUI::evaluate_AQI_averages()
     AirQualityService airQualityService;
     MeasurementRepository measurementRepo;
     SensorRepository sensorRepo;
-    static AlgoPerformance algoPerformance;
 
     std::cout << "You first need to specify a circular area where mean air quality will be calculated\n";
     std::cout << "1. Enter the coordinates for the centre of the circular area\n";
@@ -203,7 +190,6 @@ void ConsoleUI::evaluate_AQI_averages()
 void ConsoleUI::compare_AQI_similarity() {
     AirQualityService airQualityService;
     SensorRepository sensorRepo;
-    static AlgoPerformance algoPerformance;
 
     std::cout << "Which sensor would you like to compare against others ?\n";
     std::cout << "Please enter a sensor ID (e.g. Sensor0): " << std::flush;
@@ -238,7 +224,6 @@ void ConsoleUI::compare_AQI_similarity() {
 
 void ConsoleUI::calculate_air_cleaner_impact() {
     AirCleanerRepository airCleanerRepo;
-    static AlgoPerformance algoPerformance;
 
     std::cout << "Please enter an AirTracker ID (e.g. Cleaner0): " << std::flush;
     std::string airCleanerId;
@@ -261,7 +246,6 @@ void ConsoleUI::calculate_air_cleaner_impact() {
 void ConsoleUI::evaluate_air_tracker_reliability() {
     SensorRepository sensorRepo;
     ReliabilityService reliabilityService;
-    static AlgoPerformance algoPerformance;
 
     std::cout << "Which sensor would you like to evaluate?\n";
     std::cout << "Please enter a sensor ID (e.g. Sensor0): " << std::flush;
@@ -309,7 +293,6 @@ void ConsoleUI::evaluate_private_submission() {
     UserRepository userRepo;
     SensorRepository sensorRepo;
     ReliabilityService reliabilityService;
-    static AlgoPerformance algoPerformance;
 
     std::cout << "Enter a Private User ID (e.g. User0): " << std::flush;
     std::string userId;
