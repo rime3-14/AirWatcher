@@ -88,7 +88,19 @@ class ConsoleUI
         }
     };
 
+    // Main menu
     MenuAction select_action() const;
+
+    // Actions
+    void evaluate_AQI_averages();
+    void compare_AQI_similarity();
+    void calculate_air_cleaner_impact();
+    void evaluate_air_tracker_reliability();
+    void evaluate_private_submission();
+
+    // User-input getters
+    float getValidFloat(const std::string& prompt);
+    time_t getValidDate(const std::string& prompt);
 
 public:
     void run();

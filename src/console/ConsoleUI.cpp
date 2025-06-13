@@ -66,186 +66,27 @@ void ConsoleUI::run()
         {
             case MenuAction::EvaluateAQIAverages: {
                 std::cout << "===== Evaluate AQI Averages: ====\n";
-                std::cout << "In which are area would you like to view the mean air quality ?" << std::endl;
-                std::cout << "Please enter the coordinates of the center area :" << std::endl;
-                std::cout << "  - Latitude (e.g. 48.8566): ";
-                float latitude;
-                std::cin >> latitude;
-                std::cout << "  - Longitude (e.g. 2.3522): ";
-                float longitude;
-                std::cin >> longitude;
-                std::cout << "Please enter the radius of the area in meters (e.g. 1000): ";
-                float radius;
-                std::cin >> radius;
-                std::cout << "Please enter the calculation start date (YYYY-MM-DD HH:MM:SS): ";
-                std::string startDateStr;
-                std::cin >> startDateStr;
-                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                time_t startDate = stringToDate(startDateStr);
-                std::cout << "Please enter calculation the end date (YYYY-MM-DD HH:MM:SS): ";
-                std::string endDateStr;
-                std::cin >> endDateStr;
-                time_t endDate = stringToDate(endDateStr);
-                algoPerformance.begin("EvaluateAQIAverages");
-                vector<Sensor> sensors = sensorRepo.getSensorsInCircularRadius(latitude, longitude, radius);
-                if (sensors.empty()) {
-                    std::cout << "No sensors found in the specified area." << std::endl;
-                    algoPerformance.end(); 
-                    break;
-                } else {
-                    std::cout << sensors.size() << " sensors found in the specified area." << std::endl;
-                    for (const Sensor& sensor : sensors) {
-                        std::cout << sensor.getId() << " | Location: (" << sensor.getLatitude() << ", " << sensor.getLongitude() << ")" << std::endl;
-                    }
-                }
-
-                std::cout << std::endl << "Evaluating AQI averages in area centered at (" << latitude << ", " << longitude << ") with a " << radius << " meters radius ..." << std::endl << std::endl; 
-
-                vector<MeasurementGroup> measurements = measurementRepo.getAllMeasurementsInTimeRange(sensors, startDate, endDate);
-                std::cout << "Found " << measurements.size() << " measurements in the specified time range." << std::endl;
-                float averageAQI = airQualityService.CalculateAvgAirQuality(measurements);
-                std::cout << "Average AQI calculated successfully." << std::endl << std::endl; 
-                std::cout << "→ Average AQI in the specified area: " << averageAQI << std::endl;
-                algoPerformance.end(); 
+                evaluate_AQI_averages();
             break;
             }
             case MenuAction::CompareAQISimilarity: {
                 std::cout << "==== Compare AQI Similarity: ====\n";
-                std::cout << "Which sensor would you like to compare against others ?" << std::endl;
-                std::cout << "Please enter a sensor ID (e.g. Sensor0): ";
-                std::string sensorId;
-                std::cin >> sensorId;
-                Sensor sensor = sensorRepo.getSensorById(sensorId);
-                if (sensor.getId().empty()) {
-                    std::cout << "Sensor with ID " << sensorId << " not found." << std::endl;
-                    break;
-                } else {
-                    std::cout << "Sensor with ID" << sensorId << " successfully found." << std::endl; 
-                }
-                std::cout << "Please enter the start date (YYYY-MM-DD HH:MM:SS): ";
-                std::string startDateStr;
-                std::cin >> startDateStr;
-                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
-                time_t startDate = stringToDate(startDateStr);
-                std::cout << "Please enter the end date (YYYY-MM-DD HH:MM:SS): ";
-                std::string endDateStr;
-                std::cin >> endDateStr;
-                time_t endDate = stringToDate(endDateStr);
-               
-                std::cout << "Comparing sensor " << sensorId << " against others..." << std::endl;
-                algoPerformance.begin("EvaluateAQIAverages"); 
-                std::vector<Sensor*> similarSensors = airQualityService.CompareSensorAgainstOthers(sensor, startDate, endDate);
-                std::cout << "Comparison complete." << std::endl;
-
-                std::cout << "Similar sensors ranked by air quality similarity:" << std::endl;
-                int rank = 1; 
-                for(Sensor * similarSensor : similarSensors) {
-                    std::cout << rank << "." << similarSensor->getId(); 
-                    std::cout << " | Location : (" << similarSensor->getLatitude() << ", " << similarSensor->getLongitude() << ")" << std::endl; 
-                    rank++; 
-                } 
-
-                algoPerformance.end(); 
+                compare_AQI_similarity();
             break;
             }
             case MenuAction::CalculateAirCleanerImpact: {
                 std::cout << "==== Calc AirTracker Impact: ====\n";
-                std::cout << "Please enter an AirTracker ID (e.g. Cleaner0) : ";
-                std::string airCleanerId; 
-                std::cin >> airCleanerId; 
-                AirCleaner airCleaner = airCleanerRepo.getAirCleanerById(airCleanerId);
-                if (airCleaner.getId().empty()) {
-                    std::cout << "Air Tracker with ID " << airCleanerId << " not found." << std::endl;
-                    break;
-                } else {
-                    std::cout << "Air Tracker with ID" << airCleanerId << " successfully found." << std::endl; 
-                }
-                algoPerformance.begin("CalculateAirCleanerImpact"); 
-                std::cout << "- Radius of air purified by the Air Tracker : " << airCleaner.calculateRadiusPurifiedAir() << std::endl;  
-                std::cout << "- Level of AQI Improvement : " << airCleaner.calculateImprovedAirLevel() << std::endl; 
-                algoPerformance.end(); 
-
+                calculate_air_cleaner_impact();
             break;
             }
             case MenuAction::EvaluateAirTrackerReliability: {
                 std::cout << "== Eval AirTracker Reliability: =\n";
-                std::cout << "==== Compare AQI Similarity: ====\n";
-                std::cout << "Which sensor would you like to evaluate its reliability ?" << std::endl;
-                std::cout << "Please enter a sensor ID (e.g. Sensor0): ";
-                std::string sensorId;
-                std::cin >> sensorId;
-
-                algoPerformance.begin("EvaluateAirTrackerReliability");
-
-                Sensor sensor = sensorRepo.getSensorById(sensorId);
-                if (sensor.getId().empty()) {
-                    std::cout << "Sensor with ID " << sensorId << " not found." << std::endl;
-                    break;
-                } else {
-                    std::cout << "Sensor with ID" << sensorId << " successfully found." << std::endl; 
-                }
-
-                bool isReliable = sensor.getReliability(); 
-                vector<Sensor> nearbySensors = sensorRepo.getSensorsInCircularRadius(sensor.getLatitude(),sensor.getLongitude(),100000); // Rayon de 100 km
-                float deviation = reliabilityService.calculateZScoreDeviationBetween(sensor, nearbySensors); 
-                std::cout << "Estimated deviation between the sensor and nearby sensors in a 100 km radius : " << deviation << endl; 
-
-                if(isReliable) {
-                    std::cout << "The sensor is currently marked as reliable." << std::endl; 
-                    std::cout << "Do you wish to mark it as unreliable ? [Y/N] "; 
-                    char response; 
-                    std::cin >> response; 
-                    while(response != 'Y' && response != 'N') {
-                        std::cout << "Invalid input. Please choose between 'Yes' (Y) or 'No' (N). "; 
-                        std::cin >> response; 
-                    }
-                    if(response == 'Y') {
-                        sensorRepo.markSensorAsUnreliable(sensor); 
-                        std::cout << sensor.getId() << " has been successfully marked as unreliable." << std::endl; 
-                    }
-                } else {
-                    std::cout << "The sensor is already marked as unreliable." << std::endl; 
-                }
-
-                algoPerformance.end(); 
-
+                evaluate_air_tracker_reliability();
             break;
             }
             case MenuAction::EvaluatePrivateSubmission: {
                 std::cout << "==== Eval Private Submission: ===\n";
-                 std::cout << "Which individual would you like to view the data of ?" << std::endl;
-                std::cout << "Please enter a Private User ID (e.g. User0): ";
-                std::string userId;
-                std::cin >> userId;
-
-                algoPerformance.begin("EvaluatePrivateSubmission");
-
-                PrivateUser privateUser = userRepo.getPrivateUserById(userId); 
-                if (privateUser.getId().empty()) {
-                    std::cout << "Private User with ID " << userId << " not found." << std::endl;
-                    break;
-                } else {
-                    std::cout << "Private User with ID" << userId << " successfully found." << std::endl << endl; 
-                }
-
-                std::cout << "AirTrackers provided by " << userId << ": " << std::endl; 
-                vector<string> sensorsId = privateUser.getSensorsId(); 
-                int sensorPosition = 1; 
-                for(string sId : sensorsId) {
-                    Sensor sensor = sensorRepo.getSensorById(sId);
-                    if (sensor.getId().empty()) {
-                        continue;
-                    }  
-                    vector<Sensor> nearbySensors = sensorRepo.getSensorsInCircularRadius(sensor.getLatitude(),sensor.getLongitude(),100000); // Rayon de 100 km
-                    float deviation = reliabilityService.calculateZScoreDeviationBetween(sensor, nearbySensors); 
-                    Sensor s = sensorRepo.getSensorById(sId); 
-                    std::cout << "  " << sensorPosition << ". " << sensor.getId() << std::endl; 
-                    std::cout << "      " << "Currently Reliable ? " << (sensor.getReliability() ? "yes" : "no")<< std::endl; 
-                    std::cout << "      " << "Deviation : " << deviation << std::endl; 
-                    sensorPosition++; 
-                } 
-                std::cout << std::endl << "Note : To mark any sensor above as unreliable, please refer to option 'EvaluateAirTrackerReliability'" << endl; 
-                algoPerformance.end(); 
+                evaluate_private_submission();
             break;
             }
             case MenuAction::SharePrivateData:
@@ -289,9 +130,7 @@ MenuAction ConsoleUI::select_action() const
 
     while (true)
     {
-        std::cout << "Please select a number from above: ";
-        std::cout << std::flush;
-
+        std::cout << "Please select a number from above: " << std::flush;
         int choice;
 
         // Check input is a number
@@ -311,5 +150,232 @@ MenuAction ConsoleUI::select_action() const
         }
 
         return availableOptions.at(choice - 1)->menu_action;
+    }
+}
+
+void ConsoleUI::evaluate_AQI_averages()
+{
+    AirQualityService airQualityService;
+    MeasurementRepository measurementRepo;
+    SensorRepository sensorRepo;
+    static AlgoPerformance algoPerformance;
+
+    std::cout << "You first need to specify a circular area where mean air quality will be calculated\n";
+    std::cout << "1. Enter the coordinates for the centre of the circular area\n";
+    float latitude  = getValidFloat("   - Latitude (e.g. 48.8566): ");
+    float longitude = getValidFloat("   - Longitude (e.g. 2.3522): ");
+
+    std::cout << "2. Enter the radius of the circular area\n";
+    float radius = getValidFloat("   - Radius in meters (e.g. 10000): ");
+
+    std::cout << "\nYou now need to specify a time range to calculate mean air quality during\n";
+    std::cout << "1. Enter the calculation start date (in format YYYY-MM-DD HH:MM:SS)\n";
+
+    time_t startDate = getValidDate("   - Start date (e.g. 2019-01-01 00:00:00): ");
+
+    std::cout << "2. Enter the calculation end date (in format YYYY-MM-DD HH:MM:SS)" << std::endl;
+    time_t endDate   = getValidDate("   - End date (e.g. 2019-12-01 00:00:00): ");
+
+    algoPerformance.begin("EvaluateAQIAverages");
+    vector<Sensor> sensors = sensorRepo.getSensorsInCircularRadius(latitude, longitude, radius);
+
+    if (sensors.empty()) {
+        std::cout << "No sensors found in the specified area." << std::endl;
+        algoPerformance.end();
+        return;
+    } else {
+        std::cout << sensors.size() << " sensors found in the specified area." << std::endl;
+        for (const Sensor& sensor : sensors) {
+            std::cout << sensor.getId() << " | Location: (" << sensor.getLatitude() << ", " << sensor.getLongitude() << ")" << std::endl;
+        }
+    }
+
+    std::cout << std::endl << "Evaluating AQI averages in area centered at (" << latitude << ", " << longitude << ") with a " << radius << " meters radius ..." << std::endl << std::endl;
+
+    vector<MeasurementGroup> measurements = measurementRepo.getAllMeasurementsInTimeRange(sensors, startDate, endDate);
+    std::cout << "Found " << measurements.size() << " measurements in the specified time range." << std::endl;
+    float averageAQI = airQualityService.CalculateAvgAirQuality(measurements);
+    std::cout << "Average AQI calculated successfully." << std::endl << std::endl;
+    std::cout << "→ Average AQI in the specified area: " << averageAQI << std::endl;
+    algoPerformance.end();
+}
+
+void ConsoleUI::compare_AQI_similarity() {
+    AirQualityService airQualityService;
+    SensorRepository sensorRepo;
+    static AlgoPerformance algoPerformance;
+
+    std::cout << "Which sensor would you like to compare against others ?\n";
+    std::cout << "Please enter a sensor ID (e.g. Sensor0): " << std::flush;
+    std::string sensorId;
+    std::cin >> sensorId;
+
+    Sensor sensor = sensorRepo.getSensorById(sensorId);
+    if (sensor.getId().empty()) {
+        std::cout << "Sensor with ID " << sensorId << " not found.\n";
+        return;
+    }
+    std::cout << "Sensor with ID " << sensorId << " successfully found.\n";
+
+    time_t startDate = getValidDate("Please enter the start date (YYYY-MM-DD HH:MM:SS): ");
+    time_t endDate = getValidDate("Please enter the end date (YYYY-MM-DD HH:MM:SS): ");
+
+    std::cout << "Comparing sensor " << sensorId << " against others...\n";
+    algoPerformance.begin("CompareAQISimilarity");
+
+    std::vector<Sensor*> similarSensors = airQualityService.CompareSensorAgainstOthers(sensor, startDate, endDate);
+
+    std::cout << "Comparison complete.\n";
+    std::cout << "Similar sensors ranked by air quality similarity:\n";
+    int rank = 1;
+    for (Sensor* s : similarSensors) {
+        std::cout << rank++ << ". " << s->getId()
+                  << " | Location: (" << s->getLatitude() << ", " << s->getLongitude() << ")\n";
+    }
+
+    algoPerformance.end();
+}
+
+void ConsoleUI::calculate_air_cleaner_impact() {
+    AirCleanerRepository airCleanerRepo;
+    static AlgoPerformance algoPerformance;
+
+    std::cout << "Please enter an AirTracker ID (e.g. Cleaner0): " << std::flush;
+    std::string airCleanerId;
+    std::cin >> airCleanerId;
+
+    AirCleaner airCleaner = airCleanerRepo.getAirCleanerById(airCleanerId);
+    if (airCleaner.getId().empty()) {
+        std::cout << "Air Tracker with ID " << airCleanerId << " not found.\n";
+        return;
+    }
+
+    std::cout << "Air Tracker with ID " << airCleanerId << " successfully found.\n";
+
+    algoPerformance.begin("CalculateAirCleanerImpact");
+    std::cout << "- Radius of air purified: " << airCleaner.calculateRadiusPurifiedAir() << " m\n";
+    std::cout << "- AQI improvement level: " << airCleaner.calculateImprovedAirLevel() << "\n";
+    algoPerformance.end();
+}
+
+void ConsoleUI::evaluate_air_tracker_reliability() {
+    SensorRepository sensorRepo;
+    ReliabilityService reliabilityService;
+    static AlgoPerformance algoPerformance;
+
+    std::cout << "Which sensor would you like to evaluate?\n";
+    std::cout << "Please enter a sensor ID (e.g. Sensor0): " << std::flush;
+    std::string sensorId;
+    std::cin >> sensorId;
+
+    algoPerformance.begin("EvaluateAirTrackerReliability");
+
+    Sensor sensor = sensorRepo.getSensorById(sensorId);
+    if (sensor.getId().empty()) {
+        std::cout << "Sensor with ID " << sensorId << " not found.\n";
+        return;
+    }
+
+    std::cout << "Sensor with ID " << sensorId << " successfully found.\n";
+
+    bool isReliable = sensor.getReliability();
+    std::vector<Sensor> nearbySensors =
+        sensorRepo.getSensorsInCircularRadius(sensor.getLatitude(), sensor.getLongitude(), 100000);
+
+    float deviation = reliabilityService.calculateZScoreDeviationBetween(sensor, nearbySensors);
+    std::cout << "Deviation from nearby sensors (100km radius): " << deviation << "\n";
+
+    if (isReliable) {
+        std::cout << "Sensor is currently marked as reliable.\n";
+        std::cout << "Do you want to mark it as unreliable? [Y/N]: " << std::flush;
+        char response;
+        std::cin >> response;
+        while (response != 'Y' && response != 'N') {
+            std::cout << "Invalid input. Please enter Y or N: " << std::flush;
+            std::cin >> response;
+        }
+        if (response == 'Y') {
+            sensorRepo.markSensorAsUnreliable(sensor);
+            std::cout << sensor.getId() << " marked as unreliable.\n";
+        }
+    } else {
+        std::cout << "Sensor is already marked as unreliable.\n";
+    }
+
+    algoPerformance.end();
+}
+
+void ConsoleUI::evaluate_private_submission() {
+    UserRepository userRepo;
+    SensorRepository sensorRepo;
+    ReliabilityService reliabilityService;
+    static AlgoPerformance algoPerformance;
+
+    std::cout << "Enter a Private User ID (e.g. User0): " << std::flush;
+    std::string userId;
+    std::cin >> userId;
+
+    algoPerformance.begin("EvaluatePrivateSubmission");
+
+    PrivateUser privateUser = userRepo.getPrivateUserById(userId);
+    if (privateUser.getId().empty()) {
+        std::cout << "Private User with ID " << userId << " not found.\n";
+        return;
+    }
+
+    std::cout << "Private User " << userId << " found.\n";
+    std::cout << "AirTrackers provided by " << userId << ":\n";
+
+    std::vector<std::string> sensorsId = privateUser.getSensorsId();
+    int i = 1;
+    for (const std::string& id : sensorsId) {
+        Sensor sensor = sensorRepo.getSensorById(id);
+        if (sensor.getId().empty()) continue;
+
+        std::vector<Sensor> nearbySensors =
+            sensorRepo.getSensorsInCircularRadius(sensor.getLatitude(), sensor.getLongitude(), 100000);
+        float deviation = reliabilityService.calculateZScoreDeviationBetween(sensor, nearbySensors);
+
+        std::cout << "  " << i++ << ". " << sensor.getId() << "\n";
+        std::cout << "      Reliable? " << (sensor.getReliability() ? "Yes" : "No") << "\n";
+        std::cout << "      Deviation: " << deviation << "\n";
+    }
+
+    std::cout << "\nNote: To mark any sensor as unreliable, use 'EvaluateAirTrackerReliability'\n";
+
+    algoPerformance.end();
+}
+
+float ConsoleUI::getValidFloat(const std::string& prompt)
+{
+    float value;
+    while (true) {
+        std::cout << prompt << std::flush;
+        std::cin >> value;
+
+        if (std::cin.fail()) {
+            // Input was not a valid float
+            std::cin.clear(); // clear error flags
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // discard invalid input
+            std::cout << "Invalid input. Please enter a valid float.\n";
+        } else {
+            // Input is valid
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // discard any extra input
+            return value;
+        }
+    }
+}
+
+time_t ConsoleUI::getValidDate(const std::string& prompt) {
+    std::string input;
+    while (true) {
+        std::cout << prompt << std::flush;
+        std::cin >> input;
+
+        try {
+            return stringToDate(input);
+        } catch (const std::exception& e) {
+            std::cout << "Invalid input. Please use format YYYY-MM-DD or YYYY-MM-DD HH:MM:SS.\n";
+        }
     }
 }
