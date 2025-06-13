@@ -123,7 +123,7 @@ Test results will be printed in the console.
 
 ## 🔮 Example Use Case
 
-```bash
+```
 $ ./main
 Welcome to AirWatcher
 You can use this tool to access different information regarding air quality of the area.

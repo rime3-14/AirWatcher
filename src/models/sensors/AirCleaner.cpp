@@ -40,7 +40,7 @@ float AirCleaner::calculateRadiusPurifiedAir() {
 
     // Par hypothèse, un AirCleaner ne peut pas avoir un impact sur un rayon > distanceMax. 
     // Choix arbitraire du rayon d'impact maximum d'un AirCleaner
-    float distanceMax = 1000; 
+    float distanceMax = 100000; 
     // Initialisation de la valeur de retour
     float r = 0; 
 
@@ -75,7 +75,7 @@ float AirCleaner::calculateRadiusPurifiedAir() {
 
 float AirCleaner::calculateImprovedAirLevel() {
 //
-    float distanceMax = 1000;
+    float distanceMax = 100000;
 
     if(radius != -1) {
         distanceMax = radius; 
