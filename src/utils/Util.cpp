@@ -15,6 +15,7 @@
 #include <iostream> 
 #include <iomanip>
 #include <sstream>
+#include <regex>
 
 //------------------------------------------------------ Include personnel
 #include "utils/Util.h"
@@ -81,13 +82,24 @@ std::string dateToString(time_t timestamp) {
     return oss.str();
 }
 
-time_t stringToDate(const std::string& input) {
+time_t stringToDate(const std::string& dateStr) {
     std::tm tm = {};
-    std::istringstream ss(input);
-    ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");
-    if (ss.fail()) {
-        throw std::runtime_error("Failed to parse date/time");
+    std::istringstream ss(dateStr);
+
+    static const std::regex dateOnlyPattern(R"(^\d{4}-\d{2}-\d{2}$)");
+    static const std::regex dateTimePattern(R"(^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$)");
+
+    if (std::regex_match(dateStr, dateOnlyPattern)) {
+        ss >> std::get_time(&tm, "%Y-%m-%d");
+    } else if (std::regex_match(dateStr, dateTimePattern)) {
+        ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");
+    } else {
+        throw std::invalid_argument("Date string does not match required format.");
     }
-    tm.tm_isdst = -1; 
+
+    if (ss.fail()) {
+        throw std::invalid_argument("Failed to parse date string.");
+    }
+
     return std::mktime(&tm);
 }
