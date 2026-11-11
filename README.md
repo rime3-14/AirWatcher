@@ -76,7 +76,7 @@ Then run:
 make run-tests
 ```
 
-The application and all 15 test executables build on Ubuntu 24.04 (WSL). Run both commands from the repository root so the tests can find `data/`.
+The application and all 14 test executables build on Ubuntu 24.04 (WSL). Run both commands from the repository root so the tests can find `data/`.
 
 All tests are unit-based and focus on models, repositories, and services such as:
 
